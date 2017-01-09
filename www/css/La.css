@@ -1,0 +1,20 @@
+
+.ui-menu {
+        /*//Переопределили jquery-ui для autocomplit*/
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: block;
+	outline: none;
+        z-index: 802 !important;
+}
+
+.ui-dialog {
+        /*//Переопределили jquery-ui для autocomplit*/
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: block;
+	outline: none;
+        z-index: 800 !important;
+}
