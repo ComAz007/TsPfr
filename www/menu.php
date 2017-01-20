@@ -87,3 +87,6 @@ else {
 '; ?>		
 </ul>
 </div>
+
+<!-- Begin MainContent-->
+<div class="MainContent">

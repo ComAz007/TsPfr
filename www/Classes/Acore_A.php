@@ -150,10 +150,10 @@ foreach ($array_file as $key => $value)
   $array_file[$key] = iconv("windows-1251","UTF-8",$value);
 }
 
-$js_obj = json_encode($array_file);
+$Files = json_encode($array_file);
 $PathTmp=json_encode(PathVremFiles);
 
-print "<script language='javascript'> SendGet($js_obj,$PathTmp); </script>";
+print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
 
 //Echo "<p><input type='submit' name='EP' value='Подписать Файлы' onClick='SendGet(obj,PathTmp)' >";
 
@@ -451,6 +451,10 @@ protected function get_LeftBar()
     
     protected function get_Footer()
     {
+        echo '
+        <!-- End MainContent-->
+</div >';
+        
         include 'ver.php';
         echo '
          
@@ -462,11 +466,22 @@ protected function get_LeftBar()
     {
        if ($_POST||$_GET){
         //var_dump($_POST);
+          include 'scripts.php';
           $this->obr();
-          $this->obrGL($_REQUEST);   
+          $this->obrGL($_REQUEST);
+          $this->MainContent();
+          
         }
-      
-           
+ else {
+        $this->get_Header();
+            $this->MainContent();
+            $this->get_Footer();    
+        }
+     IF (isset($_POST['CreateButton'])) { 
+         $this->get_Header();
+            $this->MainContent();
+            $this->get_Footer(); 
+     }     
     
     //$this->get_LeftBar();
 //    If ($_REQUEST['Act'] == 'Create') {
@@ -478,12 +493,10 @@ protected function get_LeftBar()
         }
    //If ((!isset($_REQUEST['Act'])) or $_SESSION['NotAjax']==1) {
    //If ($_SESSION['NotAjax']==1) {
-        
-       
-            $this->get_Header();
-            $this->MainContent();
-            $this->get_Footer();
-            unset($_SESSION['NotAjax']);
+//            $this->get_Header();
+//            $this->MainContent();
+//            $this->get_Footer();
+         unset($_SESSION['NotAjax']);
        //}
        //else {include 'Header.php';};
     

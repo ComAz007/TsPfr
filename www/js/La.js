@@ -50,8 +50,6 @@ return arr;
 //   }
 // }
 
-
-
 function SendGet(Files,PathTmp) {
 	//отправляю GET запрос и получаю ответ
 
@@ -74,7 +72,7 @@ $.ajax({
 	});
 
 for(var i=2; i<Files.length; i++) {
-  
+  console.log(PathTmp+Files[i]);
 
 	$.ajax({
 		type:'get',//тип запроса: get,post либо head
@@ -127,9 +125,25 @@ for(var i=2; i<Files.length; i++) {
     });
   });
   
-
+  
+  function UpdateContetnt()  
+            {  
+                $.ajax({  
+                    url: "?option="+opti,
+                    cache: false,
+                    data: {"Act" : "UpdCont"},
+                    success: function(html){  
+                        $(".MainContent").html(html);  
+                    }  
+                });  
+            }  
+  
  var requestSent = false;
-    $(document).ready(function() {	
+    $(document).ready(function() {
+        
+        //setInterval('UpdateContetnt()',10000); 
+        
+        
             $("#dialog").dialog(
             {modal:true,
             resizable:false,
@@ -139,6 +153,7 @@ for(var i=2; i<Files.length; i++) {
             }
              
             );
+    
 $('.ui-button-text').click(function(){
     console.log("?option="+opti);
      location.replace("?option="+opti);
@@ -175,7 +190,8 @@ $('.ui-button-text').click(function(){
                     cache: false,
                     data: {"Act" : "Create"},
                     success: function(html){  
-                        $("body").append(html);
+                        $(".MainContent").html(html);
+                        //$("body").append(html);
                                 //html(html);  
                     }  
                 });  
@@ -212,7 +228,8 @@ $('.ui-button-text').click(function(){
                     cache: false,
                     data: {"Act" : "Action1", sl: DataChekedSet()},
                     success: function(html){  
-                        $("body").append(html);
+                        $(".MainContent").html(html);
+                                //append(html);
                                 //html(html);  
                     }  
                 });  
@@ -228,7 +245,8 @@ $('.ui-button-text').click(function(){
                     cache: false,
                     data: {"Act" : "Action2", sl: DataChekedSet()},
                     success: function(html){  
-                        $("body").append(html);
+                        $("body").html(html);
+                        //append(html)
                                 //html(html);  
                     }  
                 });  

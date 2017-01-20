@@ -190,7 +190,7 @@ class viewJurOZIKD extends Jurnals {
         
         If ($_REQUEST['Act'] == 'CopySL') {
             $_SESSION['IdRec'] = $_REQUEST['id'];
-            $this->Create(1);  
+            $this->Create('Создать запись');  
         }
         
         IF (isset($_POST['B1Action1'])) {
@@ -235,7 +235,7 @@ class viewJurOZIKD extends Jurnals {
         };
     }
 
-    public function Create($reg=0) {
+    public function Create($Caption, $data) {
         Echo "<Div class=grid>"; 
         Echo '<div id="dialog" title="Создание">';
         $Usluga=$this->getPTK(0,2);
@@ -266,7 +266,7 @@ class viewJurOZIKD extends Jurnals {
         Echo '</Div>';
     }
     
-    public function Edit(){
+    public function Edit($Caption, $data){
         Echo "<Div class=grid>"; 
         Echo '<div id="dialog" title="Изменение карточки # '.$_SESSION['IdRec'].'">';
         Echo "<form enctype='multipart/form-data' action='' method='Post'>";

@@ -104,8 +104,9 @@ class viewJurTS extends Jurnals {
         
      
 //        exit();
-        If ($_REQUEST['Act'] == UpdateContent) {
-            $this->MainTabelA();    
+        If ($_REQUEST['Act'] == UpdCont) {
+            $this->MainContent();   
+            //unset($_REQUEST['Act']);
         }
         
         
@@ -145,7 +146,7 @@ class viewJurTS extends Jurnals {
                 endforeach;
             
             //$this->MainTabelA();
-            header("location: /?option=".$this->class);
+            //header("location: /?option=".$this->class);
            }
         }
         
@@ -170,7 +171,7 @@ class viewJurTS extends Jurnals {
 
             //$this->Logging($_SESSION['Id_user'], $Id_Razdela=3,$this->linkId,10,0,'Проставлены даты на акты №№'.$NNAkt);
             //$this->MainTabelA();
-            header("location: /?option=".$this->class);
+            //header("location: /?option=".$this->class);
         }
 
         
@@ -207,7 +208,7 @@ class viewJurTS extends Jurnals {
             $this->query($query);
             $this->Logging($_SESSION['Id_user'], $Id_Razdela=0,$_SESSION['IdRec'],11,0,'Изменение задачи');
             //$this->MainTabelA();
-            header("location: /?option=".$this->class);
+            //header("location: /?option=".$this->class);
         }
        
         $this->GLflagCreate=0;
@@ -233,7 +234,7 @@ class viewJurTS extends Jurnals {
             $this->query($query);
             $this->Logging($_SESSION['Id_user'], $Id_Razdela=0,$this->linkId,1,0,'Создана задача');
             //$this->MainTabelA();
-            header("location: /?option=".$this->class);
+            //header("location: /?option=".$this->class);
         };
     }
 
