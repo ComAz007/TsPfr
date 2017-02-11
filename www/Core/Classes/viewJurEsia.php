@@ -148,7 +148,8 @@ private function TableHistory($Res){
 
     public function MainContent()
   {
-         echo "<script language='javascript'>var opti='viewJurEsia' </script>";
+         echo "<script language='javascript'>var module='".$this->class."' </script>";
+        echo "<script language='javascript'>var opti='".$this->class."' </script>";
         echo "<Center> <H6> Журнал регистрации заявлений на регистрацию, подтверждение, удаление, восстановление доступа к учетной записи пользователя в Единой системе идентификации и аутентификации в инфраструктуре, обеспечивающей информационно-технологическое взаимодействие информационных систем, используемых для предоставления государственных и муниципальных услуг в электронной форме </Center> </H6>";
         echo '<ul class="tabs left">
                 <li><a href="#tabr1">Заявления</a></li>';
@@ -156,9 +157,12 @@ private function TableHistory($Res){
         
         Echo ('<div id="tabr1" class="tab-content">');
         $IDU = $_SESSION['Id_user'];
-        echo "<div class='col_3 visible center' style='height: 25px;'> <a id='Create' title='Создать заявление'>Создать заявление</a></div>";
+        //echo "<div class='col_3 visible center' style='height: 25px;'> <a id='Create' title='Создать заявление'>Создать заявление</a></div>";
+        $Button='';
+        $Button .=$this->UIButtonAjax('Create', 'Создать заявление');
+        echo $Button;
         //echo "<div class='col_3 visible center' id='Create' style='height: 25px;'> <a href='?option=viewJurEsia&Act=Create' title='Создать заявление'>Создать заявление</a></div>";
-        echo '<div id="content">';
+        echo '<div id="ContentMainTable">';
        Echo $this->MainTabelA();
         echo '</div>';
         //echo "<div class='col_3 visible center ' style='height: 25px;'> <a class='FormMini fancybox.ajax' href='?option=viewJurVipnet&Act=PZ'>Принять запрос</a></div>";
@@ -345,11 +349,16 @@ private function TableHistory($Res){
     
     protected function obr() {
 
-         If ($_REQUEST['Act'] == Create) {
-            $_SESSION['IdRec'] = $_REQUEST['id'];
-            $this->Create($Caption, $data);    
+         If ($_REQUEST['Act'] == UpdCont) {
+            Echo $this->MainTabelA();
         }
         
+        If ($_REQUEST['Act'] == Create) {
+            $_SESSION['IdRec'] = $_REQUEST['id'];
+            $_SESSION['Class']=$this->class;
+            $this->Create('Создание заявления', '');    
+        }
+
         If ($_REQUEST['Act'] == PrintForm) {
            
             $_SESSION['IdRec'] = $_REQUEST['id'];
@@ -377,8 +386,9 @@ private function TableHistory($Res){
            //exit();
         }
         
-       IF (isset($_POST['CreateBut'])) {
-            
+       //IF (isset($_POST['CreateBut'])) {
+        $this->GLflagCreate=0;
+        IF ($_REQUEST['Action'] == 'Create') {    
             $IdRec = $_SESSION['IdRec'];
             $DC = date('Y-m-d');
             $IDU = $_SESSION['Id_user'];
@@ -395,9 +405,9 @@ private function TableHistory($Res){
             //var_dump($query);
             $this->query($query);
             $this->Logging($_SESSION['Id_user'], $Id_Razdela=2,$this->linkId,1,0,'Создано заявление');
-            $this->MainTabelA();
+            //$this->MainTabelA();
             
-           header("location: /?option=viewJurEsia");
+           //header("location: /?option=viewJurEsia");
         };
         
        // unset($_REQUEST);
@@ -410,10 +420,11 @@ private function TableHistory($Res){
             $res= $this->query($z);
            $res=$res->fetch_assoc();
         }
-        Echo "<Div class=grid>"; 
-        Echo '<div id="dialog" title="Создание заявления">';
+        $this->TableHeadLocal=array("false");
+        //Echo "<Div class=grid>"; 
+        //Echo '<div id="dialog" title="Создание заявления">';
         $Usluga=$this->getESIA(0,2);
-        Echo "<form enctype='multipart/form-data' action='' method='Post'>";
+        //Echo "<form enctype='multipart/form-data' action='' method='Post'>";
 //       if ($reg==0){
 //        Echo ' ФИО обратившегося: <input name="FIOZL" size="50" required> </BR>  </BR></p>';
 //        Echo ' <p> Реквизиты документа: <input name="RekvDoc" size="15" required> ';
@@ -421,20 +432,21 @@ private function TableHistory($Res){
 //       }
         
        //if ($reg==1){
-        Echo ' ФИО обратившегося: <input name="FIOZL" size="50" value="'.$res['FIO'].'" required> </BR>  </BR></p>';
-        Echo ' <p> Реквизиты документа: <input name="RekvDoc" size="15"value="'.$res['DocRekv'].'" required> ';
-        Echo ' СНИЛС: <input name="Snils" size="15"value="'.$res['SNILS'].'" required> </BR>  </BR></p>';
+        $data .= ' ФИО обратившегося: <input name="FIOZL" size="50" value="'.$res['FIO'].'" required> </BR>  </BR></p>';
+        $data .= ' <p> Реквизиты документа: <input name="RekvDoc" size="15"value="'.$res['DocRekv'].'" required> ';
+        $data .= ' СНИЛС: <input name="Snils" size="15"value="'.$res['SNILS'].'" required> </BR>  </BR></p>';
        //}
        
-        Echo ' Вид действия(Услуга): <select name="Usluga">';
+        $data .= ' Вид действия(Услуга): <select name="Usluga">';
         foreach ($Usluga as $key=>$value ){
-        Echo ' <option value='.$key.'>'.$value.' </option>';
+        $data .= ' <option value='.$key.'>'.$value.' </option>';
             }
-         Echo '  </select>';     
-        Echo "<p><input type='submit' name='CreateBut' value='Создать' >";
-        Echo '</form>';
-        Echo '</Div>';
-        Echo '</Div>';
+        $data .= '  </select>'; 
+        parent::Create($Caption, $data);
+        //Echo "<p><input type='submit' name='CreateBut' value='Создать' >";
+        //Echo '</form>';
+        //Echo '</Div>';
+        //Echo '</Div>';
         //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=viewJurVipnet&Action=Create' title='Создать'>Сохранить</a></div> </Br></Br></Br>";
     }
 

@@ -1,7 +1,7 @@
 <?php
 function class_autoload($class_name) {
 	//$file = IDEAL . 'classes/'.ucfirst(strtolower($class_name)).'.php';
-        $file = 'classes/'.ucfirst(strtolower($class_name)).'.php';
+        $file = 'core/classes/'.ucfirst(strtolower($class_name)).'.php';
 	if( file_exists($file) == false )
 		return false;
 	require_once ($file);

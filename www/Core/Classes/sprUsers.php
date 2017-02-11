@@ -46,7 +46,7 @@ class SprUsers extends Spravochniki {
 
 
     public function MainContent(){
-        echo "<script language='javascript'>var opti='".$this->class."' </script>";
+        //echo "<script language='javascript'>var opti='".$this->class."' </script>";
         echo "<Center> <H6> Журнал регистрации начала и конца действия Карточек доступа к ПТК </Center> </H6>";
         echo '<ul class="tabs left">
             <li><a href="#tabr1">Карточки</a></li>';

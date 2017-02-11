@@ -13,6 +13,71 @@ return arr;
     //document.getElementById('PathFileCL').value=peremen;
     }
 
+
+//
+//$(function(){
+//    
+//$.xhrPool = [];
+//    $.xhrPool.abortAll = function() {
+//        $(this).each(function(idx, jqXHR) {
+//            jqXHR.abort();
+//        });
+//        $.xhrPool = [];
+//    };
+//    $.ajaxSetup({
+//        beforeSend: function(jqXHR) {
+//            $.xhrPool.push(jqXHR);
+//        },
+//        complete: function(jqXHR) {
+//            var index = $.xhrPool.indexOf(jqXHR);
+//            if (index > -1) {
+//                $.xhrPool.splice(index, 1);
+//            }
+//        }
+//    });
+//    
+//
+//});
+
+//$(function(){
+ 
+//$.xhrPool = [];
+//$.xhrPool.abortAll = function() {
+//    $(this).each(function(idx, jqXHR) {
+//        jqXHR.abort();
+//    });
+//    $.xhrPool.length = 0
+//};
+// 
+//$.ajaxSetup({
+//    beforeSend: function(jqXHR) {
+//        $.xhrPool.push(jqXHR);
+//    },
+//    complete: function(jqXHR) {
+//        var index = $.xhrPool.indexOf(jqXHR);
+//        if (index > -1) {
+//            $.xhrPool.splice(index, 1);
+//        }
+//    }
+//});
+//    
+    
+    
+
+//});
+
+
+//function CreateButton(module, action){
+//    $.ajax({  
+//                    url: "?option="+module,
+//                    cache: false,
+//                    data: {"Act" : action},
+//                    success: function(html){  
+//                        $(".MainContent").html(html);  
+//                    }  
+//                });  
+//}
+
 //var countChecked = function() {
 //  var n = $( "input:checked" ).length;
 //  $( "div" ).text( n + (n === 1 ? " is" : " are") + " checked!" );
@@ -50,6 +115,8 @@ return arr;
 //   }
 // }
 
+
+
 function SendGet(Files,PathTmp) {
 	//отправляю GET запрос и получаю ответ
 
@@ -72,7 +139,7 @@ $.ajax({
 	});
 
 for(var i=2; i<Files.length; i++) {
-  console.log(PathTmp+Files[i]);
+  
 
 	$.ajax({
 		type:'get',//тип запроса: get,post либо head
@@ -88,6 +155,33 @@ for(var i=2; i<Files.length; i++) {
 }
 
   $(function() {
+
+$('.CreateForm').submit(function(e){
+//отменяем стандартное действие при отправке формы
+alert(module);
+e.preventDefault();
+//берем из формы метод передачи данных
+var m_method=$(this).attr('method');
+//получаем адрес скрипта на сервере, куда нужно отправить форму
+var m_action=$(this).attr('action');
+//получаем данные, введенные пользователем в формате input1=value1&input2=value2...,
+//то есть в стандартном формате передачи данных формы
+var m_data=$(this).serialize();
+
+$.ajax({
+type: m_method,
+url: "?option="+module,
+//url: "?option="+m_action,
+data: m_data+"&Action=Create",
+success: function(result){
+$("#dialog").dialog('destroy');
+$('.MainContent').html(result);
+
+}
+});
+});
+
+
 
 
     function log( arr ) {
@@ -123,43 +217,146 @@ for(var i=2; i<Files.length; i++) {
         $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
       }
     });
+    
+     
+    
   });
   
-  
-  function UpdateContetnt()  
+  function UpdateContentMainTable()  
             {  
                 $.ajax({  
-                    url: "?option="+opti,
+                    url: "?option="+module,
                     cache: false,
                     data: {"Act" : "UpdCont"},
+                    success: function(html){  
+                        $("#ContentMainTable").html(html);  
+                    }  
+                });  
+            }  
+            
+   
+    function UpdCont(module)  
+            {  
+                $.ajax({  
+                    url: "?option="+module,
+                    cache: false,
+                    data: {"Act" : "UpdContt"},
                     success: function(html){  
                         $(".MainContent").html(html);  
                     }  
                 });  
             }  
-  
- var requestSent = false;
-    $(document).ready(function() {
-        
-        //setInterval('UpdateContetnt()',10000); 
-        
-        
-            $("#dialog").dialog(
-            {modal:true,
+            
+     function modalwindow(){
+         $("#dialog").dialog(
+            {modal: true,
             resizable:false,
             minWidth: 700,
+            position: ['top','center'],
             //minHeight: 300
             close: function(event, ui) {}
             }
              
             );
+    }
+
+//$(document).on'click','input[type="submit"]',function(){
+ var requestSent = false;
+    $(document).ready(function() {
+        
+
+//$('input[type="submit"]').submit(function(e){
+////$('.CreateForm').submit(function(e){
+////отменяем стандартное действие при отправке формы
+//alert(module);
+//e.preventDefault();
+////берем из формы метод передачи данных
+//var m_method=$(this).attr('method');
+////получаем адрес скрипта на сервере, куда нужно отправить форму
+//var m_action=$(this).attr('action');
+////получаем данные, введенные пользователем в формате input1=value1&input2=value2...,
+////то есть в стандартном формате передачи данных формы
+//var m_data=$(this).serialize();
+//
+//$.ajax({
+//type: m_method,
+////url: "?option="+module,
+//url: "?option="+m_action,
+//data: m_data+"&Action=Create",
+//success: function(result){
+//$('.MainContent').html(result);
+////$("#dialog").dialog('destroy');
+//}
+//});
+//});
+      
+      
+      
+        //Есть проблема наростание(в геометр прогрессии) кол-ва запросов Ажакс
+            //Авто апдейт страниц но пробелма выше
+            //setInterval('UpdateContentMainTable()',10000);
+            //
+//        $(".menu").each(function() {
+//        var menu = this;
+//        $(menu).find('a').click(function() {
+//           сonsole.log('working');
+//        });
+//    });
+        
+        
+    //$("body").on("click",".menu li a",function(event){   
+    $(".menu li a").click(function(event){
+    //alert("XeraSebe");
+    //location.href=toLoad1;
+    var  toLoad1 = $(this).attr('href');
+    event.preventDefault();
+    var  toLoad = $(this).attr('href').substr(9,$(this).attr('href').length);
+    UpdCont(toLoad);
+    //сonsole.log(toLoad);
+    
+    
+    
+//    $('#content').hide('fast',loadContent);
+//    $('#load').remove();
+//    $('#wrapper').append('<span id="load">LOADING...</span>');
+//    $('#load').fadeIn('normal');
+//    window.location = toLoad1;
+//    function loadContent() {
+//    	$('.MainContent').load(toLoad1,'',MainContent())
+//    }
+//    function showNewContent() {
+//    	$('#content').show('normal',hideLoader());
+//    }
+//    function hideLoader() {
+//    	$('#load').fadeOut('normal');
+//    }
+    return false;
+    
+    });
+        
+        
+        
+        
+        
+           
     
 $('.ui-button-text').click(function(){
     console.log("?option="+opti);
      location.replace("?option="+opti);
     });
-
-
+    
+    //Щелкнули по крестику в диалоге модальном! Похронили на всегда
+//    $('.ui-button-icon-primary ui-icon ui-icon-closethick').click(function(){
+//        $("#dialog").dialog('destroy');
+//        });
+    $('#dialog').bind('dialogclose', function(event) {
+    //$.xhrPool.abortAll();
+    $("#dialog").remove();
+    
+    });
+    
+    
+    
         $('#CreateBut').click(function(){
            // if(!requestSent) {
 	      requestSent = true;
@@ -176,12 +373,14 @@ $('.ui-button-text').click(function(){
                 });  
             //}
             });  
+        
+        //$("body").on("click","#Create",function(){
+//alert(1);
+//})
             
-            
-            
-        $('#Create').click(function(){  
-//            myfunc();
-                $.ajax({
+//        $('body').on('click'    
+        $('#Create').click(function(){   
+            $.ajax({
                     //type: "POST",
                     //url: "?option=viewJurEsia&Act=Create", 
                     
@@ -189,9 +388,9 @@ $('.ui-button-text').click(function(){
                     url: "?option="+opti,
                     cache: false,
                     data: {"Act" : "Create"},
-                    success: function(html){  
-                        $(".MainContent").html(html);
-                        //$("body").append(html);
+                    success: function(html){
+                        $(".MainContent").append(html);
+                        modalwindow(); 
                                 //html(html);  
                     }  
                 });  
@@ -208,7 +407,7 @@ $('.ui-button-text').click(function(){
                     cache: false,
                     data: {"Act" : "Historym"},
                     success: function(html){  
-                        $("body").append(html);
+                        $("body").html(html);
                                 //html(html);  
                     }  
                 });  
@@ -228,8 +427,7 @@ $('.ui-button-text').click(function(){
                     cache: false,
                     data: {"Act" : "Action1", sl: DataChekedSet()},
                     success: function(html){  
-                        $(".MainContent").html(html);
-                                //append(html);
+                        $("body").append(html);
                                 //html(html);  
                     }  
                 });  
@@ -245,8 +443,7 @@ $('.ui-button-text').click(function(){
                     cache: false,
                     data: {"Act" : "Action2", sl: DataChekedSet()},
                     success: function(html){  
-                        $("body").html(html);
-                        //append(html)
+                        $("body").append(html);
                                 //html(html);  
                     }  
                 });  

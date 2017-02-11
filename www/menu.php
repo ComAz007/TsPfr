@@ -19,13 +19,8 @@
 <ul class="menu">
 <?Php
 
-If (!isset($_GET['option'])){
-    echo '<li class="current">';
-}    
- else {
-        echo '<li>';
-}
-echo '<a href="/index.php">Задачи</a></li>';
+echo '<li> <a href="/?option=viewJurTS">Задачи</a></li>';
+//echo '<a href="/?option=viewJurTS">Задачи</a></li>';
 
 
 
@@ -39,7 +34,7 @@ else {
     echo 'Электронные Журналы </a>'
         ?>
     <ul>
-        <li> <a href="/?option=viewJurVipnet1">Регистрации запросов(463р)</a></li>
+        <li> <a href="/?option=viewJurVipnet">Регистрации запросов(463р)</a></li>
          <li> <a href="/?option=viewJurEsia">Регистрации заявлений для доступа к ЕСИА</a></li>
     </ul>
 </li>
@@ -89,4 +84,4 @@ else {
 </div>
 
 <!-- Begin MainContent-->
-<div class="MainContent">
+<div class="MainContent col_12">

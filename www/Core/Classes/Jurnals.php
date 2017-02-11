@@ -83,17 +83,17 @@ class Jurnals extends Acore_A{
     
    protected function getTypeZ3($type) {
    $arrays = array(
-                1=>'СТАЖ',
-                2=>'З/ПЛ',
-                3=>'СТАЖ И З/ПЛ',
-                4=>'АКТ ПРОВЕРКИ',
-                5=>'ДРУГОЕ'
+                0=>'СТАЖ',
+                1=>'З/ПЛ',
+                2=>'СТАЖ И З/ПЛ',
+                3=>'АКТ ПРОВЕРКИ',
+                4=>'ДРУГОЕ'
                 );
-   If ($type>0)
+//   If ($type>0)
     return $arrays[$type];
-   else {
-    return $type;
-   }
+//   else {
+//    return $type;
+  // }
     }
     
     protected function getTypeZ4($type) {

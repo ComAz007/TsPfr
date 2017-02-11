@@ -5,16 +5,10 @@
 class viewJurVipnet extends Jurnals {
     
     public function __construct() {
-        //include 'Header.php';
-        //echo"";
-        
-        //$_SESSION['NotAjax']=1;
-        
         $this->class='viewJurVipnet';
         $this->table='jurvipnetzapros';
         parent::__construct();
-        //parent::__construct();
-        
+        //$this->MainContent();
     }
 
 
@@ -289,6 +283,7 @@ private function TableHistory($Res){
   {
         //ЖУДЧАЙШИЙ КАСТЫЛЬ!!! НУЖНО ПЕРЕДЕЛЫВАТЬ!!!
         print "<script language='javascript'>var opti='viewJurVipnet' </script>";
+        print "<script language='javascript'>var module='viewJurVipnet' </script>";
         echo "<Center> <H6> Журнал регистрации направления поступления и исполнения запросов (Распоряжение Правления ПФР 463Р от 06.10.2015) </Center> </H6>";
         echo '<ul class="tabs left">
 <li><a href="#tabr2">Запросы в обработке</a></li>';
@@ -316,7 +311,7 @@ echo '<li><a href="#tabr1">Запросы обработанные</a></li>
          
         If ($_SESSION['Status']==20) 
          {
-           $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap,Kontrol FROM jurvipnetzapros Where ( (IdUserCreate='$IDU')  or  (Otvetstv='$IDU') ) and (DateOtveta is NULL)  Order By Id DESC LIMIT 20";             
+           $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap,Kontrol FROM jurvipnetzapros Where ( (IdUserCreate='$IDU')  or  (Otvetstv='$IDU') ) and (DateOtveta is NULL)  Order By Id DESC LIMIT 40";             
          }
 
 
@@ -327,13 +322,16 @@ echo '<li><a href="#tabr1">Запросы обработанные</a></li>
 
          If ($_SESSION['Status']==22)
          {
-            $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where (IdUserCreate='$IDU') and (Otvetstv=0) Order By Id DESC LIMIT 20"; 
+            $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where (IdUserCreate='$IDU') and (Otvetstv=0) Order By Id DESC LIMIT 40"; 
          }
         $Res= $this->query($query);
         
         
-         If ($Res<>NULL){
-        $this->Table($Res,0);}
+        If ($Res<>NULL){
+        echo '<div id="ContentMainTable">';
+        $this->Table($Res,0);
+        echo '</div>';
+         }
    Echo '</div>';
    
    If ($_SESSION['Status']==20) 
@@ -343,7 +341,10 @@ $Otd=$_SESSION['IdOtd'];
    $query="SELECT jurvipnetzapros.Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap,Kontrol FROM jurvipnetzapros, user Where  (DateOtveta is NULL)  and (user.Id_Otdel='$Otd') and (jurvipnetzapros.IdUserCreate=user.id) Order By Id DESC LIMIT 100";             
    //$query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where DateOtveta is NOT NULL Order By DateOtveta DESC";             
    $Res=$this->query($query);
+   
+    
    $this->Table($Res,0);
+       
    Echo '</div>';
    }
    
@@ -511,6 +512,7 @@ Echo '</div>';
     //`Id`, `DataReg`, `KodReg`, `KodUrLic`, `KodUpfr`, `FIOZL`, `IdUserCreate`, `TypeZapros`, `TypeZaprosId`, `TypeDeistv`, `FileZapr`, PathFileToArchiv `Povtor`, `DatePovtor`, `DateOtveta`, `FileOtv`
     //
     protected function obr() {
+       
         $DC = date('Y-m-d');
         If ($_REQUEST['Act'] == 2) {
             $_SESSION['IdRec'] = $_REQUEST['id'];
@@ -813,11 +815,13 @@ Echo '</div>';
                 else {
                     $FL=$_SESSION['FIOZL'];
             }
-            
+            If (isset($_POST['SendAs'])){
             $query="SELECT TypeZaprosId FROM jurvipnetzapros WHERE Id='$IdRec'";
             $IdTypeZapr= $this->resultOne($query);
-            
             $TZI = $IdTypeZapr+1;
+            }
+            else $TZI=$_POST['TypeZapr'];
+            
             //$TZI = $_POST['TypeZapr'];
             $TZ = $this->getTypeZ2($TZI);
             $TDe = $_POST['TypeDeistv'];

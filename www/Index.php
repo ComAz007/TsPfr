@@ -5,26 +5,27 @@ define ('DIRSEP', DIRECTORY_SEPARATOR);
 
 require_once("Lib/Function.php");
 
-require_once 'Config.php';
+require_once 'Core/Config.php';
 
-include 'Classes/ald.php';
+include 'Core/Classes/ald.php';
 
 session_start();
-
+//var_dump($_REQUEST);
 If (isset($_GET['option']))
 {
 $class=  trim(htmlspecialchars(strip_tags($_GET['option'])));    
 }
 else 
 {
-$class='viewJurTS'; // Set default class 
+$class='main'; // Set default class 
 }
+    
 
-
-if (file_exists("classes/".$class.".php"))
+if (file_exists("Core/classes/".$class.".php"))
 {
-    include_once ("classes/".$class.".php");
+    include_once ("core/classes/".$class.".php");
     if (class_exists($class)){
+        
         $obj=new $class;
     }
     else {
@@ -34,6 +35,5 @@ if (file_exists("classes/".$class.".php"))
  else {
     exit("<p>Не верный адрес</p>");
 }
-
 
 ?>

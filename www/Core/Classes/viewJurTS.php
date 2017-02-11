@@ -51,6 +51,7 @@ class viewJurTS extends Jurnals {
 
 
     public function MainContent(){
+        echo "<script language='javascript'>var module='".$this->class."' </script>";
         echo "<script language='javascript'>var opti='".$this->class."' </script>";
         //echo "<Center> <H6> Журнал регистрации начала и конца действия Карточек доступа к ПТК </Center> </H6>";
         echo '<ul class="tabs left">
@@ -64,7 +65,7 @@ class viewJurTS extends Jurnals {
         //$this->ButtonAjaxUI('TakeEndTask', 'Принять и завершить задачу');
         $Button .=$this->UIButtonAjax('DeleteRecord', 'Удалить задачу');
         echo $Button;
-        echo '<div id="content">';
+        echo '<div id="ContentMainTable">';
             Echo $this->MainTabelA();
         echo '</div>';
     }
@@ -100,18 +101,16 @@ class viewJurTS extends Jurnals {
     
    
     
-    protected function obr() {
-        
-     
-//        exit();
-        If ($_REQUEST['Act'] == UpdCont) {
-            $this->MainContent();   
-            //unset($_REQUEST['Act']);
+    protected function obr($Action) {
+        //var_dump($Action);
+        If ($Action['Act'] == UpdContt) {
+            Echo $this->MainContent();
+            //Echo $this->MainTabelA();
         }
-        
         
         If ($_REQUEST['Act'] == Create) {
             $_SESSION['IdRec'] = $_REQUEST['id'];
+            $_SESSION['Class']=$this->class;
             $this->Create('Создание заявки','');    
         }
         
@@ -127,7 +126,7 @@ class viewJurTS extends Jurnals {
             endforeach;
             }
             //$this->MainTabelA();
-            //header("location: /?option=".$this->class);
+            header("location: /?option=".$this->class);
         }
         
         If ($_REQUEST['Act'] == Edit) {
@@ -145,8 +144,8 @@ class viewJurTS extends Jurnals {
                     $this->Logging($_SESSION['Id_user'], $Id_Razdela=0,$product,12,0,'Задача закрыта');
                 endforeach;
             
-            //$this->MainTabelA();
-            //header("location: /?option=".$this->class);
+            $this->MainTabelA();
+            header("location: /?option=".$this->class);
            }
         }
         
@@ -171,7 +170,7 @@ class viewJurTS extends Jurnals {
 
             //$this->Logging($_SESSION['Id_user'], $Id_Razdela=3,$this->linkId,10,0,'Проставлены даты на акты №№'.$NNAkt);
             //$this->MainTabelA();
-            //header("location: /?option=".$this->class);
+            header("location: /?option=".$this->class);
         }
 
         
@@ -207,16 +206,17 @@ class viewJurTS extends Jurnals {
            
             $this->query($query);
             $this->Logging($_SESSION['Id_user'], $Id_Razdela=0,$_SESSION['IdRec'],11,0,'Изменение задачи');
-            //$this->MainTabelA();
-            //header("location: /?option=".$this->class);
+            $this->MainTabelA();
+            header("location: /?option=".$this->class);
         }
        
         $this->GLflagCreate=0;
-       IF (isset($_POST['CreateButton'])) {
+       //IF (isset($_POST['CreateButton'])) {
+       IF ($_REQUEST['Action'] == 'Create') {
             $Zadacha=htmlspecialchars($_POST['Opisanie']);
             $OtvUserId=htmlspecialchars($_POST['SpisSTS']);
             $DTS = date("Y-m-d H:i:s");
-            $UserId=$_SESSION['Id_user'];
+            $UserId = $_SESSION['Id_user'];
             If ($_SESSION['Status']==1)
                 {
                     If (isset($_POST['UserId']))
@@ -234,21 +234,19 @@ class viewJurTS extends Jurnals {
             $this->query($query);
             $this->Logging($_SESSION['Id_user'], $Id_Razdela=0,$this->linkId,1,0,'Создана задача');
             //$this->MainTabelA();
+            mail("071-040-0802", iconv('utf-8','windows-1251', "Новая задача в ТС"), iconv('utf-8','windows-1251', "Новая задача в ТС"));
+            //TO-DO возвращение к старому ИПО пока не понятно как реализовать апдейт при нажатии клавиши создать!!!
+            //$this->MainContent();
+           // include 'scripts.php';
+            //header("location: /?option=viewJurTS");
             //header("location: /?option=".$this->class);
+            
         };
     }
 
     public function Create($Caption,$data) {
+       //echo $_SESSION['Class'];
         $this->TableHeadLocal=array("Opisanie");
-
-        
-//        Echo "<Div class=grid>"; 
-//        Echo '<div id="dialog" title="Создание задания/заявки">';
-//        Echo "<form enctype='multipart/form-data' action='' method='Post'>";
-//                    Echo '<div>Описание</div>';
-//                    Echo '<textarea name="Zadanie" cols="68" rows="5"></textarea>';
-//                    Echo '<br/> <br/>';
-//
                         $data .='<div class="col_3 visible">Кому заявка:';
                         $data .= selected(SetSpisok("Select Id, FIO From User Where Status=1"), 'SpisSTS','',0);
                         $data .= '</div>';
@@ -258,12 +256,6 @@ class viewJurTS extends Jurnals {
                         $data .= selected(SetSpisok("Select Id, FIO From User"), 'UserId','',0);
                         $data .= '</div> </BR> </BR> </BR> </BR>';
                         }
-//                    Echo '<div class="col_3"></div>';
-//                    Echo '<div>';
-//        Echo "<p><input type='submit' name='CreateBut' value='Создать заявку' >";
-//        Echo '</form>';
-//        Echo '</Div>';
-//        Echo '</Div>';
           parent::Create($Caption, $data);
     }
 

@@ -464,24 +464,49 @@ protected function get_LeftBar()
     }
     public function get_Body()
     {
+        //echo "<script language='javascript'>var module='".$_SESSION['Class']."' </script>";
+        //echo "<script language='javascript'>var module='".$this->class."' </script>";
+    //
+//         if ($_POST{'ajax'}||$_GET{'ajax'}){
+//             $this->MainContent();
+//         }
+// else {
        if ($_POST||$_GET){
-        //var_dump($_POST);
+//        var_dump($_REQUEST);
+//        echo 'r';
+//        var_dump($_POST);
+//        echo 't';
+//        var_dump($_GET);
+          //if (!isset($_GET['SearchSTR']) and (($_REQUEST['Act'])!==Create) and (!$_REQUEST['Action'] == 'Create') and (!isset($_REQUEST['CreateButton']))) {
+          if (!isset($_GET['SearchSTR']) and (($_REQUEST['Act'])!==Create)) {
           include 'scripts.php';
-          $this->obr();
+          
+          };
+          $this->obr($_REQUEST);
           $this->obrGL($_REQUEST);
           $this->MainContent();
+          //$this->get_Header();
+       
+          
+          //$this->get_Footer();
           
         }
  else {
+////     if (!$_REQUEST['Action'] == 'Create'){
+////     //include 'scripts.php';}
+     //echo 'droch';
+     IF ((!$_REQUEST['Action'] == 'Create') and (!isset($_POST['CreateButton']))) {
+       //  echo 'droch1';
         $this->get_Header();
+       
             $this->MainContent();
-            $this->get_Footer();    
+     $this->get_Footer();    }
         }
-     IF (isset($_POST['CreateButton'])) { 
-         $this->get_Header();
-            $this->MainContent();
-            $this->get_Footer(); 
-     }     
+//     IF (isset($_POST['CreateButton'])) { 
+//         $this->get_Header();
+//            $this->MainContent();
+//            $this->get_Footer(); 
+//     }     
     
     //$this->get_LeftBar();
 //    If ($_REQUEST['Act'] == 'Create') {
@@ -501,7 +526,7 @@ protected function get_LeftBar()
        //else {include 'Header.php';};
     
     }
-    
+  //  }
     abstract function MainContent();
     
     protected function Edit($Caption,$data){
@@ -515,26 +540,41 @@ protected function get_LeftBar()
     protected function Create($Caption,$data){
         $data .= $this->DynamicTableGenerated();
         $data .= $this->UIButtonCreate();
-        $this->Form($Caption, $data);
+        $this->Form($Caption, $data,'Create');
     }
         
-    private function Form($Caption,$data)
+    private function Form($Caption,$data,$Action='')
     {
         //Echo "<Div class=grid>";
-        Echo '<div id="dialog" title="'.$Caption.'# '.$_SESSION['IdRec'].'">';
-        Echo "<form enctype='multipart/form-data' action='' method='Post'>";
+        Echo '<div id="dialog" title="'.$Caption.'# '.$_SESSION['IdRec'].'" >';
+
+        //TO-DO ПОлНЫ БРЕД ИПО вот этастрока создана что бы проверить как оно рабоатет 
+        //Echo "<form enctype='multipart/form-data' action='?option=viewJurTS' method='Post' class='create'>";
+        // а вот это истинная ИСХОДНА СТРОКА
+        If ($Action==''){
+            Echo "<form enctype='multipart/form-data' action='' method='Post'>";
+        }
+        else {
+            $Action.='Form';
+            Echo "<form enctype='multipart/form-data' action='' method='post' class='$Action'>";
+           // $Classl="?option=".$_SESSION['Class'];
+           // Echo "<form enctype='multipart/form-data' action='$Classl' method='post' class='$Action'>";
+        }
+        echo "<script language='javascript'>var module='".$_SESSION['Class']."' </script>";
+       
         
         echo $data;
         
         Echo '</form>';
         Echo '</Div>';
+        include 'scripts_1.php';
         //$_SESSION['IdRec']=$_SESSION['IdRec'];
        // Echo '</Div>';
         
         
     }
 
-        protected function obr(){
+        protected function obr($Action){
         
     }
     
@@ -550,6 +590,12 @@ protected function get_LeftBar()
         If (isset($request['exit'])) {
             header("location: /logout.php");
         }
+        
+//         If ($request['Act'] == 'UpdContt') {
+//            $this->MainContent();
+//            //exit();
+//        }
+        
         
         If (isset($request['Authorization'])) {
             require_once "Lib/Function.php";
@@ -568,12 +614,11 @@ protected function get_LeftBar()
                 }
         }
         
-        
         If ($this->GLflagCreate==1){
             //IF (isset($request['Save'])) {
           
 //        exit();
-            IF (isset($request['CreateButton'])) {
+            IF (isset($request['CreateButton1'])) {
 
                 $this->MergeArray();
                 foreach ($this->TableHeadLocal as $key=>$value ){
@@ -592,7 +637,8 @@ protected function get_LeftBar()
                 $pole=substr($pole, 0, -1);
                 $query = "INSERT INTO ".$this->table." (".$pole.") VALUES(".$zn.")";
                 $this->query($query);
-                header("location: /?option=".$this->class);
+                //header("location: /?option=".$_SESSION['Class']);
+                //header("location: /?option=".$this->class);
                 //echo 'Xera sebe';
         }}
     }
@@ -706,7 +752,7 @@ protected function get_LeftBar()
 
 
 public function UIButtonAjax($ButtonType,$ButtonText){  
-    return "<div class='col_3 visible center' style='height: 25px;'> <a id='".$ButtonType."' title='".$ButtonText."'>".$ButtonText."</a></div>";
+    return "<div class='col_3 ButtonUIAjax visible center' style='height: 25px;'> <a id='".$ButtonType."' title='".$ButtonText."'>".$ButtonText."</a></div>";
 }
 
 public function UITextArea($Name,$Data,$cols=68,$Rows=5){  
@@ -722,7 +768,11 @@ public function UIButtonSave(){
 }
 
 public function UIButtonCreate(){
+//    $a=$_SESSION['Class'];
+//    $b='CreateButton';
+ //return "<input type='submit' onclick='CreateButton($a,$b)' value='Создать запись' >";
  return "<input type='submit' name='CreateButton' value='Создать запись' >";
+ 
 }
 
 public function UIButtonClose(){
