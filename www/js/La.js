@@ -154,7 +154,10 @@ for(var i=2; i<Files.length; i++) {
   }
 }
 
-  $(function() {
+
+
+
+$(function() {
 
 $('.CreateForm').submit(function(e){
 //отменяем стандартное действие при отправке формы
@@ -222,32 +225,7 @@ $('.MainContent').html(result);
     
   });
   
-  function UpdateContentMainTable()  
-            {  
-                $.ajax({  
-                    url: "?option="+module,
-                    cache: false,
-                    data: {"Act" : "UpdCont"},
-                    success: function(html){  
-                        $("#ContentMainTable").html(html);  
-                    }  
-                });  
-            }  
-            
-   
-    function UpdCont(module)  
-            {  
-                $.ajax({  
-                    url: "?option="+module,
-                    cache: false,
-                    data: {"Act" : "UpdContt"},
-                    success: function(html){  
-                        $(".MainContent").html(html);  
-                    }  
-                });  
-            }  
-            
-     function modalwindow(){
+  function modalwindow(){
          $("#dialog").dialog(
             {modal: true,
             resizable:false,
@@ -259,6 +237,61 @@ $('.MainContent').html(result);
              
             );
     }
+  
+  function UpdContentMainTable()  
+            {  
+                $.ajax({  
+                    url: "?option="+module,
+                    cache: false,
+                    data: {"Act" : "UCMT"},
+                    success: function(html){  
+                        $("#ContentMainTable").html(html);
+                    }  
+                });  
+            }  
+            
+   
+    function UpdMainContent(module)  
+            {  
+                $.ajax({  
+                    url: "?option="+module,
+                    cache: false,
+                    data: {"Act" : "UMC"},
+                    success: function(html){  
+                        $(".MainContent").html(html);  
+                    }  
+                });  
+            }  
+            
+     
+
+function obrabotka(){
+$('.CreateForm').submit(function(e){
+//отменяем стандартное действие при отправке формы
+//alert(module);
+e.preventDefault();
+//берем из формы метод передачи данных
+var m_method=$(this).attr('method');
+//получаем адрес скрипта на сервере, куда нужно отправить форму
+var m_action=$(this).attr('action');
+//получаем данные, введенные пользователем в формате input1=value1&input2=value2...,
+//то есть в стандартном формате передачи данных формы
+var m_data=$(this).serialize();
+
+$.ajax({
+type: m_method,
+url: "?option="+module,
+//url: "?option="+m_action,
+data: m_data+"&Action=Create",
+success: function(result){
+$("#dialog").dialog('destroy');
+$('.MainContent').html(result);
+
+}
+});
+});
+    
+}
 
 //$(document).on'click','input[type="submit"]',function(){
  var requestSent = false;
@@ -294,7 +327,7 @@ $('.MainContent').html(result);
       
         //Есть проблема наростание(в геометр прогрессии) кол-ва запросов Ажакс
             //Авто апдейт страниц но пробелма выше
-            //setInterval('UpdateContentMainTable()',10000);
+           // setInterval('UpdContentMainTable()',20000);
             //
 //        $(".menu").each(function() {
 //        var menu = this;
@@ -306,12 +339,9 @@ $('.MainContent').html(result);
         
     //$("body").on("click",".menu li a",function(event){   
     $(".menu li a").click(function(event){
-    //alert("XeraSebe");
-    //location.href=toLoad1;
-    var  toLoad1 = $(this).attr('href');
     event.preventDefault();
     var  toLoad = $(this).attr('href').substr(9,$(this).attr('href').length);
-    UpdCont(toLoad);
+    UpdMainContent(toLoad);
     //сonsole.log(toLoad);
     
     
@@ -349,13 +379,15 @@ $('.ui-button-text').click(function(){
 //    $('.ui-button-icon-primary ui-icon ui-icon-closethick').click(function(){
 //        $("#dialog").dialog('destroy');
 //        });
-    $('#dialog').bind('dialogclose', function(event) {
-    //$.xhrPool.abortAll();
-    $("#dialog").remove();
+//    $('#dialog').bind('dialogclose', function(event) {
+//    //$.xhrPool.abortAll();
+//    $("#dialog").remove();
     
+    //});
+    
+    $('#tabr1').click(function(){
+      UpdContentMainTable();
     });
-    
-    
     
         $('#CreateBut').click(function(){
            // if(!requestSent) {
@@ -390,7 +422,8 @@ $('.ui-button-text').click(function(){
                     data: {"Act" : "Create"},
                     success: function(html){
                         $(".MainContent").append(html);
-                        modalwindow(); 
+                        modalwindow();
+                        obrabotka();
                                 //html(html);  
                     }  
                 });  
@@ -423,11 +456,12 @@ $('.ui-button-text').click(function(){
                     //type: "POST",
                     //url: "?option=viewJurEsia&Act=Create", 
                     //url: "?option=viewJurEsia",  
-                    url: "?option="+opti,
+                    url: "?option="+module,
                     cache: false,
                     data: {"Act" : "Action1", sl: DataChekedSet()},
                     success: function(html){  
-                        $("body").append(html);
+                       UpdMainContent(module);
+                        //$(".ContentMainTable").append(html);
                                 //html(html);  
                     }  
                 });  

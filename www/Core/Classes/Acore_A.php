@@ -109,7 +109,9 @@ foreach($array_file as $name_file){ // Наш цикл
     //if (!is_dir($folder.'/'.$name_file)){
     if (!is_dir($folder.$name_file)){
         //echo $folder.$name_file;
-        $zip->addFile($folder.$name_file, $name_file);
+        
+        //$zip->addFile($folder.$name_file, $name_file);
+        $zip->addFile($folder.$name_file, iconv('windows-1251', 'CP866//TRANSLIT//IGNORE', $name_file));
         //$zip->addFile($folder.'/'.$name_file, $name_file);
     }
     
@@ -478,13 +480,15 @@ protected function get_LeftBar()
 //        echo 't';
 //        var_dump($_GET);
           //if (!isset($_GET['SearchSTR']) and (($_REQUEST['Act'])!==Create) and (!$_REQUEST['Action'] == 'Create') and (!isset($_REQUEST['CreateButton']))) {
-          if (!isset($_GET['SearchSTR']) and (($_REQUEST['Act'])!==Create)) {
+          //if (!isset($_GET['SearchSTR']) and (($_REQUEST['Act'])!==Create)) {
+           if (!isset($_GET['SearchSTR'])) {
           include 'scripts.php';
           
           };
           $this->obr($_REQUEST);
           $this->obrGL($_REQUEST);
-          $this->MainContent();
+          if (!isset($_REQUEST['Act'])){
+          $this->MainContent();}
           //$this->get_Header();
        
           
@@ -567,14 +571,14 @@ protected function get_LeftBar()
         
         Echo '</form>';
         Echo '</Div>';
-        include 'scripts_1.php';
+        //include 'scripts_1.php';
         //$_SESSION['IdRec']=$_SESSION['IdRec'];
        // Echo '</Div>';
         
         
     }
 
-        protected function obr($Action){
+        protected function obr(){
         
     }
     
@@ -613,6 +617,15 @@ protected function get_LeftBar()
                     $_SESSION['err_autrh']=1;
                 }
         }
+        
+         If ($_REQUEST['Act'] == UMC) {
+            $this->MainContent();
+        }
+        
+//        If ($_REQUEST['Act'] == UCMT) {
+//            Echo $this->MainTabelA();
+//        }
+        
         
         If ($this->GLflagCreate==1){
             //IF (isset($request['Save'])) {

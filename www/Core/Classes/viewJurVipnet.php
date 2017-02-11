@@ -282,8 +282,8 @@ private function TableHistory($Res){
     public function MainContent()
   {
         //ЖУДЧАЙШИЙ КАСТЫЛЬ!!! НУЖНО ПЕРЕДЕЛЫВАТЬ!!!
-        print "<script language='javascript'>var opti='viewJurVipnet' </script>";
-        print "<script language='javascript'>var module='viewJurVipnet' </script>";
+        echo "<script language='javascript'>var module='".$this->class."' </script>";
+        echo "<script language='javascript'>var opti='".$this->class."' </script>";
         echo "<Center> <H6> Журнал регистрации направления поступления и исполнения запросов (Распоряжение Правления ПФР 463Р от 06.10.2015) </Center> </H6>";
         echo '<ul class="tabs left">
 <li><a href="#tabr2">Запросы в обработке</a></li>';
@@ -523,6 +523,7 @@ Echo '</div>';
         If ($_REQUEST['Act'] == 'Create') {
            //unset($_SESSION['NotAjax']);
             $_SESSION['IdRec'] = $_REQUEST['id'];
+            $_SESSION['Class']=$this->class;
             $this->Create('Создание запроса', $data);
         }
 
@@ -797,8 +798,9 @@ Echo '</div>';
 //      $data = array('bla', 'bla', 'bla');
 ////header('Content-Type: application/javascript');
 //      echo (isset($_GET['callback']) ? $_GET['callback'] : '').'(' . json_encode($data) . ')';
-
-        IF (isset($_POST['CreateButton'])||isset($_POST['SendAs'])) {
+//IF () {
+    IF (($_REQUEST['Action'] == 'Create')||isset($_POST['SendAs'])) {
+        //IF (isset($_POST['CreateButton'])||isset($_POST['SendAs'])) {
             $this->GLflagCreate=0;
             //$this->EPCreate();
             $IdRec = $_SESSION['IdRec'];
@@ -807,7 +809,8 @@ Echo '</div>';
             
             $KU = $_POST['KodUrL'];
             $KP = $_POST['KodUPFR'];
-            IF (isset($_POST['CreateButton']))
+            //IF (isset($_POST['CreateButton']))
+            IF (($_REQUEST['Action'] == 'Create'))
                 {
                     $FL = $_POST['FIOZL'];
                     $SpNap = $_POST['SposNapr'];
@@ -865,7 +868,8 @@ Echo '</div>';
             //FileOtv
             
             
-            If (isset($_POST['CreateButton'])) {
+            //If (isset($_POST['CreateButton']))
+            If ($_REQUEST['Action'] == 'Create') {
                 $query = "INSERT INTO jurvipnetzapros (DataReg, KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeZaprosId,TypeDeistv,FileZapr,PathFileToArchiv,ZR,Napravl,SpNap)
                 VALUES('$DC','$KR','$KU','$KP','$FL','$IDU','$TZ','$TZI','$TDe','$Flname','$PS','$TZR','0',$SpNap)";
    
@@ -877,7 +881,9 @@ Echo '</div>';
             }
             //var_dump($query);
             $this->query($query);
-            If (isset($_POST['CreateButton'])) {
+            
+            //If (isset($_POST['CreateButton'])) {
+            If ($_REQUEST['Action'] == 'Create') {
                 copy($img_src.'.zip', $img_src1.'.zip');
                 $this->Logging($_SESSION['Id_user'], $Id_Razdela=1,$this->linkId,1,0,'Создан запрос');
                 $this->ochistit_papku(PathVremFiles);

@@ -101,12 +101,17 @@ class viewJurTS extends Jurnals {
     
    
     
-    protected function obr($Action) {
+    protected function obr() {
         //var_dump($Action);
-        If ($Action['Act'] == UpdContt) {
-            Echo $this->MainContent();
-            //Echo $this->MainTabelA();
-        }
+//        If ($_REQUEST['Act'] == UMC) {
+//            $this->MainContent();
+//        }
+//        
+//        If ($_REQUEST['Act'] == UCMT) {
+//            Echo $this->MainTabelA();
+//        }
+        
+        
         
         If ($_REQUEST['Act'] == Create) {
             $_SESSION['IdRec'] = $_REQUEST['id'];
@@ -126,7 +131,7 @@ class viewJurTS extends Jurnals {
             endforeach;
             }
             //$this->MainTabelA();
-            header("location: /?option=".$this->class);
+            //header("location: /?option=".$this->class);
         }
         
         If ($_REQUEST['Act'] == Edit) {
