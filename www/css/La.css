@@ -22,3 +22,11 @@
 .ButtonUIAjax {
 cursor: pointer
 }
+
+.PointCursor {
+cursor: pointer
+}
+
+.PointCursor:hover {
+    color: #000; /* Цвет ссылки при наведении на нее курсора мыши */  
+   }

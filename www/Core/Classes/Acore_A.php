@@ -16,6 +16,7 @@ abstract class Acore_A extends ADB {
     public $TableHeadLocal;
     public $StatusEnd;
     public $crosTable;
+    public $IdForm;
     protected $IDUser;
 
     // TO-DO пдумать как сделать красивей! Сейчас если 1 то работает Create Acore_A если 0 то Create Модуля!
@@ -26,9 +27,11 @@ abstract class Acore_A extends ADB {
     /* 
      * $Id_Razdela=0 - Журнал Тех поддержки
      * $Id_Razdela=1 - Журнал Випнет
-     * $Id_Razdela=1 - Журнал ЕСИА
-     * $Id_Razdela=1 - Журнал Карточек ПТК
+     * $Id_Razdela=2 - Журнал ЕСИА
+     * $Id_Razdela=3 - Журнал Карточек ПТК
+     * $Id_Razdela=4 - Журнал Регистрации Запросов подтверждения стажа
       
+     * 
      * $id_Action=1 Создание запроса
      * $id_Action=2 Принятие запроса
      * $id_Action=3 Отправка ответа
@@ -86,6 +89,7 @@ protected function PrintMsg($MSG){
          
         }
         $this->TableHeadLocal=$new_arr;
+        //var_dump($this->TableHeadLocal);
     }
 
 
@@ -260,11 +264,12 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
                         else
                             {$datav.='  '.$data[$key].' ';};
                        
-                        
+                        $datav.='</Br>';
                         If ((in_array('EditStr', $AtribId, true) and (!in_array('Edit', $AtribId, true))) or in_array('ALL', $AtribId, true)) {$datav.='<a id="Edit" href="?option='.$Class.'&Act=Edit&id='.$data[$key].' ">Редактировать</a> </BR> ';};
-                        If (in_array('PrnRec', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a id="PrintRecord" href="?option='.$Class.'&Act=PrintForm&id='.$data[$key].' ">Печать</a> </BR> ';};
-                        If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a id="Copy" href="?option='.$Class.'&Act=CopySL&id='.$data[$key].' ">Скопировать</a> </BR> ';};
-                        //If ($Cheked==0) {$datav.='<input id="iCheked" class="cCheked" type="checkbox" value="Select * From '.$TableName.' Where Id='.$data[$key].'">';};
+                        If (in_array('PrnRec', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a id="PrintRecord" class="PointCursor" href="?option='.$Class.'&Act=PrintForm&id='.$data[$key].'" RecId='.$data[$key].'>Печать</a> </BR> ';};
+                        //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a id="CopyRecords" href="?option='.$Class.'&Act=CopySL&id='.$data[$key].' ">Скопировать</a> </BR> ';};
+                        If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a id="CopyRecord" class="PointCursor" RecId='.$data[$key].' Module='.$Class.' Table='.$this->table.'>Скопировать</a> </BR> ';};                        
+//If ($Cheked==0) {$datav.='<input id="iCheked" class="cCheked" type="checkbox" value="Select * From '.$TableName.' Where Id='.$data[$key].'">';};
                          }
                          else {$datav.='  '.$data[$key].' ';};
 //                        $datav='</BR> <a href="?option=viewJurEsia&Act=Edit&id='.$data[$key].' ">Изменить</a>';
@@ -546,7 +551,14 @@ protected function get_LeftBar()
         $data .= $this->UIButtonCreate();
         $this->Form($Caption, $data,'Create');
     }
-        
+    
+    protected function CopyRecord($Caption,$data){
+       $RecordData = $this->RecordZN($_REQUEST['Table'],'*',$_REQUEST['RecordId']);
+       $data .= $this->DynamicTableGenerated($RecordData);
+       $data .= $this->UIButtonCreate();
+       $this->Form($Caption, $data,'Create');
+    }
+    
     private function Form($Caption,$data,$Action='')
     {
         //Echo "<Div class=grid>";
@@ -564,7 +576,7 @@ protected function get_LeftBar()
            // $Classl="?option=".$_SESSION['Class'];
            // Echo "<form enctype='multipart/form-data' action='$Classl' method='post' class='$Action'>";
         }
-        echo "<script language='javascript'>var module='".$_SESSION['Class']."' </script>";
+        //echo "<script language='javascript'>var module='".$_SESSION['Class']."' </script>";
        
         
         echo $data;
@@ -631,10 +643,13 @@ protected function get_LeftBar()
             //IF (isset($request['Save'])) {
           
 //        exit();
-            IF (isset($request['CreateButton1'])) {
-
+            
+            //IF (isset($request['CreateButton1'])) {
+            IF ($request['Action'] == 'Create') {
+                //var_dump($request);
                 $this->MergeArray();
                 foreach ($this->TableHeadLocal as $key=>$value ){
+                    //echo 'nn_'.$value;
                     If($key<>'Id' and $key<>'IdUserCreate'){
                     $zn.='"'.$request[$key].'",';
                     $pole.=$key.',';}
@@ -649,7 +664,10 @@ protected function get_LeftBar()
                 $zn=substr($zn, 0, -1);
                 $pole=substr($pole, 0, -1);
                 $query = "INSERT INTO ".$this->table." (".$pole.") VALUES(".$zn.")";
+                //echo $query;
+                //exit();
                 $this->query($query);
+                $this->Logging($_SESSION['Id_user'], $this->IdForm, $this->linkId,1,0,'Создание записи');
                 //header("location: /?option=".$_SESSION['Class']);
                 //header("location: /?option=".$this->class);
                 //echo 'Xera sebe';
@@ -741,21 +759,43 @@ protected function get_LeftBar()
 //<p> Поиск УПФР по классификатору: </BR> <input name="SearchField" placeholder="Поиск УПФР по справочнику" style="width: 100%" class="searchUPFR">
     }
 
-    private function DynamicTableGenerated(){
+    //TO-DO слишком все по тупому
+    //TO-DO во первых все проверки ПОЛЯ вынести в отдельную функцию с возвратом труе или фалсе
+    // проверки на названия полей и пустоту имени
+    //TO-DO во вторых пусть юзер хоть пупок изорвет нужно объединить все массивы   
+    // $StructTable, TableHeadLocal, TableHead на придмет названия полей
+    private function DynamicTableGenerated($RecordData=''){
         $StructTable=$this->GetStructTable($this->table);
         $data='';
-        if (!empty($this->TableHeadLocal)){
-            foreach ($StructTable as $key=>$value){
-                if (in_array($value['Name'], $this->TableHeadLocal)) {
-                    $data .=$this->UIDinamicTableFieldGenerate($value['Type'], $value['Name'], $value['Comment']);
+        //var_dump($this->TableHead);
+        foreach ($StructTable as $key=>$Pole){
+            $fieldValue='';
+            If($RecordData!=='')
+            {
+                $fieldValue=$RecordData[$Pole['Name']];
+            }
+            
+            If (($Pole['Name']!=='Id') and ($Pole['Name']!=='IdUserCreate')){
+            if (!empty($this->TableHeadLocal)){
+                    if (in_array($Pole['Name'], $this->TableHeadLocal)) {
+                        $data .=$this->UIDinamicTableFieldGenerate($Pole['Type'], $Pole['Name'], $Pole['Comment'],$fieldValue);
+                    }
+            }
+            else
+            {
+                
+                If (array_key_exists($Pole['Name'], $this->TableHead)){
+                    
+                        $data .=$this->UIDinamicTableFieldGenerate($Pole['Type'], $Pole['Name'], $this->TableHead[$Pole['Name']], $fieldValue);                
+                    
+                }    
+                else {
+                    If ($Pole['Comment']!==''){
+                    $data .=$this->UIDinamicTableFieldGenerate($Pole['Type'], $Pole['Name'], $Pole['Comment'], $fieldValue);
+                    }
                 }
             }
-        }
-        else
-        {
-         foreach ($StructTable as $key=>$value1){
-                $data .=$this->UIDinamicTableFieldGenerate($value1['Type'], $value1['Name'], $value1['Comment']);
-        }
+            }
         }
         return $data;
     }
@@ -769,7 +809,7 @@ public function UIButtonAjax($ButtonType,$ButtonText){
 }
 
 public function UITextArea($Name,$Data,$cols=68,$Rows=5){  
-return '<textarea name="'.$Name.'" cols="68" rows="5">'.$Data.'</textarea>' ;
+    return '<textarea name="'.$Name.'" cols="68" rows="5">'.$Data.'</textarea>' ;
 }
 
 public function UILabel($Text){  
@@ -777,19 +817,16 @@ public function UILabel($Text){
 }
 
 public function UIButtonSave(){
- return "<input type='submit' name='SaveButton' value='Сохранить изменения' >";
+    return "<input type='submit' name='SaveButton' value='Сохранить изменения' >";
 }
 
 public function UIButtonCreate(){
-//    $a=$_SESSION['Class'];
-//    $b='CreateButton';
- //return "<input type='submit' onclick='CreateButton($a,$b)' value='Создать запись' >";
- return "<input type='submit' name='CreateButton' value='Создать запись' >";
+    return "<input type='submit' name='CreateButton' value='Создать запись' >";
  
 }
 
 public function UIButtonClose(){
- return "<input type='submit' name='CloseButton' value='Закрыть' >";
+    return "<input type='submit' name='CloseButton' value='Закрыть' >";
 }
 
 }

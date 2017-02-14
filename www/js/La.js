@@ -159,30 +159,30 @@ for(var i=2; i<Files.length; i++) {
 
 $(function() {
 
-$('.CreateForm').submit(function(e){
-//отменяем стандартное действие при отправке формы
-alert(module);
-e.preventDefault();
-//берем из формы метод передачи данных
-var m_method=$(this).attr('method');
-//получаем адрес скрипта на сервере, куда нужно отправить форму
-var m_action=$(this).attr('action');
-//получаем данные, введенные пользователем в формате input1=value1&input2=value2...,
-//то есть в стандартном формате передачи данных формы
-var m_data=$(this).serialize();
-
-$.ajax({
-type: m_method,
-url: "?option="+module,
-//url: "?option="+m_action,
-data: m_data+"&Action=Create",
-success: function(result){
-$("#dialog").dialog('destroy');
-$('.MainContent').html(result);
-
-}
-});
-});
+//$('.CreateForm').submit(function(e){
+////отменяем стандартное действие при отправке формы
+////alert(module);
+//e.preventDefault();
+////берем из формы метод передачи данных
+//var m_method=$(this).attr('method');
+////получаем адрес скрипта на сервере, куда нужно отправить форму
+//var m_action=$(this).attr('action');
+////получаем данные, введенные пользователем в формате input1=value1&input2=value2...,
+////то есть в стандартном формате передачи данных формы
+//var m_data=$(this).serialize();
+//
+//$.ajax({
+//type: m_method,
+//url: "?option="+module,
+////url: "?option="+m_action,
+//data: m_data+"&Action=Create",
+//success: function(result){
+//$("#dialog").dialog('destroy');
+//$('.MainContent').html(result);
+//
+//}
+//});
+//});
 
 
 
@@ -293,11 +293,67 @@ $('.MainContent').html(result);
     
 }
 
+//function Back(module){
+//      location.replace("/");
+//      UpdMainContent(module);
+//}
+
 //$(document).on'click','input[type="submit"]',function(){
  var requestSent = false;
     $(document).ready(function() {
+$('.NoPrint').on('click', function(e){
+    //$('.NoPrint').click(function(e){
+      e.preventDefault();
+      var  Module = $(this).attr('Module');
+      UpdMainContent(Module);
+    });
+    
+    $('#PrintRecord').on('click', function(e){
+    //$('.NoPrint').click(function(e){
+      e.preventDefault();
+      var Record=$(this).attr('RecId');
+      //alert(module);
+      $.ajax({
+                    url: "?option="+module,
+                    cache: false,
+                    data: {"Action" : "PrintForm",
+                           "RecordId" : Record,
+                    },
+                    success: function(html){
+                        $(".MainContent").html(html);
+                                //html(html);  
+                    }  
+                });  
+      
+      return false;
+//      var  Module = $(this).attr('Module');
+//      UpdMainContent(Module);
+    });
         
-
+        
+$('#CopyRecord').click(function(e){
+    //e.preventDefault();
+    var Record=$(this).attr('RecId');
+    var Module=$(this).attr('Module');
+    var Table=$(this).attr('Table');
+    //alert(Record+" "+Module);
+            $.ajax({
+                    url: "?option="+Module,
+                    cache: false,
+                    data: {"Action" : "CopyRecord",
+                           "RecordId" : Record,
+                           "Table" : Table
+                    },
+                    success: function(html){
+                        $(".MainContent").append(html);
+                        modalwindow();
+                        obrabotka();
+                                //html(html);  
+                    }  
+                });  
+    
+    
+});
 //$('input[type="submit"]').submit(function(e){
 ////$('.CreateForm').submit(function(e){
 ////отменяем стандартное действие при отправке формы
@@ -342,24 +398,6 @@ $('.MainContent').html(result);
     event.preventDefault();
     var  toLoad = $(this).attr('href').substr(9,$(this).attr('href').length);
     UpdMainContent(toLoad);
-    //сonsole.log(toLoad);
-    
-    
-    
-//    $('#content').hide('fast',loadContent);
-//    $('#load').remove();
-//    $('#wrapper').append('<span id="load">LOADING...</span>');
-//    $('#load').fadeIn('normal');
-//    window.location = toLoad1;
-//    function loadContent() {
-//    	$('.MainContent').load(toLoad1,'',MainContent())
-//    }
-//    function showNewContent() {
-//    	$('#content').show('normal',hideLoader());
-//    }
-//    function hideLoader() {
-//    	$('#load').fadeOut('normal');
-//    }
     return false;
     
     });
@@ -385,9 +423,9 @@ $('.ui-button-text').click(function(){
     
     //});
     
-    $('#tabr1').click(function(){
-      UpdContentMainTable();
-    });
+//    $('#tabr1').click(function(){
+//      UpdContentMainTable();
+//    });
     
         $('#CreateBut').click(function(){
            // if(!requestSent) {
@@ -413,10 +451,6 @@ $('.ui-button-text').click(function(){
 //        $('body').on('click'    
         $('#Create').click(function(){   
             $.ajax({
-                    //type: "POST",
-                    //url: "?option=viewJurEsia&Act=Create", 
-                    
-                    //url: "?option=viewJurEsia",  
                     url: "?option="+opti,
                     cache: false,
                     data: {"Act" : "Create"},

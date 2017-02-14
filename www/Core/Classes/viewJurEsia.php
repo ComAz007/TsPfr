@@ -12,6 +12,10 @@ class viewJurEsia extends Jurnals {
 //echo"";
         $this->class='viewJurEsia';
         $this->table='JurEsia';
+        $this->TableHead=Array("Id"=>"№п/п", "FIO"=>"Фамилия Имя Отчество",
+              "DocRekv"=>"Реквизиты документа, удостоверяющего личность", "SNILS"=>"СНИЛС",
+              "DateObr"=>"Дата обращения", "Deistvie"=>"Услуга, за которой обратился заявитель",
+              "IdUserCreate"=>"Сотрудник, принявший заявление");
         parent::__construct();
         
     }
@@ -218,15 +222,12 @@ private function TableHistory($Res){
   }
   
   private function MainTabelA() {
-      $Head=Array("Id"=>"№п/п", "FIO"=>"Фамилия Имя Отчество",
-              "DocRekv"=>"Реквизиты документа, удостоверяющего личность", "SNILS"=>"СНИЛС",
-              "DateObr"=>"Дата обращения", "Deistvie"=>"Услуга, за которой обратился заявитель",
-              "IdUserCreate"=>"Сотрудник, принявший заявление");
+      
           If (($_SESSION['Admin']==1) or ($_SESSION['Status']==20)){
-              return $this->TablePrototype($Res,$Head,$this->table,$this->class,Array('PrnRec','Copy'));
+              return $this->TablePrototype($Res,$this->TableHead,$this->table,$this->class,Array('PrnRec','Copy'));
               }
               
-          Else{return $this->TablePrototype($Res,$Head,$this->table,$this->class,Array('PrnRec','Copy'));}
+          Else{return $this->TablePrototype($Res,$this->TableHead,$this->table,$this->class,Array('PrnRec','Copy'));}
         //$this->Table($Res,0);
         //}
    //Echo '</div>';
@@ -261,7 +262,7 @@ private function TableHistory($Res){
         Echo "<form enctype='multipart/form-data' action='?option=viewJurVipnet' method='Post'>";
         $query="SELECT Id_User,Action,Times,Id_rezerv,id_action FROM logged WHERE Id_Record=$id and Id_Razdela=2 order by Times desc";
         $Res= $this->query($query);
-        $Head=array("Пользователь","Действие","Дата/время");
+        //$Head=array("Пользователь","Действие","Дата/время");
         //$this->TablePrototype($Res, $Head, 1, 0);
         $this->TableHistory($Res);
       
@@ -274,7 +275,7 @@ private function TableHistory($Res){
 
        private function printForm() {
            include 'Header.php';
-          echo "<div class='col_3 visible NoPrint center' style='height: 25px;'> <a href='?option=viewJurEsia'>Закрыть форму(возврат в журнал)</a><br></div>";
+          echo "<div class='col_3 visible NoPrint center' Module='viewJurEsia' style='height: 25px;'> <a href='?option=viewJurEsia'>Закрыть форму(возврат в журнал)</a><br></div>";
        Echo '<BR> <BR> <div  class="col_12 center" style="font-size:15px; text-align:center; ">'
            .'
                ЗАЯВЛЕНИЕ № '.$_SESSION['IdRec'].'</BR >
@@ -359,31 +360,24 @@ private function TableHistory($Res){
             $this->Create('Создание заявления', '');    
         }
 
-        If ($_REQUEST['Act'] == PrintForm) {
+        //If ($_REQUEST['Act'] == PrintForm) {
            
-            $_SESSION['IdRec'] = $_REQUEST['id'];
+            If ($_REQUEST['Action'] == PrintForm) {
+            $_SESSION['IdRec'] = $_REQUEST['RecordId'];
             $this->printForm();
             
         }
         
-        If ($_REQUEST['Act'] == 'CopySL') {
+        //To-DO копирование реализаетс локально нужен перевод на ГЛОБАЛЬНЫЙ уровень.
+        //If ($_REQUEST['Act'] == 'CopySL') {
+        If ($_REQUEST['Action'] == CopyRecord) {
             $_SESSION['IdRec'] = $_REQUEST['id'];
             $this->Create($Caption, $data,1);  
         }
-        
-        //If ($_REQUEST['Act'] == 'Update') {
-           
-//        }
-//       
-                If ($_REQUEST['Act'] == Historym) {
-           // $this->VxodZapros();
-          echo($_REQUEST['id']);
+
+          If ($_REQUEST['Act'] == Historym) {
           $this->Logging($_SESSION['Id_user'], $Id_Razdela=2,$_REQUEST['id'],1000,0,'Просмотр истории');
           $this->history($_REQUEST['id']);
-               //Logging($Id_User, $Id_Razdela=1,$Id_Record,$id_Action,$Id_rezerv=0,$Action)
-           // unset($_SESSION['$Message']);
-           
-           //exit();
         }
         
        //IF (isset($_POST['CreateBut'])) {
@@ -400,42 +394,25 @@ private function TableHistory($Res){
                 $query = "INSERT INTO juresia (FIO, DocRekv, SNILS,DateObr, Deistvie , IdUserCreate)
                  VALUES('$FIO','$DocRekv','$SNILS','$DC','$Deistvie','$IDU')";
 
-                
-            
-            //var_dump($query);
             $this->query($query);
             $this->Logging($_SESSION['Id_user'], $Id_Razdela=2,$this->linkId,1,0,'Создано заявление');
-            //$this->MainTabelA();
-            
-           //header("location: /?option=viewJurEsia");
+
         };
-        
-       // unset($_REQUEST);
-        
+
     }
 
     public function Create($Caption, $data,$reg=0) {
         if ($reg==1){
-            $z="Select FIO,DocRekv,SNILS from JurEsia Where id=".$_SESSION['IdRec'];
+            $z="Select FIO,DocRekv,SNILS from JurEsia Where id=".$_REQUEST['RecordId'];
             $res= $this->query($z);
            $res=$res->fetch_assoc();
         }
-        $this->TableHeadLocal=array("false");
-        //Echo "<Div class=grid>"; 
-        //Echo '<div id="dialog" title="Создание заявления">';
+        $this->TableHeadLocal=array("False");
         $Usluga=$this->getESIA(0,2);
-        //Echo "<form enctype='multipart/form-data' action='' method='Post'>";
-//       if ($reg==0){
-//        Echo ' ФИО обратившегося: <input name="FIOZL" size="50" required> </BR>  </BR></p>';
-//        Echo ' <p> Реквизиты документа: <input name="RekvDoc" size="15" required> ';
-//        Echo ' СНИЛС: <input name="Snils" size="15" required> </BR>  </BR></p>';
-//       }
-        
-       //if ($reg==1){
+
         $data .= ' ФИО обратившегося: <input name="FIOZL" size="50" value="'.$res['FIO'].'" required> </BR>  </BR></p>';
         $data .= ' <p> Реквизиты документа: <input name="RekvDoc" size="15"value="'.$res['DocRekv'].'" required> ';
         $data .= ' СНИЛС: <input name="Snils" size="15"value="'.$res['SNILS'].'" required> </BR>  </BR></p>';
-       //}
        
         $data .= ' Вид действия(Услуга): <select name="Usluga">';
         foreach ($Usluga as $key=>$value ){
@@ -443,11 +420,6 @@ private function TableHistory($Res){
             }
         $data .= '  </select>'; 
         parent::Create($Caption, $data);
-        //Echo "<p><input type='submit' name='CreateBut' value='Создать' >";
-        //Echo '</form>';
-        //Echo '</Div>';
-        //Echo '</Div>';
-        //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=viewJurVipnet&Action=Create' title='Создать'>Сохранить</a></div> </Br></Br></Br>";
     }
 
   

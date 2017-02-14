@@ -1,5 +1,5 @@
 ﻿
-<div class="col_12 visible column center"> 
+<div class="col_12  NoPrint visible column center"> 
 
-        &copy; 2014-2016 Оплачко М.С. - УПФР г. Азов;   <a href='Index.php' title='Техническая поддержка пользователя'>Техническая поддержка пользователя</a>  <a href='History.php'> 0.4.0</a> от 27.12.2016
+        &copy; 2014-2017 Оплачко М.С. - УПФР г. Азов;   <a href='Index.php' title='Техническая поддержка пользователя'>Техническая поддержка пользователя</a>  <a href='History.php'> 0.5.0</a> от 14.02.2017
 </div>

@@ -87,6 +87,18 @@ protected function FieldZN($Table,$Field,$Id) {
     return $res[$Field]; 
 }
 
+protected function RecordZN($Table,$Field,$Id) {
+    $Qu="Select ".$Field." from ".$Table." Where Id=".$Id;
+    if ($res = mysqli_prepare($this->link, $Qu)) {
+        $res=mysqli_query($this->link,$Qu);
+        $res=mysqli_fetch_assoc($res);
+    }
+    //$res=mysqli_query($this->link,$query);
+    
+    return $res; 
+}
+
+
 protected function structDB($param=0,$TableName='',$DBName='') {
 
     $result=array();
