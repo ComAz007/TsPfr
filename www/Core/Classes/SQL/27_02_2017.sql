@@ -1,0 +1,4 @@
+ALTER TABLE `jurpstz` ADD `DateOtv` DATE NOT NULL ,
+ADD `NomerOtv` VARCHAR( 10 ) NOT NULL ,
+ADD `Rezult` VARCHAR( 100 ) NOT NULL,
+ADD `status` INT NOT NULL DEFAULT '0'

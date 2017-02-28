@@ -13,6 +13,7 @@ return arr;
     //document.getElementById('PathFileCL').value=peremen;
     }
 
+var xhr;
 
 //
 //$(function(){
@@ -226,13 +227,21 @@ $(function() {
   });
   
   function modalwindow(){
+      
+        
          $("#dialog").dialog(
             {modal: true,
             resizable:false,
             minWidth: 700,
-            position: ['top','center'],
+            position: ['center','center'],
+            //position: ['top','center'],
             //minHeight: 300
-            close: function(event, ui) {}
+            close: function(event, ui) {
+               $('div.ui-dialog').remove();
+               $('div.ui-widget-overlay').remove();
+               $("#dialog").remove();
+               xhr.abort();
+            }
             }
              
             );
@@ -266,7 +275,8 @@ $(function() {
      
 
 function obrabotka(){
-$('.CreateForm').submit(function(e){
+$('.UIForm').unbind('submit');
+$('.UIForm').submit(function(e){
 //отменяем стандартное действие при отправке формы
 //alert(module);
 e.preventDefault();
@@ -277,14 +287,18 @@ var m_action=$(this).attr('action');
 //получаем данные, введенные пользователем в формате input1=value1&input2=value2...,
 //то есть в стандартном формате передачи данных формы
 var m_data=$(this).serialize();
+//alert(m_action+" "+module);
 
-$.ajax({
+    $.ajax({
 type: m_method,
 url: "?option="+module,
 //url: "?option="+m_action,
-data: m_data+"&Action=Create",
+data: m_data+"&Action="+m_action,
 success: function(result){
-$("#dialog").dialog('destroy');
+//$("#dialog").dialog('destroy');
+$('div.ui-dialog').remove();
+$('div.ui-widget-overlay').remove();
+$("#dialog").remove();
 $('.MainContent').html(result);
 
 }
@@ -301,6 +315,7 @@ $('.MainContent').html(result);
 //$(document).on'click','input[type="submit"]',function(){
  var requestSent = false;
     $(document).ready(function() {
+        
 $('.NoPrint').on('click', function(e){
     //$('.NoPrint').click(function(e){
       e.preventDefault();
@@ -354,6 +369,29 @@ $('#CopyRecord').click(function(e){
     
     
 });
+
+$('.ButtonActionAjax').click(function(){
+    //e.preventDefault();
+    var Action=$(this).attr('Action');
+    //var Module=$(this).attr('Module');
+    //var Table=$(this).attr('Table');
+    //alert(Action+" "+module);
+            $.ajax({
+                    url: "?option="+module,
+                    cache: false,
+                    data: {"Action" : Action, sl: DataChekedSet()
+                    },
+                    success: function(html){
+                        $(".MainContent").append(html);
+                        modalwindow();
+                        obrabotka();
+                                //html(html);  
+                    }  
+                });  
+    
+    
+});
+
 //$('input[type="submit"]').submit(function(e){
 ////$('.CreateForm').submit(function(e){
 ////отменяем стандартное действие при отправке формы
@@ -414,14 +452,18 @@ $('.ui-button-text').click(function(){
     });
     
     //Щелкнули по крестику в диалоге модальном! Похронили на всегда
-//    $('.ui-button-icon-primary ui-icon ui-icon-closethick').click(function(){
+    
+    $('.ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close').click(function(){
+        xhr.abort();
+        $('div.ui-dialog').remove();
+        $("#dialog").remove();
 //        $("#dialog").dialog('destroy');
 //        });
 //    $('#dialog').bind('dialogclose', function(event) {
 //    //$.xhrPool.abortAll();
 //    $("#dialog").remove();
     
-    //});
+    });
     
 //    $('#tabr1').click(function(){
 //      UpdContentMainTable();
@@ -448,9 +490,10 @@ $('.ui-button-text').click(function(){
 //alert(1);
 //})
             
-//        $('body').on('click'    
+//        $('body').on('click' 
+        $('#Create').unbind('click');
         $('#Create').click(function(){   
-            $.ajax({
+            xhr=$.ajax({
                     url: "?option="+opti,
                     cache: false,
                     data: {"Act" : "Create"},
@@ -460,7 +503,8 @@ $('.ui-button-text').click(function(){
                         obrabotka();
                                 //html(html);  
                     }  
-                });  
+                }); 
+              //  xhr.abort();
             });  
  
                 $('#Historym').click(function(){  
@@ -494,8 +538,10 @@ $('.ui-button-text').click(function(){
                     cache: false,
                     data: {"Act" : "Action1", sl: DataChekedSet()},
                     success: function(html){  
-                       UpdMainContent(module);
-                        //$(".ContentMainTable").append(html);
+                        $(".MainContent").append(html);
+                        modalwindow();
+                        obrabotka();
+                        UpdMainContent(module);
                                 //html(html);  
                     }  
                 });  
@@ -507,16 +553,33 @@ $('.ui-button-text').click(function(){
                     //type: "POST",
                     //url: "?option=viewJurEsia&Act=Create", 
                     //url: "?option=viewJurEsia",  
-                    url: "?option="+opti,
+                    url: "?option="+module,
                     cache: false,
                     data: {"Act" : "Action2", sl: DataChekedSet()},
-                    success: function(html){  
-                        $("body").append(html);
+                    success: function(html){ 
+                        UpdMainContent(module);
+                        //$("body").append(html);
                                 //html(html);  
                     }  
                 });  
             });  
 
+            $('#ObrabotkaEnd').click(function(){  
+            //myfunc();
+                $.ajax({
+                    //type: "POST",
+                    //url: "?option=viewJurEsia&Act=Create", 
+                    //url: "?option=viewJurEsia",  
+                    url: "?option="+module,
+                    cache: false,
+                    data: {"Action" : "OBE", sl: DataChekedSet()},
+                    success: function(html){ 
+                        UpdMainContent(module);
+                        //$("body").append(html);
+                                //html(html);  
+                    }  
+                });  
+            });
 
             
             $('#PrintM').click(function(){  
@@ -526,11 +589,12 @@ $('.ui-button-text').click(function(){
                     //url: "?option=viewJurEsia&Act=Create", 
                     
                     //url: "?option=viewJurEsia",  
-                    url: "?option="+opti,
+                    url: "?option="+module,
                     cache: false,
-                    data: {"Act" : "PrintM", sl: DataChekedSet()},
+                    data: {"Action" : "PrintM", sl: DataChekedSet()},
                     success: function(data){  
-                        $("body").html(data);
+                        $(".MainContent").html(data);
+                        //$("body").html(data);
                     }  
                 }); 
                

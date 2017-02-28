@@ -18,6 +18,7 @@ abstract class Acore_A extends ADB {
     public $crosTable;
     public $IdForm;
     protected $IDUser;
+    private $UserTable=[];
 
     // TO-DO пдумать как сделать красивей! Сейчас если 1 то работает Create Acore_A если 0 то Create Модуля!
     public $GLflagCreate=1;
@@ -176,8 +177,8 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
     If ($key=='Id_User_Vipoln'){ $result=GetUserName($data);}
     If ($key=='Id_User_Get'){ $result=GetUserName($data);}
 
-    
     //If ($TableName=='juresia' AND $key=='Deistvie'){$result=Jurnals::getESIA($data); echo $result;}
+    If ($TableName=='JurObrEVD' AND $key=='region'){ $result=$this->getRegion($data);}
     
     If ($TableName=='JurEsia' AND $key=='Deistvie'){ $result=$this->getESIA($data);}
     If ($TableName=='JurEsia' AND $key=='DateObr'){ $result=date("d.m.Y",strtotime($data));}
@@ -304,6 +305,7 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
 // TODO новая функция отрисовки таблиц(от 19/12/2016). Заменить во всех местах
 //TODO $CheckedFieldOnOff - поле по которому определяется что обработка завершена
 //                          доработат до состояния когда определяется Имя поля и значение
+//TODO человеческий эрор если таблицы нет в БД!
     protected function TablePrototypeNew($AtribId=Array('Edit'),$CheckedFieldOnOff='1',$WhereString='',$Access=0){
         
     //`Id`, `DataReg`, `KodReg`, `KodUrLic`, `KodUpfr`, `FIOZL`, `IdUserCreate`, `TypeZapros`, `TypeZaprosId`, `TypeDeistv`, `FileZapr`, `Povtor`, `DatePovtor`, `DateOtveta`, `FileOtv`
@@ -548,8 +550,15 @@ protected function get_LeftBar()
     
     protected function Create($Caption,$data){
         $data .= $this->DynamicTableGenerated();
-        $data .= $this->UIButtonCreate();
+        $data .= '</br> '.$this->UIButtonCreate();
         $this->Form($Caption, $data,'Create');
+    }
+    
+    //создание формы почти повторяет private function Form
+    //TO-DO рассмотреть вопрос об оптимизации соединив все в одну форму
+    // TO-DO доработать до стадии когда из полей подставляются значения если они там есть!!!
+    protected function CreateForm($Caption,$data,$Action){
+        $this->Form($Caption, $data,$Action);
     }
     
     protected function CopyRecord($Caption,$data){
@@ -571,8 +580,8 @@ protected function get_LeftBar()
             Echo "<form enctype='multipart/form-data' action='' method='Post'>";
         }
         else {
-            $Action.='Form';
-            Echo "<form enctype='multipart/form-data' action='' method='post' class='$Action'>";
+            //$Action.='Form';
+            Echo "<form enctype='multipart/form-data' action='$Action' method='post' class='UIForm'>";
            // $Classl="?option=".$_SESSION['Class'];
            // Echo "<form enctype='multipart/form-data' action='$Classl' method='post' class='$Action'>";
         }
@@ -668,6 +677,10 @@ protected function get_LeftBar()
                 //exit();
                 $this->query($query);
                 $this->Logging($_SESSION['Id_user'], $this->IdForm, $this->linkId,1,0,'Создание записи');
+                
+                If ($this->class=='viewJurObrEVD'){
+                mail("071-040-0800", iconv('utf-8','windows-1251', "Новая задача загрузки ЭВД"), iconv('utf-8','windows-1251', "Новая задача загрузки ЭВД"));
+                }
                 //header("location: /?option=".$_SESSION['Class']);
                 //header("location: /?option=".$this->class);
                 //echo 'Xera sebe';
@@ -778,7 +791,10 @@ protected function get_LeftBar()
             If (($Pole['Name']!=='Id') and ($Pole['Name']!=='IdUserCreate')){
             if (!empty($this->TableHeadLocal)){
                     if (in_array($Pole['Name'], $this->TableHeadLocal)) {
-                        $data .=$this->UIDinamicTableFieldGenerate($Pole['Type'], $Pole['Name'], $Pole['Comment'],$fieldValue);
+                        If ($Pole['Comment']=='')
+                           $data .=$this->UIDinamicTableFieldGenerate($Pole['Type'], $Pole['Name'], $this->TableHead[$Pole['Name']], $fieldValue);        
+                        else
+                           $data .=$this->UIDinamicTableFieldGenerate($Pole['Type'], $Pole['Name'], $Pole['Comment'],$fieldValue);
                     }
             }
             else
@@ -806,6 +822,11 @@ protected function get_LeftBar()
 
 public function UIButtonAjax($ButtonType,$ButtonText){  
     return "<div class='col_3 ButtonUIAjax visible center' style='height: 25px;'> <a id='".$ButtonType."' title='".$ButtonText."'>".$ButtonText."</a></div>";
+}
+
+
+public function UIButtonActionAjax($ButtonAction,$ButtonLabel){  
+    return "<div class='col_3 ButtonActionAjax visible center' Action='".$ButtonAction."' style='height: 25px;'> <a title='".$ButtonLabel."'>".$ButtonLabel."</a></div>";
 }
 
 public function UITextArea($Name,$Data,$cols=68,$Rows=5){  

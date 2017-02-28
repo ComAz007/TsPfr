@@ -19,7 +19,7 @@
         z-index: 800 !important;
 }
 
-.ButtonUIAjax {
+.ButtonUIAjax, .ButtonActionAjax {
 cursor: pointer
 }
 

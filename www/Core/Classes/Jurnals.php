@@ -157,7 +157,24 @@ class Jurnals extends Acore_A{
         }
     }
     
-    
+    protected function getRegion($type,$GetSet=0) {
+    //static function getESIA($type,$GetSet=0) {
+        $arrays = array(
+                1=>'Наш регион',
+                0=>'Не наш'
+                );
+   
+        If ($GetSet==1){
+            $arrays = array_flip ($arrays);
+        }
+        
+        If ($GetSet==2){
+            return $arrays;
+        }
+        else {
+            return $arrays[$type];
+        }
+    }
     
     protected function rdate($param, $time=0) {
 	if(intval($time)==0)$time=time();

@@ -51,12 +51,14 @@ class viewJurOZIKD extends Jurnals {
 
 
     public function MainContent(){
+        echo "<script language='javascript'>var module='".$this->class."' </script>";
         echo "<script language='javascript'>var opti='".$this->class."' </script>";
         echo "<Center> <H6> Журнал регистрации начала и конца действия Карточек доступа к ПТК </Center> </H6>";
         echo '<ul class="tabs left">
             <li><a href="#tabr1">Карточки</a></li>';
         echo '</ul>';
         Echo ('<div id="tabr1" class="tab-content">');
+        Echo $this->UIButtonActionAjax('test', 'Test button');
         echo "<div id='Create' class='col_3 visible center' style='height: 25px;'> <a   title='Создать'>Создать</a></div>";
         echo "<div id='PrintM' class='col_3 visible center' style='height: 25px;'> <a  title='Печатать АКТ'>Печатать АКТ</a></div>";
         echo "<div id='Action1' class='col_3 visible center' style='height: 25px;'> <a  title='Включит в АКТ'>Включить в АКТ</a></div>";
@@ -96,13 +98,14 @@ class viewJurOZIKD extends Jurnals {
     }
     
 
-    private function printMain() {
-        If (isset($_REQUEST['sl'])){
-            include 'Header.php';
+    private function PrintForm($request) {
+        echo "<script language='javascript'>var module='".$this->class."' </script>";
+        If (isset($request['sl'])){
+            //include 'Header.php';
             $perech='';
-            foreach($_REQUEST['sl'] as $product):
-                    $NNAkt.=$product.' ';
-                    $query=" Select IDPtk,DataBeg,DataEnd,IdAkt,DateAkt From ".$this->table." Where Id=$product";
+            foreach($request['sl'] as $record):
+                    $NNAkt.=$record.' ';
+                    $query=" Select IDPtk,DataBeg,DataEnd,IdAkt,DateAkt From ".$this->table." Where Id=$record";
                     $Res= $this->query($query,1);
                     $data = $Res->fetch_assoc();
                     $perech.=$this->getPTK($data['IDPtk']).' срок действия с '.date("d.m.Y",strtotime($data['DataBeg'])).' по '.date("d.m.Y",strtotime($data['DataEnd'])).'; </BR>';
@@ -114,7 +117,7 @@ class viewJurOZIKD extends Jurnals {
             Echo '<BR> <BR> <div  class="col_12 center" style="font-size:15px; text-align:right; ">'
                 .'УТВЕРЖДАЮ:</BR >
                 Начальник УПФР в г.Азове РО</BR >
-                _____________ Ю.А. Булавин</BR >'.$DatAkt.'</div>';
+                _____________ В.В. Парфенов</BR >'.$DatAkt.'</div>';
 
             Echo '<BR> <BR> <div  class="col_12 center" style="font-size:15px; text-align: center; ">'
                 .'<B> АКТ № '.$NomAkt.' <BR>
@@ -144,12 +147,15 @@ class viewJurOZIKD extends Jurnals {
             Главный специалист-эксперт группы автоматизации: ______________ Трубицин А.А.; </BR>
             </div>';
         }
-        else { header("location: /?option=".$this->class);}
+        exit();
+        //else { header("location: /?option=".$this->class);}
     }
     
    
     
     protected function obr() {
+        
+        $this->GLflagCreate=0;
         
         If ($_REQUEST['Act'] == Create) {
             $_SESSION['IdRec'] = $_REQUEST['id'];
@@ -179,14 +185,19 @@ class viewJurOZIKD extends Jurnals {
                 endforeach;
             
             $this->MainTabelA();
-            header("location: /?option=".$this->class);
+            //header("location: /?option=".$this->class);
            }
         }
         
-        If ($_REQUEST['Act'] == PrintM) {
-            $_SESSION['IdRec'] = $_REQUEST['id'];
-            $this->printMain($data);
+        If ($_REQUEST['Action'] == PrintM) {
+            //$_SESSION['IdRec'] = $_REQUEST['RecordId'];
+            $this->printForm($_REQUEST);    
         }
+        
+//        If ($_REQUEST['Act'] == PrintM) {
+//            $_SESSION['IdRec'] = $_REQUEST['id'];
+//            $this->printMain($data);
+//        }
         
         If ($_REQUEST['Act'] == 'CopySL') {
             $_SESSION['IdRec'] = $_REQUEST['id'];
@@ -220,7 +231,8 @@ class viewJurOZIKD extends Jurnals {
             header("location: /?option=".$this->class);
         }
         
-       IF (isset($_POST['CreateBut'])) {
+//       IF (isset($_POST['CreateBut'])) {
+        IF ($_REQUEST['Action'] == 'Create') {
             $IdRec = $_SESSION['IdRec'];
             $IDU = $_SESSION['Id_user'];
             $DateBeg = $_POST['DataBeg'];
@@ -230,27 +242,29 @@ class viewJurOZIKD extends Jurnals {
                       VALUES('$PTK','$DateBeg','$Osn','$IDU')";
             $this->query($query);
             $this->Logging($_SESSION['Id_user'], $Id_Razdela=3,$this->linkId,1,0,'Создана запись для парольных карт к ПТК');
-            $this->MainTabelA();
-            header("location: /?option=".$this->class);
+            //$this->MainTabelA();
+            //header("location: /?option=".$this->class);
         };
     }
 
     public function Create($Caption, $data) {
-        Echo "<Div class=grid>"; 
-        Echo '<div id="dialog" title="Создание">';
+        $this->TableHeadLocal=array("False");
+//        Echo "<Div class=grid>"; 
+//        Echo '<div id="dialog" title="Создание">';
         $Usluga=$this->getPTK(0,2);
-        Echo "<form enctype='multipart/form-data' action='' method='Post'>";
-        Echo 'Название ПТК: <select name="Usluga">';
+//        Echo "<form enctype='multipart/form-data' action='' method='Post'>";
+        $data.='Название ПТК: <select name="Usluga">';
         foreach ($Usluga as $key=>$value ){
-            Echo ' <option value='.$key.'>'.$value.' </option>';
+            $data.=' <option value='.$key.'>'.$value.' </option>';
         }
-        Echo '  </select> </BR>  </BR></p>';     
-        Echo ' Дата начала <input class="KalDates" name="DataBeg"> </BR>  </BR></p>';
-        Echo ' Основание <input name="Osnovanie"> </BR>  </BR></p>';
-        Echo "<p><input type='submit' name='CreateBut' value='Создать' >";
-        Echo '</form>';
-        Echo '</Div>';
-        Echo '</Div>';
+        $data.='  </select> </BR>  </BR></p>';     
+        $data.=' Дата начала <input class="KalDates" name="DataBeg"> </BR>  </BR></p>';
+        $data.=' Основание <input name="Osnovanie"> </BR>  </BR></p>';
+        //Echo "<p><input type='submit' name='CreateBut' value='Создать' >";
+        //Echo '</form>';
+        //Echo '</Div>';
+        //Echo '</Div>';
+        parent::Create($Caption, $data);
     }
 
     

@@ -37,6 +37,7 @@ else {
         <li> <a href="/?option=viewJurVipnet">Регистрации запросов(463р)</a></li>
          <li> <a href="/?option=viewJurEsia">Регистрации заявлений для доступа к ЕСИА</a></li>
          <li> <a href="/?option=viewJurPStZ">Регистрации запросов подтверждения стажа</a></li>
+         <li> <a href="/?option=viewJurObrEVD">Журнал обработки запросов загрузки ЭВД</a></li>
          
     </ul>
 </li>

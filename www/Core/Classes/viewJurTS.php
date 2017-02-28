@@ -130,6 +130,17 @@ class viewJurTS extends Jurnals {
                 $this->Logging($_SESSION['Id_user'], $Id_Razdela=0,$product,10,0,'Задача № '.$product.' принята');
             endforeach;
             }
+            
+            If ($_REQUEST['Act'] == Action2) {
+                $DTS = date("Y-m-d H:i:s");
+                foreach($_REQUEST['sl'] as $product):
+                    $query=" UPDATE ".$this->table." SET Date_Vipl='$DTS',  Status='2' Where Id='$product' and Date_Vipl='0000-00-00 00:00:00'";
+                    $this->query($query);
+                    $this->Logging($_SESSION['Id_user'], $Id_Razdela=0,$product,12,0,'Задача закрыта');
+                endforeach;
+//                $this->MainTabelA();
+//                header("location: /?option=".$this->class);
+            }
             //$this->MainTabelA();
             //header("location: /?option=".$this->class);
         }
@@ -139,20 +150,7 @@ class viewJurTS extends Jurnals {
             $this->Edit('Изменение задачи/заявки','');    
         }
         
-          If ($_REQUEST['Act'] == Action2) {
-          
-            If (isset($_REQUEST['sl'])){
-                $DTS = date("Y-m-d H:i:s");
-                foreach($_REQUEST['sl'] as $product):
-                    $query=" UPDATE ".$this->table." SET Date_Vipl='$DTS',  Status='2' Where Id='$product' and Date_Vipl='0000-00-00 00:00:00'";
-                    $this->query($query);
-                    $this->Logging($_SESSION['Id_user'], $Id_Razdela=0,$product,12,0,'Задача закрыта');
-                endforeach;
-            
-            $this->MainTabelA();
-            header("location: /?option=".$this->class);
-           }
-        }
+       
         
         
         If ($_REQUEST['Act'] == 'CopySL') {
