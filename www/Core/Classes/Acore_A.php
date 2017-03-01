@@ -61,10 +61,27 @@ abstract class Acore_A extends ADB {
  else {
     $this->IDUser = $_SESSION['Id_user'];
     parent::__construct();
+    
+    If (empty($this->UserTable)){
+    $this->UserMas();}
+    
     $this->get_Body();    
 }
 
 }
+
+private function UserMas(){
+    $query=" Select Id,FIO from user";
+    $res=$this->query($query);
+     while($data = $res->fetch_assoc()){
+         $this->UserTable[$data["Id"]]=$data["FIO"];
+     }      
+}
+
+protected function GetUserName($Id) {
+    return $this->UserTable[$Id];
+    }
+
 
 protected function PrintMsg($MSG){
     If ($MSG<>'')
@@ -171,11 +188,11 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
  protected function IdentData($TableName,$key,$data){
     
     $result='';
-    If ($key=='IdUserCreate'){ $result=GetUserName($data);}
+    If ($key=='IdUserCreate'){ $result= $this->GetUserName($data);}
     
-    If ($key=='Id_User_Create'){ $result=GetUserName($data);}
-    If ($key=='Id_User_Vipoln'){ $result=GetUserName($data);}
-    If ($key=='Id_User_Get'){ $result=GetUserName($data);}
+    If ($key=='Id_User_Create'){ $result=$this->GetUserName($data);}
+    If ($key=='Id_User_Vipoln'){ $result=$this->GetUserName($data);}
+    If ($key=='Id_User_Get'){ $result=$this->GetUserName($data);}
 
     //If ($TableName=='juresia' AND $key=='Deistvie'){$result=Jurnals::getESIA($data); echo $result;}
     If ($TableName=='JurObrEVD' AND $key=='region'){ $result=$this->getRegion($data);}

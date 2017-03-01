@@ -167,11 +167,11 @@ class viewJurVipnet extends Jurnals {
                 $str=$str. '<td value="'.$data['3'].'" >' . $data['3'] . '</td>';
                 $str=$str. '<td value="'.$data['4'].'" >' . $data['4']. '</td>';
                 $str=$str. '<td value="'.$data['5'].'" >' . $data['5'] . '</td>';
-                $str=$str. '<td value="'.GetUserName($data['6']).'" >' . GetUserName($data['6']). '</td>';
+                $str=$str. '<td value="'.$this->GetUserName($data['6']).'" >' . $this->GetUserName($data['6']). '</td>';
                 $str=$str. '<td value="'.$data['7'].'" >' . $data['7']. '</td>';
                 $str=$str. '<td value="'.$this->getTypeZ3($data['8']).'" >' . $this->getTypeZ3($data['8']) . '</td>';
                 $str=$str. '<td value="'.$data['9'].'" >' . $this->getEsNo($data['9']) . '</td>';
-                $str=$str. '<td value="'.$data['14'].'" >'. GetUserName( $data['14'] ). '</td>';
+                $str=$str. '<td value="'.$data['14'].'" >'. $this->GetUserName( $data['14'] ). '</td>';
                 $str=$str. '<td value="'.$data['10'].'" >' . $this->getEsNo($data['10']) . '</td>';
                 $str=$str. '<td value="'.$data['11'].'" >' . $data['11'] . '</td>';
                 $str=$str. '<td value="'.$data['12'].'" >' . date("d.m.Y",strtotime($data['12'])) . '</td>';
@@ -212,9 +212,9 @@ private function TableHistory($Res){
         
         while($data = $Res->fetch_row()){ 
                 
-                $str=$str. '<td value="'.GetUserName($data['0']).'" >' . GetUserName($data['0']). '</td>';
+                $str=$str. '<td value="'.$this->GetUserName($data['0']).'" >' . $this->GetUserName($data['0']). '</td>';
 		If($data['4']==6){
-	                $str=$str. '<td value="'.$data['1'].'" >' . $data['1'].': '. GetUserName($data['3']). '</td>';}
+	                $str=$str. '<td value="'.$data['1'].'" >' . $data['1'].': '. $this->GetUserName($data['3']). '</td>';}
 		else
 {
 	                $str=$str. '<td value="'.$data['1'].'" >' . $data['1']. '</td>';}
@@ -349,7 +349,7 @@ $Otd=$_SESSION['IdOtd'];
    }
    
    Echo ('<div id="tabr1" class="tab-content">');
-   $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where DateOtveta is NOT NULL Order By DateOtveta DESC";             
+   $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where DateOtveta is NOT NULL Order By DateOtveta DESC LIMIT 100";             
    $Res=$this->query($query);
    $this->Table($Res,1);
    Echo '</div>';
