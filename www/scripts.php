@@ -1,6 +1,6 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/kickstart.js"></script> <!-- KICKSTART -->
-<script src="js/la.js"></script> 
+<script src="js/la.js"></script>
 <link rel="stylesheet" href="css/La.css" media="all" />
 
 <script type="text/javascript" src="js/jquery-2.2.0.js"></script>

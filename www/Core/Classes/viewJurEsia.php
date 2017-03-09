@@ -372,7 +372,7 @@ private function TableHistory($Res){
         //If ($_REQUEST['Act'] == 'CopySL') {
         If ($_REQUEST['Action'] == CopyRecord) {
             $_SESSION['IdRec'] = $_REQUEST['id'];
-            $this->Create($Caption, $data,1);  
+            $this->Create('Новая запись через копирование', $data,1);  
         }
 
           If ($_REQUEST['Act'] == Historym) {

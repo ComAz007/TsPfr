@@ -17,6 +17,7 @@ $class=  trim(htmlspecialchars(strip_tags($_GET['option'])));
 }
 else 
 {
+    include_once 'scripts_1.php';
 $class='main'; // Set default class 
 }
     
@@ -33,6 +34,12 @@ if (file_exists("Core/classes/".$class.".php"))
     }
 }
  else {
+    var_dump($_REQUEST);
+     If (isset($request['exit'])) {
+            //header("location: /logout.php");
+         header("Location: /");
+        }
+        Else
     exit("<p>Не верный адрес</p>");
 }
 

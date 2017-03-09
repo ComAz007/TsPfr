@@ -1,72 +1,11 @@
    //Сия чудная функция получает Value Инпутов с типом Чекид
-    function DataChekedSet(){
-    //alert("XeraSebe");
-     var arr = [];
- //$('input[name="NCheked"]').click(function(){
-   $('input[name="NCheked"]:checked').each(function() {
-        arr.push($(this).val());
-    }); 
-   
-                //сonsole.log(arr);
-return arr;
- //      });
-    //document.getElementById('PathFileCL').value=peremen;
+    function GetDataCheked(){
+        var CheckedArray = [];
+        $('input[name="NCheked"]:checked').each(function() {
+            CheckedArray.push($(this).val());
+        }); 
+        return CheckedArray;
     }
-
-var xhr;
-
-//
-//$(function(){
-//    
-//$.xhrPool = [];
-//    $.xhrPool.abortAll = function() {
-//        $(this).each(function(idx, jqXHR) {
-//            jqXHR.abort();
-//        });
-//        $.xhrPool = [];
-//    };
-//    $.ajaxSetup({
-//        beforeSend: function(jqXHR) {
-//            $.xhrPool.push(jqXHR);
-//        },
-//        complete: function(jqXHR) {
-//            var index = $.xhrPool.indexOf(jqXHR);
-//            if (index > -1) {
-//                $.xhrPool.splice(index, 1);
-//            }
-//        }
-//    });
-//    
-//
-//});
-
-//$(function(){
- 
-//$.xhrPool = [];
-//$.xhrPool.abortAll = function() {
-//    $(this).each(function(idx, jqXHR) {
-//        jqXHR.abort();
-//    });
-//    $.xhrPool.length = 0
-//};
-// 
-//$.ajaxSetup({
-//    beforeSend: function(jqXHR) {
-//        $.xhrPool.push(jqXHR);
-//    },
-//    complete: function(jqXHR) {
-//        var index = $.xhrPool.indexOf(jqXHR);
-//        if (index > -1) {
-//            $.xhrPool.splice(index, 1);
-//        }
-//    }
-//});
-//    
-    
-    
-
-//});
-
 
 //function CreateButton(module, action){
 //    $.ajax({  
@@ -78,45 +17,6 @@ var xhr;
 //                    }  
 //                });  
 //}
-
-//var countChecked = function() {
-//  var n = $( "input:checked" ).length;
-//  $( "div" ).text( n + (n === 1 ? " is" : " are") + " checked!" );
-//};
-//countChecked();
-//
-//$( "input[type=checkbox]" ).on( "click", countChecked );
-//
-// $('input:cCheked:checked').each(function(){
-//alert($(this).val());
-//});
-
-//var dann =  $($(":checkbox:checked"), function(el){ return $(el).val(); });
-//alert(dann);
-
-
-
-//var flag = 0;
-//$('#iCheked :checkbox').click(clickCheckbox);
-// 
-// 
-// function clickCheckbox(){
-//      var num = new Array(check_ch);
-// 
-//   var j = 0;
-//   $('#iCheked :checkbox:checked').each(function() {
-//       num[j] = $(this).attr('value');
-//       j++;
-//   });
-//  
-//    if(num.length > 1){
-//           flag  = 1; 
-//    }else{
-//           flag =  0;  
-//   }
-// }
-
-
 
 function SendGet(Files,PathTmp) {
 	//отправляю GET запрос и получаю ответ
@@ -215,6 +115,7 @@ $(function() {
           log(arr);
       },
       open: function() {
+        
         $(this).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
       },
       close: function() {
@@ -240,7 +141,7 @@ $(function() {
                $('div.ui-dialog').remove();
                $('div.ui-widget-overlay').remove();
                $("#dialog").remove();
-               xhr.abort();
+               $( this ).removeClass("ui-widget-overlay ui-front");
             }
             }
              
@@ -261,13 +162,14 @@ $(function() {
             
    
     function UpdMainContent(module)  
-            {  
+            { 
                 $.ajax({  
                     url: "?option="+module,
                     cache: false,
                     data: {"Act" : "UMC"},
                     success: function(html){  
-                        $(".MainContent").html(html);  
+                        $(".MainContent").html(html);
+                           //console.log(steck);
                     }  
                 });  
             }  
@@ -346,7 +248,7 @@ $('.NoPrint').on('click', function(e){
     });
         
         
-$('#CopyRecord').click(function(e){
+$('.CopyRecord').click(function(e){
     //e.preventDefault();
     var Record=$(this).attr('RecId');
     var Module=$(this).attr('Module');
@@ -370,6 +272,30 @@ $('#CopyRecord').click(function(e){
     
 });
 
+$('.EditRecord').click(function(e){
+    //e.preventDefault();
+    var Record=$(this).attr('RecId');
+    var Module=$(this).attr('Module');
+    var Table=$(this).attr('Table');
+    //alert(Record+" "+Module);
+            $.ajax({
+                    url: "?option="+Module,
+                    cache: false,
+                    data: {"Action" : "EditRecord",
+                           "RecordId" : Record,
+                           "Table" : Table
+                    },
+                    success: function(html){
+                        $(".MainContent").append(html);
+                        modalwindow();
+                        obrabotka();
+                                //html(html);  
+                    }  
+                });  
+    
+    
+});
+
 $('.ButtonActionAjax').click(function(){
     //e.preventDefault();
     var Action=$(this).attr('Action');
@@ -379,7 +305,7 @@ $('.ButtonActionAjax').click(function(){
             $.ajax({
                     url: "?option="+module,
                     cache: false,
-                    data: {"Action" : Action, sl: DataChekedSet()
+                    data: {"Action" : Action, sl: GetDataCheked()
                     },
                     success: function(html){
                         $(".MainContent").append(html);
@@ -431,13 +357,17 @@ $('.ButtonActionAjax').click(function(){
 //    });
         
         
-    //$("body").on("click",".menu li a",function(event){   
-    $(".menu li a").click(function(event){
+    //$("body").on("click",".menu li a",function(event){ 
+    
+    //$("a[href^='#']").unbind('click');
+    $(".menu li a").one("click",function(event){
+        $(".menu li a").unbind('click'); //"Убиваем" размножение AJAX запроса связано с тем, что
+                                    //$(document).ready выполняется при загрузке ажаксом и этим снимаем клик
     event.preventDefault();
     var  toLoad = $(this).attr('href').substr(9,$(this).attr('href').length);
     UpdMainContent(toLoad);
+           
     return false;
-    
     });
         
         
@@ -454,7 +384,9 @@ $('.ui-button-text').click(function(){
     //Щелкнули по крестику в диалоге модальном! Похронили на всегда
     
     $('.ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close').click(function(){
-        xhr.abort();
+         //xhr.abort();
+        $('div.ui-widget-overlay ui-front').remove(); 
+        //$('div.ui-widget-overlay').remove();
         $('div.ui-dialog').remove();
         $("#dialog").remove();
 //        $("#dialog").dialog('destroy');
@@ -493,7 +425,7 @@ $('.ui-button-text').click(function(){
 //        $('body').on('click' 
         $('#Create').unbind('click');
         $('#Create').click(function(){   
-            xhr=$.ajax({
+            $.ajax({
                     url: "?option="+opti,
                     cache: false,
                     data: {"Act" : "Create"},
@@ -536,7 +468,7 @@ $('.ui-button-text').click(function(){
                     //url: "?option=viewJurEsia",  
                     url: "?option="+module,
                     cache: false,
-                    data: {"Act" : "Action1", sl: DataChekedSet()},
+                    data: {"Act" : "Action1", sl: GetDataCheked()},
                     success: function(html){  
                         $(".MainContent").append(html);
                         modalwindow();
@@ -555,7 +487,7 @@ $('.ui-button-text').click(function(){
                     //url: "?option=viewJurEsia",  
                     url: "?option="+module,
                     cache: false,
-                    data: {"Act" : "Action2", sl: DataChekedSet()},
+                    data: {"Act" : "Action2", sl: GetDataCheked()},
                     success: function(html){ 
                         UpdMainContent(module);
                         //$("body").append(html);
@@ -572,7 +504,7 @@ $('.ui-button-text').click(function(){
                     //url: "?option=viewJurEsia",  
                     url: "?option="+module,
                     cache: false,
-                    data: {"Action" : "OBE", sl: DataChekedSet()},
+                    data: {"Action" : "OBE", sl: GetDataCheked()},
                     success: function(html){ 
                         UpdMainContent(module);
                         //$("body").append(html);
@@ -591,7 +523,7 @@ $('.ui-button-text').click(function(){
                     //url: "?option=viewJurEsia",  
                     url: "?option="+module,
                     cache: false,
-                    data: {"Action" : "PrintM", sl: DataChekedSet()},
+                    data: {"Action" : "PrintM", sl: GetDataCheked()},
                     success: function(data){  
                         $(".MainContent").html(data);
                         //$("body").html(data);

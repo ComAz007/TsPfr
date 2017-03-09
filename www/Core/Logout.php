@@ -10,6 +10,7 @@
     unset ($_SESSION['Page']);
     unset ($_GET['page']);
     unset($_SESSION['err_autrh']);
+    echo $_SERVER['HTTP_REFERER'];
     header("Location: ".$_SERVER['HTTP_REFERER']);
     
  ?>

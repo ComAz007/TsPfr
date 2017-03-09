@@ -1,4 +1,4 @@
- <div class="col_12 NoPrint visible center " >
+ <div class="col_12 NoPrint1 visible center " >
 
         <div class="col_8"><Center><H4> <a href='Index.php' title='Техническая поддержка пользователя'>Техническая поддержка пользователя</a>
 </H4></Center>
@@ -14,7 +14,7 @@
         
     </div>
 
- <div class="col_12 NoPrint" >
+ <div class="col_12 NoPrint1" >
 <!-- Menu Horizontal -->
 <ul class="menu">
 <?Php

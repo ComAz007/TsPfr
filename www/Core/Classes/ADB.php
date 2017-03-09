@@ -48,8 +48,8 @@ protected function ConstructSql($SqlCreate,$Table,$Param){
  
  
 protected function query($query,$assoc=0) {
-    if ($res = mysqli_prepare($this->link, $query)) {
-        $res=mysqli_query($this->link,$query);
+    if ($result = mysqli_prepare($this->link, $query)) {
+        $result=mysqli_query($this->link,$query);
     //TO-DO посмотреть эти команды!
     //$res->execute();
     //$res = $res->affected_rows;
@@ -57,14 +57,14 @@ protected function query($query,$assoc=0) {
     $this->setLastId($this->link);    
     }
     //$res=mysqli_query($this->link,$query);
-    return $res;
-//    If ($assoc==0) {
-//        return $res;
-//    }
-//    else {
-//        $res=mysqli_fetch_assoc($res);
-//        return $res;
-//    }
+    //return $res;
+    If ($assoc==0) {
+        return $result;
+    }
+    else {
+        //$result=
+        return mysqli_fetch_assoc($result);
+    }
 }
 
 
@@ -77,25 +77,27 @@ protected function resultOne($query)
 }
 
 protected function FieldZN($Table,$Field,$Id) {
-    $Qu="Select ".$Field." from ".$Table." Where Id=".$Id;
-    if ($res = mysqli_prepare($this->link, $Qu)) {
-        $res=mysqli_query($this->link,$Qu);
-        $res=mysqli_fetch_assoc($res);
-    }
-    //$res=mysqli_query($this->link,$query);
+    $query="Select ".$Field." from ".$Table." Where Id=".$Id;
     
-    return $res[$Field]; 
+//    if ($res = mysqli_prepare($this->link, $Qu)) {
+//        $res=mysqli_query($this->link,$Qu);
+//        $res=mysqli_fetch_assoc($res);
+//    }
+//    //$res=mysqli_query($this->link,$query);
+    
+    //return $res[$Field]; 
+    return $this->query($query,1)[$Field]; 
 }
 
-protected function RecordZN($Table,$Field,$Id) {
-    $Qu="Select ".$Field." from ".$Table." Where Id=".$Id;
-    if ($res = mysqli_prepare($this->link, $Qu)) {
-        $res=mysqli_query($this->link,$Qu);
-        $res=mysqli_fetch_assoc($res);
-    }
-    //$res=mysqli_query($this->link,$query);
-    
-    return $res; 
+protected function GetValueFieldRecord($Table,$Field,$Id) {
+    $query="Select ".$Field." from ".$Table." Where Id=".$Id;
+//    if ($result = mysqli_prepare($this->link, $query)) {
+//        $result=mysqli_query($this->link,$query);
+//        $result=mysqli_fetch_assoc($result);
+//    }
+//    //$res=mysqli_query($this->link,$query);
+    return $this->query($query,1);
+   // return $result; 
 }
 
 

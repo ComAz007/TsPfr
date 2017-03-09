@@ -669,8 +669,8 @@ Echo '</div>';
             $_SESSION['IdRec'] = $_REQUEST['id'];
             $Id= $_REQUEST['id'];
             $query = "Select FileZapr from jurvipnetzapros Where Id=$Id";
-            $rez=$this->query($query);
-            $rez=mysqli_fetch_assoc($rez);            
+            $rez=$this->query($query,1);
+            //$rez=mysqli_fetch_assoc($rez);            
             $_SESSION['FileZapr']=$rez['FileZapr'];
              
             
@@ -736,8 +736,8 @@ Echo '</div>';
             $D = date('Y-m-d');
             $Id= $_REQUEST['id'];
             $query = "Select FileZapr from jurvipnetzapros Where Id=$Id";
-            $rez=$this->query($query);
-            $rez=mysqli_fetch_assoc($rez);
+            $rez=$this->query($query,1);
+            //$rez=mysqli_fetch_assoc($rez);
             $FileName=$rez['FileZapr'];
             
             $FileMas = explode("_", $rez['FileZapr']);
@@ -764,8 +764,8 @@ Echo '</div>';
             $_SESSION['IdRec'] = $_REQUEST['id'];
             $Id= $_REQUEST['id'];
             $query = "Select FIOZL from jurvipnetzapros Where Id=$Id";
-            $rez=$this->query($query);
-            $rez=mysqli_fetch_assoc($rez);            
+            $rez=$this->query($query,1);
+            //$rez=mysqli_fetch_assoc($rez);            
             $_SESSION['FIOZL']=$rez['FIOZL'];
             $this->Msg();
             

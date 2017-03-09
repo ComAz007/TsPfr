@@ -11,7 +11,9 @@
 <script type="text/javascript" src="js/jquery172.min.js" ></script>-->
 
 <?php
+//include_once 'scripts_1.php';
 include 'scripts.php';
+
 ?>
 
 

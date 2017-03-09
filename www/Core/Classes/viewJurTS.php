@@ -150,6 +150,10 @@ class viewJurTS extends Jurnals {
             $this->Edit('Изменение задачи/заявки','');    
         }
         
+        If ($_REQUEST['Action'] == EditRecord) {
+            //$_SESSION['IdRec'] = $_REQUEST['id'];
+            $this->Edit('Изменение задачи/заявки','');    
+        }
        
         
         
@@ -277,21 +281,21 @@ class viewJurTS extends Jurnals {
     }
     
     protected function Edit($Caption,$data){
-        $this->TableHeadLocal=array("false"); //это тупо баг!!! суть в том, что массив не пустой но при этом и полей нужных нет!
-            $SData=$data;
-            $Zapros="select Opisanie, Comment from zadacha Where zadacha.Id=".$_SESSION['IdRec'];
-            $result=SetSpisok($Zapros);
-            $data = $result->fetch_row();
-            If ($_SESSION['Id_user']==$data['2'] or $_SESSION['Admin']==1){
-                $SData .= $this->UILabel('Задача');
-                $SData .= $this->UITextArea('Opisanie', $data['0']);
-                        //'<div><textarea id="textarea1" name="Zadanie" cols="68" rows="5">'.$data['0'].'</textarea></div>';
-            }
-            $SData .= '<br/> <br/>';
-            $SData .= $this->UILabel('Комментарий');
-            $SData .= $this->UITextArea('comments', $data['1']);
-            //$SData .= '<div><textarea id="textarea1" name="comments" cols="68" rows="5">'.$data['1'].'</textarea></div>';
-            //$SData .= '<div> <br/>';
+              $this->TableHeadLocal=array("OpiSanie","Comment"); //это тупо баг!!! суть в том, что массив не пустой но при этом и полей нужных нет!
+              //$this->TableHeadLocal=array("false"); //это тупо баг!!! суть в том, что массив не пустой но при этом и полей нужных нет!
+//            $SData=$data;
+//            $Zapros="select Opisanie, Comment from zadacha Where zadacha.Id=".$_SESSION['IdRec'];
+//            $result=SetSpisok($Zapros);
+//            $data = $result->fetch_row();
+//            If ($_SESSION['Id_user']==$data['2'] or $_SESSION['Admin']==1){
+//                $SData .= $this->UILabel('Задача');
+//                $SData .= $this->UITextArea('Opisanie', $data['0']);
+
+//            }
+//            $SData .= '<br/> <br/>';
+//            $SData .= $this->UILabel('Комментарий');
+//            $SData .= $this->UITextArea('comments', $data['1']);
+
         parent::Edit($Caption, $SData);
     }
   
