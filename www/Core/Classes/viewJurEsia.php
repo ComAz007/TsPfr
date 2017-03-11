@@ -286,8 +286,8 @@ private function TableHistory($Res){
             в электронной форме </div>';
        $query='SELECT * FROM juresia WHERE Id='.$_SESSION['IdRec'];
            
-       $Res= $this->query($query,1);
-       $data = $Res->fetch_assoc();
+       $data= $this->query($query,1);
+       //$data = $Res->fetch_assoc();
        
        $sel1='/../css/img/squera.jpg';
        $sel2='/../css/img/squera.jpg';
@@ -403,7 +403,7 @@ private function TableHistory($Res){
 
     public function Create($Caption, $data,$reg=0) {
         if ($reg==1){
-            $z="Select FIO,DocRekv,SNILS from JurEsia Where id=".$_REQUEST['RecordId'];
+            $z="Select FIO,DocRekv,SNILS from ".$this->table." Where id=".$_REQUEST['RecordId'];
             $res= $this->query($z);
            $res=$res->fetch_assoc();
         }

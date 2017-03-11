@@ -38,7 +38,7 @@ else {
          <li> <a href="/?option=viewJurEsia">Регистрации заявлений для доступа к ЕСИА</a></li>
          <li> <a href="/?option=viewJurPStZ">Регистрации запросов подтверждения стажа</a></li>
          <li> <a href="/?option=viewJurObrEVD">Журнал обработки запросов загрузки ЭВД</a></li>
-         
+          <li> <a href="/?option=viewJurTruZp">Регистрации запросов подтверждения заработка</a></li>         
     </ul>
 </li>
 

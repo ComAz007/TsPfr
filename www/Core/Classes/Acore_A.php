@@ -92,6 +92,8 @@ protected function PrintMsg($MSG){
     function MergeArray()
     {
         $new_arr=array();
+            $this->TableHeadLocal = array_map('strtolower', $this->TableHeadLocal); 
+            $this->TableHead = array_map('strtolower', $this->TableHead);
         if (!empty($this->TableHeadLocal)){
             foreach($this->TableHead as $key=>$value){
                 if (in_array($key, $this->TableHeadLocal)) {
@@ -284,9 +286,13 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
                        
                         $datav.='</Br>';
                         If ((in_array('EditStr', $AtribId, true) and (!in_array('Edit', $AtribId, true))) or in_array('ALL', $AtribId, true)) {$datav.='<a id="Edit" href="?option='.$Class.'&Act=Edit&id='.$data[$key].' ">Редактировать</a> </BR> ';};
-                        If (in_array('PrnRec', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a id="PrintRecord" class="PointCursor" href="?option='.$Class.'&Act=PrintForm&id='.$data[$key].'" RecId='.$data[$key].'>Печать</a> </BR> ';};
+                        If (in_array('PrnRec', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="PrintRecord PointCursor" href="?option='.$Class.'&Act=PrintForm&id='.$data[$key].'" RecId='.$data[$key].'>Печать</a> </BR> ';};
                         //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a id="CopyRecords" href="?option='.$Class.'&Act=CopySL&id='.$data[$key].' ">Скопировать</a> </BR> ';};
-                        If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor" RecId='.$data[$key].' Module='.$Class.' Table='.$this->table.'>Скопировать</a> </BR> ';};                        
+                        //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor" RecId='.$data[$key].' Module='.$Class.' Table='.$this->table.'>Скопировать</a> </BR> ';};                        
+                        //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor" RecId='.$data[$key].'>Скопировать</a> </BR> ';};                        
+                        //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor">Скопировать</a> </BR> ';};
+                        If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.=$this->UIIdTableAction('CopyRecord','Скопировать');};                        
+                        
 //If ($Cheked==0) {$datav.='<input id="iCheked" class="cCheked" type="checkbox" value="Select * From '.$TableName.' Where Id='.$data[$key].'">';};
                          }
                          else {$datav.='  '.$data[$key].' ';};
@@ -303,9 +309,9 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
                     
                 If ($key=='Id'){
                 //$str=$str. '<td value="'.$datav1.'" >'.$datav1.' '. $datav. '</td>';
-                $str=$str. '<td value="'.$data[$key].'" >'. $datav. '</td>';
+                $str=$str. '<td RecId='.$data[$key].' value="'.$data[$key].'" >'. $datav. '</td>';
                 }
-               else{$str=$str. '<td value="'.$datav.'" >' . $datav. '</td>';}
+               else{$str=$str. '<td RecId='.$data[$key].' value="'.$datav.'" >' . $datav. '</td>';}
                 }
                
                 $str=$str. '</tr>';
@@ -366,7 +372,8 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
                         
                         If (in_array('Edit', $AtribId, true) or in_array('ALL', $AtribId, true)) 
                             {//$datav.='<a id="Edit" href="?option='.$this->class.'&Act=Edit&id='.$data[$key].'">'.$data[$key].'</a> </BR>';
-                            $datav.='<a class="EditRecord PointCursor" RecId='.$data[$key].' Module='.  $this->class.' Table='.$this->table.'>'.$data[$key].'</a> </BR> ';                       
+                            $datav.=$this->UIIdTableAction('EditRecord',$data[$key]);
+                            //$datav.='<a class="EditRecord PointCursor" RecId='.$data[$key].' Module='.  $this->class.' Table='.$this->table.'>'.$data[$key].'</a> </BR> ';                       
                             
                             }
                         else
@@ -374,9 +381,11 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
                        
                         
                         If ((in_array('EditStr', $AtribId, true) and (!in_array('Edit', $AtribId, true))) or in_array('ALL', $AtribId, true)) {$datav.='<a id="Edit" href="?option='.$this->class.'&Act=Edit&id='.$data[$key].' ">Редактировать</a> </BR> ';};
-                        If (in_array('PrnRec', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a id="PrintRecord" href="?option='.$this->class.'&Act=PrintForm&id='.$data[$key].' ">Печать</a> </BR> ';};
+                        If (in_array('PrnRec', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="PrintRecord" href="?option='.$this->class.'&Act=PrintForm&id='.$data[$key].' ">Печать</a> </BR> ';};
                         //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a id="Copy" href="?option='.$this->class.'&Act=CopySL&id='.$data[$key].' ">Скопировать</a> </BR> ';};
-                        If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor" RecId='.$data[$key].' Module='.$Class.' Table='.$this->table.'>Скопировать</a> </BR> ';};                        
+                        //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor" RecId='.$data[$key].' Module='.$Class.' Table='.$this->table.'>Скопировать</a> </BR> ';};                        
+                        //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor" RecId='.$data[$key].'>Скопировать</a> </BR> ';}; 
+                        If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.=$this->UIIdTableAction('CopyRecord','Скопировать');};                        
                         //If ($Cheked==0) {$datav.='<input id="iCheked" class="cCheked" type="checkbox" value="Select * From '.$TableName.' Where Id='.$data[$key].'">';};
                          }
                          else {$datav.='  '.$data[$key].' ';};
@@ -393,9 +402,9 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
                     
                 If ($key=='Id'){
                 //$str=$str. '<td value="'.$datav1.'" >'.$datav1.' '. $datav. '</td>';
-                $str=$str. '<td value="'.$data[$key].'" >'. $datav. '</td>';
+                $str=$str. '<td RecId='.$data[$key].' value="'.$data[$key].'" >'. $datav. '</td>';
                 }
-               else{$str=$str. '<td value="'.$datav.'" >' . $datav. '</td>';}
+               else{$str=$str. '<td RecId='.$data[$key].' value="'.$datav.'" >' . $datav. '</td>';}
                 }
                
                 $str=$str. '</tr>';
@@ -813,13 +822,15 @@ protected function get_LeftBar()
             }
             else {
                 If (isset($_REQUEST['RecordId'])){
-                $RecordData = $this->GetValueFieldRecord($_REQUEST['Table'],'*',$_REQUEST['RecordId']);
+                //$RecordData = $this->GetValueFieldRecord($_REQUEST['Table'],'*',$_REQUEST['RecordId']);
+                $RecordData = $this->GetValueFieldRecord($this->table,'*',$_REQUEST['RecordId']);
                 $fieldValue=$RecordData[$Pole['Name']];}
             }
             //var_dump($fieldValue);
             If (($Pole['Name']!=='Id') and ($Pole['Name']!=='IdUserCreate')){
             //приведение к нижнему регистру что бы пофиг как написаннно...
             $this->TableHeadLocal = array_map('strtolower', $this->TableHeadLocal); 
+            $this->TableHead = array_map('strtolower', $this->TableHead);
             if (!empty($this->TableHeadLocal)){
                     if (in_array(strtolower($Pole['Name']),$this->TableHeadLocal)) {
                         If ($Pole['Comment']=='')
@@ -831,7 +842,7 @@ protected function get_LeftBar()
             else
             {
                 
-                If (array_key_exists($Pole['Name'], $this->TableHead)){
+                If (array_key_exists(strtolower($Pole['Name']), $this->TableHead)){
                     
                         $data .=$this->UIDinamicTableFieldGenerate($Pole['Type'], $Pole['Name'], $this->TableHead[$Pole['Name']], $fieldValue);                
                     
@@ -880,5 +891,10 @@ public function UIButtonCreate(){
 public function UIButtonClose(){
     return "<input type='submit' name='CloseButton' value='Закрыть' >";
 }
+
+protected function UIIdTableAction($CssSelector,$ActionLabel){
+    return '<a class="'.$CssSelector.' PointCursor">'.$ActionLabel.' </a> </BR>';
+}
+
 
 }

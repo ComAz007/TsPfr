@@ -225,7 +225,7 @@ $('.NoPrint').on('click', function(e){
       UpdMainContent(Module);
     });
     
-    $('#PrintRecord').on('click', function(e){
+    $('.PrintRecord').on('click', function(e){
     //$('.NoPrint').click(function(e){
       e.preventDefault();
       var Record=$(this).attr('RecId');
@@ -250,16 +250,18 @@ $('.NoPrint').on('click', function(e){
         
 $('.CopyRecord').click(function(e){
     //e.preventDefault();
-    var Record=$(this).attr('RecId');
-    var Module=$(this).attr('Module');
-    var Table=$(this).attr('Table');
+    //var Record=$(this).attr('RecId');
+    var Record=$(this).parent().attr('RecId');
+    
+    //var Module=$(this).attr('Module');
+    //var Table=$(this).attr('Table');
     //alert(Record+" "+Module);
             $.ajax({
-                    url: "?option="+Module,
+                    url: "?option="+module,
                     cache: false,
                     data: {"Action" : "CopyRecord",
-                           "RecordId" : Record,
-                           "Table" : Table
+                           "RecordId" : Record
+                           //"Table" : Table
                     },
                     success: function(html){
                         $(".MainContent").append(html);
@@ -274,16 +276,17 @@ $('.CopyRecord').click(function(e){
 
 $('.EditRecord').click(function(e){
     //e.preventDefault();
-    var Record=$(this).attr('RecId');
-    var Module=$(this).attr('Module');
-    var Table=$(this).attr('Table');
+    var Record=$(this).parent().attr('RecId');
+//    var Record=$(this).attr('RecId');
+//    var Module=$(this).attr('Module');
+//    var Table=$(this).attr('Table');
     //alert(Record+" "+Module);
             $.ajax({
-                    url: "?option="+Module,
+                    url: "?option="+module,
                     cache: false,
                     data: {"Action" : "EditRecord",
-                           "RecordId" : Record,
-                           "Table" : Table
+                           "RecordId" : Record
+                          // "Table" : Table
                     },
                     success: function(html){
                         $(".MainContent").append(html);
@@ -361,7 +364,7 @@ $('.ButtonActionAjax').click(function(){
     
     //$("a[href^='#']").unbind('click');
     $(".menu li a").one("click",function(event){
-        $(".menu li a").unbind('click'); //"Убиваем" размножение AJAX запроса связано с тем, что
+    $(".menu li a").unbind('click'); //"Убиваем" размножение AJAX запроса связано с тем, что
                                     //$(document).ready выполняется при загрузке ажаксом и этим снимаем клик
     event.preventDefault();
     var  toLoad = $(this).attr('href').substr(9,$(this).attr('href').length);
