@@ -8,4 +8,5 @@ define("PATHINVipnet", "D:/_ElArx/serverin/");
 define("PathServerArxiv", "D:/_ElArx/server/");
 define("PathServerArxivPeres", "D:/_ElArx/peres/");
 define("PathVremFiles", "D:/_ElArx/_ts/");
+define("PathDopDoc", "D:/_ElArx/DopDoc/");
 ?>

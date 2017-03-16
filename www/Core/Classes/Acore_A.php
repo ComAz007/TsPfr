@@ -118,6 +118,8 @@ public function CreateZIP($fileNameArch=NULL){
 //$folder = 'W:/_elArx/_ts'; //Папка с файлами
 $folder=PathVremFiles;
 $array_file = scandir($folder); //Масcив с именами файлов
+$folderDopDoc=PathDopDoc;
+$array_fileDopDoc = scandir($folderDopDoc);
 //создание zip архива
 $zip = new ZipArchive();
 //имя файла архива
@@ -136,6 +138,18 @@ foreach($array_file as $name_file){ // Наш цикл
         
         //$zip->addFile($folder.$name_file, $name_file);
         $zip->addFile($folder.$name_file, iconv('windows-1251', 'CP866//TRANSLIT//IGNORE', $name_file));
+        //$zip->addFile($folder.'/'.$name_file, $name_file);
+    }
+    
+    }
+    
+    foreach($array_fileDopDoc as $name_file){ // Наш цикл
+    //if (!is_dir($folder.'/'.$name_file)){
+    if (!is_dir($folderDopDoc.$name_file)){
+        //echo $folder.$name_file;
+        
+        //$zip->addFile($folder.$name_file, $name_file);
+        $zip->addFile($folderDopDoc.$name_file, iconv('windows-1251', 'CP866//TRANSLIT//IGNORE', $name_file));
         //$zip->addFile($folder.'/'.$name_file, $name_file);
     }
     

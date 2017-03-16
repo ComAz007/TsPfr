@@ -1,12 +1,14 @@
 ﻿<?php
     
 //http://blog.sklazer.com/865.html почитать для просветления!
+//DYB
 
 class viewJurVipnet extends Jurnals {
     
     public function __construct() {
         $this->class='viewJurVipnet';
         $this->table='jurvipnetzapros';
+        $this->TableHead=Array("False");
         parent::__construct();
         //$this->MainContent();
     }
@@ -741,7 +743,7 @@ Echo '</div>';
             $FileName=$rez['FileZapr'];
             
             $FileMas = explode("_", $rez['FileZapr']);
-            $NewFileName=$FileMas[0].'_(н)'.$FileMas[1].'_'.$FileMas[2];
+            $NewFileName=$FileMas[0].'_(н)'.$FileMas[1].'_'.$FileMas[2].'_'.$FileMas[3];
             //$Pt=$Path.$FileName;
             $P=$Path.iconv('utf-8', 'windows-1251',$FileName).'.zip';
             $P1=$Path.iconv('utf-8', 'windows-1251',$NewFileName).'.zip';
@@ -774,7 +776,7 @@ Echo '</div>';
             rename($P,$P1);
             copy($P1, $P2);
             $this->Logging($_SESSION['Id_user'], $Id_Razdela=1,$Id,7,0,'Направлен повторный запрос');
-            header("location: /?option=viewJurVipnet");
+            //header("location: /?option=viewJurVipnet");
         }
         
         
@@ -873,34 +875,37 @@ Echo '</div>';
             
             $img_src = PathServerArxiv.iconv('utf-8', 'windows-1251', $Flname);
             $img_src1 = PATHOUTVipnet.iconv('utf-8', 'windows-1251', $Flname);
-//            IF (isset($_POST['SaveAs'])||isset($_POST['SendAs']))
-//                {
-                 $this->CreateZIP($img_src);	    
-//                }
-//            else {
-//            If (!move_uploaded_file($_FILES['FileZ']['tmp_name'], $img_src)) {
-//                exit("Не удалось загрузить файл");
-//            }
-//            
-
-            //copy($img_src, $img_src1);
-//            }
-            //FileOtv
             
+           	    
             
-            //If (isset($_POST['CreateButton']))
             If ($_REQUEST['Action'] == 'Create') {
                 $query = "INSERT INTO jurvipnetzapros (DataReg, KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeZaprosId,TypeDeistv,FileZapr,PathFileToArchiv,ZR,Napravl,SpNap)
                 VALUES('$DC','$KR','$KU','$KP','$FL','$IDU','$TZ','$TZI','$TDe','$Flname','$PS','$TZR','0',$SpNap)";
-   
                 $this->Logging($_SESSION['Id_user'], $Id_Razdela=1,$this->linkId,1,0,'Создан запрос');
+                
+                
             }
             else {
                 $query = "UPDATE jurvipnetzapros SET DateOtveta='$DC', KodReg='$KR',KodUrLic='$KU',KodUpfr='$KP', FileOtv='$Flname', TypeDeistv='$TDe' Where Id=$IdRec";    
                 
             }
-            //var_dump($query);
             $this->query($query);
+            
+            
+            
+            
+            
+            $img_src=$img_src.'_'.$this->linkId;
+            $img_src1=$img_src1.'_'.$this->linkId;
+            
+            $IdRec=$this->linkId;
+            $Flname=$Flname.'_'.$IdRec;
+            If ($_REQUEST['Action'] == 'Create') {
+                $query = "UPDATE jurvipnetzapros SET FileZapr='$Flname' Where Id=$IdRec";    
+                $this->query($query);
+            }
+            
+            $this->CreateZIP($img_src);
             
             //If (isset($_POST['CreateButton'])) {
             If ($_REQUEST['Action'] == 'Create') {
