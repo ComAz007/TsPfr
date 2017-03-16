@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 //!!!ЭТО АДМИНСКИЙ КЛАСС!!!!
@@ -93,7 +93,7 @@ protected function PrintMsg($MSG){
     {
         $new_arr=array();
             $this->TableHeadLocal = array_map('strtolower', $this->TableHeadLocal); 
-            $this->TableHead = array_map('strtolower', $this->TableHead);
+            //$this->TableHead = array_map('strtolower', $this->TableHead);
         if (!empty($this->TableHeadLocal)){
             foreach($this->TableHead as $key=>$value){
                 if (in_array($key, $this->TableHeadLocal)) {
@@ -806,7 +806,7 @@ protected function get_LeftBar()
             If (($Pole['Name']!=='Id') and ($Pole['Name']!=='IdUserCreate')){
             //приведение к нижнему регистру что бы пофиг как написаннно...
             $this->TableHeadLocal = array_map('strtolower', $this->TableHeadLocal); 
-            $this->TableHead = array_map('strtolower', $this->TableHead);
+            //$this->TableHead = array_map('strtolower', $this->TableHead);
             if (!empty($this->TableHeadLocal)){
                     if (in_array(strtolower($Pole['Name']),$this->TableHeadLocal)) {
                         If ($Pole['Comment']=='')

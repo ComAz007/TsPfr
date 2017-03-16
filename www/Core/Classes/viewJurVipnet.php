@@ -743,7 +743,12 @@ Echo '</div>';
             $FileName=$rez['FileZapr'];
             
             $FileMas = explode("_", $rez['FileZapr']);
-            $NewFileName=$FileMas[0].'_(н)'.$FileMas[1].'_'.$FileMas[2].'_'.$FileMas[3];
+            If ($FileMas[3]=='') {
+            $NewFileName=$FileMas[0].'_(н)'.$FileMas[1].'_'.$FileMas[2];
+            }
+            else {
+                $NewFileName=$FileMas[0].'_(н)'.$FileMas[1].'_'.$FileMas[2].'_'.$FileMas[3];
+                }
             //$Pt=$Path.$FileName;
             $P=$Path.iconv('utf-8', 'windows-1251',$FileName).'.zip';
             $P1=$Path.iconv('utf-8', 'windows-1251',$NewFileName).'.zip';
@@ -752,31 +757,31 @@ Echo '</div>';
 //            $P=$Path.$FileName.'.zip';
 //            //$P=iconv('utf-8', 'windows-1251', $Pt);
 //            //$Pt=
-//            $P1=$Path.$NewFileName;
+//            $P1=$Path.$NewFileName.'.zip';
 //            //$P1=iconv('utf-8', 'windows-1251', $Pt);
 //            //$Pt=
-//            $P2=PATHOUTVipnet.$NewFileName;
-//            //$P2=iconv('utf-8', 'windows-1251', $Pt); 
+//            $P2=PATHOUTVipnet.$NewFileName.'.zip';
+            //$P2=iconv('utf-8', 'windows-1251', $Pt); 
 //            echo $FileName;
 //            echo '<BR>';
-//            echo $NewFileName;
-//            echo '<BR>';
-//            echo $Pt;
-//            echo '<BR>';
+////            echo $NewFileName;
+////            echo '<BR>';
+////            echo $Pt;
+////            echo '<BR>';
 //            echo $P;
 //            echo '<BR>';
 //            echo $P1;
 //            echo '<BR>';
 //            echo $P2;
 //            echo '<BR>';
-//            exit();
+//           exit();
             $query = "UPDATE jurvipnetzapros SET Povtor='1', DatePovtor='$D',FileZapr='$NewFileName' Where Id=$Id";
             
             $this->query($query);
             rename($P,$P1);
             copy($P1, $P2);
             $this->Logging($_SESSION['Id_user'], $Id_Razdela=1,$Id,7,0,'Направлен повторный запрос');
-            //header("location: /?option=viewJurVipnet");
+            header("location: /?option=viewJurVipnet");
         }
         
         
@@ -893,16 +898,17 @@ Echo '</div>';
             
             
             
-            
+            If ($_REQUEST['Action'] == 'Create') {
             
             $img_src=$img_src.'_'.$this->linkId;
             $img_src1=$img_src1.'_'.$this->linkId;
             
-            $IdRec=$this->linkId;
-            $Flname=$Flname.'_'.$IdRec;
+            $IdRecL=$this->linkId;
+            $Flname=$Flname.'_'.$IdRecL;
             If ($_REQUEST['Action'] == 'Create') {
-                $query = "UPDATE jurvipnetzapros SET FileZapr='$Flname' Where Id=$IdRec";    
+                $query = "UPDATE jurvipnetzapros SET FileZapr='$Flname' Where Id=$IdRecL";    
                 $this->query($query);
+            }
             }
             
             $this->CreateZIP($img_src);
