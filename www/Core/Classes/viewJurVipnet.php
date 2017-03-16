@@ -742,12 +742,32 @@ Echo '</div>';
             
             $FileMas = explode("_", $rez['FileZapr']);
             $NewFileName=$FileMas[0].'_(н)'.$FileMas[1].'_'.$FileMas[2];
-            $Pt=$Path.$FileName;
-            $P=iconv('utf-8', 'windows-1251', $Pt);
-            $Pt=$Path.$NewFileName;
-            $P1=iconv('utf-8', 'windows-1251', $Pt);
-            $Pt=PATHOUTVipnet.$NewFileName;
-            $P2=iconv('utf-8', 'windows-1251', $Pt);
+            //$Pt=$Path.$FileName;
+            $P=$Path.iconv('utf-8', 'windows-1251',$FileName).'.zip';
+            $P1=$Path.iconv('utf-8', 'windows-1251',$NewFileName).'.zip';
+            $P2=PATHOUTVipnet.iconv('utf-8', 'windows-1251', $NewFileName).'.zip';
+            
+//            $P=$Path.$FileName.'.zip';
+//            //$P=iconv('utf-8', 'windows-1251', $Pt);
+//            //$Pt=
+//            $P1=$Path.$NewFileName;
+//            //$P1=iconv('utf-8', 'windows-1251', $Pt);
+//            //$Pt=
+//            $P2=PATHOUTVipnet.$NewFileName;
+//            //$P2=iconv('utf-8', 'windows-1251', $Pt); 
+//            echo $FileName;
+//            echo '<BR>';
+//            echo $NewFileName;
+//            echo '<BR>';
+//            echo $Pt;
+//            echo '<BR>';
+//            echo $P;
+//            echo '<BR>';
+//            echo $P1;
+//            echo '<BR>';
+//            echo $P2;
+//            echo '<BR>';
+//            exit();
             $query = "UPDATE jurvipnetzapros SET Povtor='1', DatePovtor='$D',FileZapr='$NewFileName' Where Id=$Id";
             
             $this->query($query);

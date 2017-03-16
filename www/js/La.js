@@ -227,6 +227,7 @@ $('.NoPrint').on('click', function(e){
     
     $('.PrintRecord').on('click', function(e){
     //$('.NoPrint').click(function(e){
+    $(".PrintRecord").unbind('click');
       e.preventDefault();
       var Record=$(this).attr('RecId');
       //alert(module);
@@ -249,6 +250,7 @@ $('.NoPrint').on('click', function(e){
         
         
 $('.CopyRecord').click(function(e){
+     $(".CopyRecord").unbind('click');
     //e.preventDefault();
     //var Record=$(this).attr('RecId');
     var Record=$(this).parent().attr('RecId');
@@ -276,6 +278,7 @@ $('.CopyRecord').click(function(e){
 
 $('.EditRecord').click(function(e){
     //e.preventDefault();
+    $(".EditRecord").unbind('click');
     var Record=$(this).parent().attr('RecId');
 //    var Record=$(this).attr('RecId');
 //    var Module=$(this).attr('Module');

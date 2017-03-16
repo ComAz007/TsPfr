@@ -170,7 +170,7 @@ class viewJurOZIKD extends Jurnals {
             }
         }
         
-        If ($_REQUEST['Act'] == Edit) {
+        If ($_REQUEST['Action'] == EditRecord) {
             $_SESSION['IdRec'] = $_REQUEST['id'];
             $this->Edit();    
         }
@@ -282,13 +282,14 @@ class viewJurOZIKD extends Jurnals {
     
     public function Edit($Caption, $data){
         Echo "<Div class=grid>"; 
-        Echo '<div id="dialog" title="Изменение карточки # '.$_SESSION['IdRec'].'">';
+        Echo '<div id="dialog" title="Изменение карточки!!! # '.$_SESSION['IdRec'].'">';
         Echo "<form enctype='multipart/form-data' action='' method='Post'>";
         Echo 'Дата окончания действия карт <input class="KalDates"  name="DataAkt"> </BR>  </BR></p>';
         Echo "<p><input type='submit' name='B1Edit' value='Изменить' >";
         Echo '</form>';
         Echo '</Div>';
         Echo '</Div>';
+        parent::Edit($Caption, $data);
     }
   
 }

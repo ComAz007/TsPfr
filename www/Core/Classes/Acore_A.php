@@ -380,7 +380,8 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
                             {$datav.='  '.$data[$key].' ';};
                        
                         
-                        If ((in_array('EditStr', $AtribId, true) and (!in_array('Edit', $AtribId, true))) or in_array('ALL', $AtribId, true)) {$datav.='<a id="Edit" href="?option='.$this->class.'&Act=Edit&id='.$data[$key].' ">Редактировать</a> </BR> ';};
+                        //If ((in_array('EditStr', $AtribId, true) and (!in_array('Edit', $AtribId, true))) or in_array('ALL', $AtribId, true)) {$datav.='<a id="Edit" href="?option='.$this->class.'&Act=Edit&id='.$data[$key].' ">Редактировать</a> </BR> ';};
+                        If ((in_array('EditStr', $AtribId, true) and (!in_array('Edit', $AtribId, true))) or in_array('ALL', $AtribId, true)) {$datav.=$this->UIIdTableAction('EditRecord','Редактировать');};
                         If (in_array('PrnRec', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="PrintRecord" href="?option='.$this->class.'&Act=PrintForm&id='.$data[$key].' ">Печать</a> </BR> ';};
                         //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a id="Copy" href="?option='.$this->class.'&Act=CopySL&id='.$data[$key].' ">Скопировать</a> </BR> ';};
                         //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor" RecId='.$data[$key].' Module='.$Class.' Table='.$this->table.'>Скопировать</a> </BR> ';};                        
@@ -503,71 +504,32 @@ protected function get_LeftBar()
     }
     public function get_Body()
     {
-        //echo "<script language='javascript'>var module='".$_SESSION['Class']."' </script>";
-        //echo "<script language='javascript'>var module='".$this->class."' </script>";
-    //
-//         if ($_POST{'ajax'}||$_GET{'ajax'}){
-//             $this->MainContent();
-//         }
-// else {
+ 
        if ($_POST||$_GET){
-//        var_dump($_REQUEST);
-//        echo 'r';
-//        var_dump($_POST);
-//        echo 't';
-//        var_dump($_GET);
-          //if (!isset($_GET['SearchSTR']) and (($_REQUEST['Act'])!==Create) and (!$_REQUEST['Action'] == 'Create') and (!isset($_REQUEST['CreateButton']))) {
-          //if (!isset($_GET['SearchSTR']) and (($_REQUEST['Act'])!==Create)) {
-           if (!isset($_GET['SearchSTR'])) {
+          if (!isset($_GET['SearchSTR'])) {
           include 'scripts.php';
           
           };
           $this->obr($_REQUEST);
           $this->obrGL($_REQUEST);
-          if (!isset($_REQUEST['Act'])){
+          if (!isset($_REQUEST['Act']) and !isset($_REQUEST['Action'])){
           $this->MainContent();}
-          //$this->get_Header();
-       
-          
-          //$this->get_Footer();
-          
         }
  else {
-////     if (!$_REQUEST['Action'] == 'Create'){
-////     //include 'scripts.php';}
-     //echo 'droch';
-     IF ((!$_REQUEST['Action'] == 'Create') and (!isset($_POST['CreateButton']))) {
-       //  echo 'droch1';
-        $this->get_Header();
-       
-            $this->MainContent();
-     $this->get_Footer();    }
-        }
-//     IF (isset($_POST['CreateButton'])) { 
-//         $this->get_Header();
-//            $this->MainContent();
-//            $this->get_Footer(); 
-//     }     
-    
-    //$this->get_LeftBar();
-//    If ($_REQUEST['Act'] == 'Create') {
-//       unset($_SESSION['NotAjax']);}
 
-//var_dump($_SESSION);
+     IF ((!$_REQUEST['Action'] == 'Create') and (!isset($_POST['CreateButton']))) {
+        $this->get_Header();
+        $this->MainContent();
+        $this->get_Footer();    }
+        }
+        
         If ($_REQUEST['id']!==NULL){
             $_SESSION['IdRec'] = $_REQUEST['id'];
         }
-   //If ((!isset($_REQUEST['Act'])) or $_SESSION['NotAjax']==1) {
-   //If ($_SESSION['NotAjax']==1) {
-//            $this->get_Header();
-//            $this->MainContent();
-//            $this->get_Footer();
+
          unset($_SESSION['NotAjax']);
-       //}
-       //else {include 'Header.php';};
-    
     }
-  //  }
+
     abstract function MainContent();
     
     protected function Edit($Caption,$data){
@@ -592,8 +554,8 @@ protected function get_LeftBar()
     }
     
     protected function CopyRecord($Caption,$data){
-       $RecordData = $this->GetValueFieldRecord($_REQUEST['Table'],'*',$_REQUEST['RecordId']);
-       $data .= $this->DynamicTableGenerated($RecordData);
+       //$RecordData = $this->GetValueFieldRecord($this->table,'*',$_REQUEST['RecordId']);
+       $data .= $this->DynamicTableGenerated();
        $data .= $this->UIButtonCreate();
        $this->Form($Caption, $data,'Create');
     }
@@ -810,22 +772,22 @@ protected function get_LeftBar()
     // проверки на названия полей и пустоту имени
     //TO-DO во вторых пусть юзер хоть пупок изорвет нужно объединить все массивы   
     // $StructTable, TableHeadLocal, TableHead на придмет названия полей
-    private function DynamicTableGenerated($RecordData=''){
+    private function DynamicTableGenerated(){
         $StructTable=$this->GetStructTable($this->table);
         $data='';
        //var_dump($_REQUEST);
         foreach ($StructTable as $key=>$Pole){
             $fieldValue='';
-            If($RecordData!=='')
-            {
-                $fieldValue=$RecordData[$Pole['Name']];
-            }
-            else {
+//            If($RecordData!=='')
+//            {
+//                $fieldValue=$RecordData[$Pole['Name']];
+//            }
+//            else {
                 If (isset($_REQUEST['RecordId'])){
                 //$RecordData = $this->GetValueFieldRecord($_REQUEST['Table'],'*',$_REQUEST['RecordId']);
                 $RecordData = $this->GetValueFieldRecord($this->table,'*',$_REQUEST['RecordId']);
                 $fieldValue=$RecordData[$Pole['Name']];}
-            }
+           // }
             //var_dump($fieldValue);
             If (($Pole['Name']!=='Id') and ($Pole['Name']!=='IdUserCreate')){
             //приведение к нижнему регистру что бы пофиг как написаннно...
