@@ -143,6 +143,7 @@ foreach($array_file as $name_file){ // Наш цикл
     
     }
     
+    IF ($_REQUEST['Action'] == 'Create'){
     foreach($array_fileDopDoc as $name_file){ // Наш цикл
     //if (!is_dir($folder.'/'.$name_file)){
     if (!is_dir($folderDopDoc.$name_file)){
@@ -154,7 +155,7 @@ foreach($array_file as $name_file){ // Наш цикл
     }
     
     }
-    
+}
     $zip->close();
  
 //exit(0);
