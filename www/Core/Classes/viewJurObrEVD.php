@@ -97,7 +97,8 @@ class viewJurObrEVD extends Jurnals {
     }
 
     public function Create($Caption, $data,$reg=0) {
-        $this->TableHeadLocal=Array("FIO","Region");
+        //$this->TableHeadLocal=Array("FIO","Region");
+        $this->TableHeadLocal=Array("FIO");
         $Oblast=$this->getRegion(0,2);
         $data.='Регион прибытия: <select name="region">';
         foreach ($Oblast as $key=>$value ){

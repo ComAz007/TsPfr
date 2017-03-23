@@ -1,4 +1,4 @@
-﻿<?php
+<?php
     
 //http://blog.sklazer.com/865.html почитать для просветления!
 
@@ -352,6 +352,12 @@ private function TableHistory($Res){
 
          If ($_REQUEST['Act'] == UpdCont) {
             Echo $this->MainTabelA();
+            
+        }
+        
+         If ($_REQUEST['Action'] == Create) {
+            Echo $this->MainTabelA();
+            
         }
         
         If ($_REQUEST['Act'] == Create) {

@@ -102,10 +102,11 @@ class viewJurTS extends Jurnals {
    
     
     protected function obr() {
+      
         //var_dump($Action);
-//        If ($_REQUEST['Act'] == UMC) {
-//            $this->MainContent();
-//        }
+        If ($_REQUEST['Act'] == UMC) {
+            $this->MainContent();
+        }
 //        
 //        If ($_REQUEST['Act'] == UCMT) {
 //            Echo $this->MainTabelA();
@@ -162,29 +163,31 @@ class viewJurTS extends Jurnals {
             $this->Create(1);  
         }
         
-        IF (isset($_POST['B1Action1'])) {
-            $NNAkt='';
-            $query='';
-            $DAct = $_POST['DataAkt'];
-            $IAct = $_POST['NomAKT'];
-            
-            foreach($_SESSION['param'] as $product):
-                $NNAkt.=$product.' ';
-                $query=" UPDATE ".$this->table." SET IdAkt='$IAct', DateAkt='$DAct' Where Id='$product'";
-                $this->query($query);
-                $this->Logging($_SESSION['Id_user'], $Id_Razdela=3,$product,10,0,'Проставлена дата на акт №'.$product);
-            endforeach;
-
-            //$this->Logging($_SESSION['Id_user'], $Id_Razdela=3,$this->linkId,10,0,'Проставлены даты на акты №№'.$NNAkt);
-            //$this->MainTabelA();
-            header("location: /?option=".$this->class);
-        }
+//        IF (isset($_POST['B1Action1'])) {
+//            $NNAkt='';
+//            $query='';
+//            $DAct = $_POST['DataAkt'];
+//            $IAct = $_POST['NomAKT'];
+//            
+//            foreach($_SESSION['param'] as $product):
+//                $NNAkt.=$product.' ';
+//                $query=" UPDATE ".$this->table." SET IdAkt='$IAct', DateAkt='$DAct' Where Id='$product'";
+//                $this->query($query);
+//                $this->Logging($_SESSION['Id_user'], $Id_Razdela=3,$product,10,0,'Проставлена дата на акт №'.$product);
+//            endforeach;
+//
+//            //$this->Logging($_SESSION['Id_user'], $Id_Razdela=3,$this->linkId,10,0,'Проставлены даты на акты №№'.$NNAkt);
+//            //$this->MainTabelA();
+//            header("location: /?option=".$this->class);
+//        }
 
         
-        IF (isset($_POST['SaveButton'])) {
+        //IF (isset($_POST['SaveButton'])) {
+        IF ($_Post['Action'] == Edit) {
+            
              //$_SESSION['IdRec'] = $_REQUEST['id'];       
              //var_dump($_REQUEST['id']);
-             //exit();
+             exit("test");
             $Zadacha=htmlspecialchars($_POST['Opisanie']);
   //$Zadacha=iconv('windows-1251','utf-8', $Zadacha);
   //$OtvUserId=htmlspecialchars($_POST['SpisSTS']);
@@ -281,7 +284,7 @@ class viewJurTS extends Jurnals {
     }
     
     protected function Edit($Caption,$data){
-              $this->TableHeadLocal=array("OpiSanie","Comment"); //это тупо баг!!! суть в том, что массив не пустой но при этом и полей нужных нет!
+              $this->TableHeadLocal=array("Opisanie","comment"); //это тупо баг!!! суть в том, что массив не пустой но при этом и полей нужных нет!
               //$this->TableHeadLocal=array("false"); //это тупо баг!!! суть в том, что массив не пустой но при этом и полей нужных нет!
 //            $SData=$data;
 //            $Zapros="select Opisanie, Comment from zadacha Where zadacha.Id=".$_SESSION['IdRec'];

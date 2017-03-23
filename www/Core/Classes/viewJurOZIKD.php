@@ -1,4 +1,4 @@
-﻿<?php
+<?php
     
 //http://blog.sklazer.com/865.html почитать для просветления!
 
@@ -59,9 +59,12 @@ class viewJurOZIKD extends Jurnals {
         echo '</ul>';
         Echo ('<div id="tabr1" class="tab-content">');
         Echo $this->UIButtonActionAjax('test', 'Test button');
+         //$Button='';
+        //$Button .=$this->UIButtonAjax('Create', 'Создать заявление');
+        echo $this->UIButtonAjax('Action1', 'Включить в АКТ');
         echo "<div id='Create' class='col_3 visible center' style='height: 25px;'> <a   title='Создать'>Создать</a></div>";
         echo "<div id='PrintM' class='col_3 visible center' style='height: 25px;'> <a  title='Печатать АКТ'>Печатать АКТ</a></div>";
-        echo "<div id='Action1' class='col_3 visible center' style='height: 25px;'> <a  title='Включит в АКТ'>Включить в АКТ</a></div>";
+        //echo "<div id='Action1' class='col_3 visible center' style='height: 25px;'> <a  title='Включит в АКТ'>Включить в АКТ</a></div>";
         echo "<div id='Action2' class='col_3 visible center' style='height: 25px;'> <a  title='Закрыть карточки(у)'>Закрыть карточки(у)</a></div>";
         //echo "<div class='col_3 visible center' id='Create' style='height: 25px;'> <a href='?option=viewJurEsia&Act=Create' title='Создать заявление'>Создать заявление</a></div>";
         echo '<div id="content">';
@@ -107,7 +110,7 @@ class viewJurOZIKD extends Jurnals {
                     $NNAkt.=$record.' ';
                     $query=" Select IDPtk,DataBeg,DataEnd,IdAkt,DateAkt From ".$this->table." Where Id=$record";
                     $Res= $this->query($query,1);
-                    $data = $Res->fetch_assoc();
+                    $data = $Res;
                     $perech.=$this->getPTK($data['IDPtk']).' срок действия с '.date("d.m.Y",strtotime($data['DataBeg'])).' по '.date("d.m.Y",strtotime($data['DataEnd'])).'; </BR>';
             endforeach;
 
@@ -168,11 +171,17 @@ class viewJurOZIKD extends Jurnals {
                $_SESSION['param']=$_REQUEST['sl'];
                $this->Action1();
             }
+            
+//            If ($_REQUEST['Action'] == Action1) {
+//               $_SESSION['IdRec'] = $_REQUEST['id'];
+//               $_SESSION['param']=$_REQUEST['sl'];
+//               $this->Action1();
+//            }
         }
         
         If ($_REQUEST['Action'] == EditRecord) {
             $_SESSION['IdRec'] = $_REQUEST['id'];
-            $this->Edit();    
+            $this->Edit('Изменение карточки',$data,$Action);    
         }
         
           If ($_REQUEST['Act'] == Action2) {
@@ -203,12 +212,13 @@ class viewJurOZIKD extends Jurnals {
             $_SESSION['IdRec'] = $_REQUEST['id'];
             $this->Create('Создать запись');  
         }
-        
-        IF (isset($_POST['B1Action1'])) {
+
+        //IF (isset($_POST['B1Action1'])) {
+        IF ($_REQUEST['Action'] == B1Action1) {
             $NNAkt='';
             $query='';
-            $DAct = $_POST['DataAkt'];
-            $IAct = $_POST['NomAKT'];
+            $DAct = $_POST['DateAkt'];
+            $IAct = $_POST['IdAkt'];
             
             foreach($_SESSION['param'] as $product):
                 $NNAkt.=$product.' ';
@@ -221,6 +231,20 @@ class viewJurOZIKD extends Jurnals {
             $this->MainTabelA();
             header("location: /?option=".$this->class);
         }
+        
+        If ($_REQUEST['Action'] == RezultF) {
+            $Dateotv = $_POST['Dates'];
+            $NomerOtv = $_POST['NomerAkt'];
+            
+            foreach($_SESSION['param'] as $product):
+                $NNAkt.=$product.' ';
+                $query="UPDATE ".$this->table." SET IdAkt='$NomerOtv', DateAkt='$Dateotv' Where Id='$product'";
+                $this->query($query);
+                $this->Logging($_SESSION['Id_user'], $Id_Razdela=3,$product,10,0,'Проставлена дата на акт №'.$product);
+            endforeach;
+            $this->MainTabelA();
+            }
+
         
         IF (isset($_POST['B1Edit'])) {
             $DAct = $_POST['DataAkt'];
@@ -267,29 +291,44 @@ class viewJurOZIKD extends Jurnals {
         parent::Create($Caption, $data);
     }
 
-    
     public function Action1(){
-        Echo "<Div class=grid>"; 
-        Echo '<div id="dialog" title="Включение карточек в АКТ">';
-        Echo "<form enctype='multipart/form-data' action='' method='Post'>";
-        Echo ' Номер Акта <input name="NomAKT"> </BR>  </BR></p>';
-        Echo ' Дата Акта <input class="KalDates"  name="DataAkt"> </BR>  </BR></p>';
-        Echo "<p><input type='submit' name='B1Action1' value='Включить в АКТ' >";
-        Echo '</form>';
-        Echo '</Div>';
-        Echo '</Div>';
+        
+        
+        $data='';
+        $data.=' Дата акта <input class="KalDates"  name="Dates"> </BR>  </BR></p>';
+        $data.=' Номер акта <input name="NomerAkt"> </BR>  </BR></p>';
+        //$data.=' Результат рассмотрения'.$this->UITextArea('Rezult');
+        $data.="<p><input type='submit' value='Включить в акт' >";
+        
+        $this->CreateForm('Включение карточек в АКТ', $data, 'RezultF');
+        
+//        $data='';
+//        $this->TableHeadLocal=array("IdAkt","DateAkt");
+//       // "IdAkt"=>"№ Акта на уничтожение ПК", "DateAkt"
+////        Echo "<Div class=grid>"; 
+////        Echo '<div id="dialog" title="Включение карточек в АКТ">';
+////        Echo "<form enctype='multipart/form-data' action='' method='Post'>";
+//       //$data.=' Номер Акта <input name="IdAkt"> </BR>  </BR></p>';
+//       //$data.=' Дата Акта <input class="KalDates" name="DateAkt"> </BR>  </BR></p>';
+//       //$data.=$this->UIButtonSave();
+//       $this->Edit("Включение карточек в АКТ",$data,"B1Action1");
+////        Echo "<p><input type='submit' name='B1Action1' value='Включить в АКТ' >";
+////        Echo '</form>';
+////        Echo '</Div>';
+////        Echo '</Div>';
     }
     
-    public function Edit($Caption, $data){
-        Echo "<Div class=grid>"; 
-        Echo '<div id="dialog" title="Изменение карточки!!! # '.$_SESSION['IdRec'].'">';
-        Echo "<form enctype='multipart/form-data' action='' method='Post'>";
-        Echo 'Дата окончания действия карт <input class="KalDates"  name="DataAkt"> </BR>  </BR></p>';
-        Echo "<p><input type='submit' name='B1Edit' value='Изменить' >";
-        Echo '</form>';
-        Echo '</Div>';
-        Echo '</Div>';
-        parent::Edit($Caption, $data);
+    public function Edit($Caption, $data,$Action){
+        $this->TableHeadLocal=array("DateAkt");
+//        Echo "<Div class=grid>"; 
+//        Echo '<div id="dialog" title="Изменение карточки!!! # '.$_SESSION['IdRec'].'">';
+//        Echo "<form enctype='multipart/form-data' action='' method='Post'>";
+//        Echo 'Дата окончания действия карт <input class="KalDates"  name="DataAkt"> </BR>  </BR></p>';
+//        Echo "<p><input type='submit' name='B1Edit' value='Изменить' >";
+//        Echo '</form>';
+//        Echo '</Div>';
+//        Echo '</Div>';
+        parent::Edit($Caption, $data,$Action);
     }
   
 }

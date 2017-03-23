@@ -183,13 +183,19 @@ $('.UIForm').submit(function(e){
 //alert(module);
 e.preventDefault();
 //берем из формы метод передачи данных
-var m_method=$(this).attr('method');
+var m_method=$('.UIForm').attr('method');
 //получаем адрес скрипта на сервере, куда нужно отправить форму
-var m_action=$(this).attr('action');
+var m_action=$('.UIForm').attr('action');
 //получаем данные, введенные пользователем в формате input1=value1&input2=value2...,
 //то есть в стандартном формате передачи данных формы
-var m_data=$(this).serialize();
-//alert(m_action+" "+module);
+var m_data=$('.UIForm').serialize();
+//alert(m_data+" "+module);
+
+//$('#add_user').on('button', 'click', function(){
+//$(this).closest('form').preventDefault(); //Предотвращаем выполнение функций, предусмотренных стандартным поведением формы;
+//var formData = $('#add_user input').serialize(); //Ваша переменная;
+//$.post('file.php', {save: formData});
+//});
 
     $.ajax({
 type: m_method,
@@ -197,11 +203,12 @@ url: "?option="+module,
 //url: "?option="+m_action,
 data: m_data+"&Action="+m_action,
 success: function(result){
+    UpdMainContent(module);
 //$("#dialog").dialog('destroy');
 $('div.ui-dialog').remove();
 $('div.ui-widget-overlay').remove();
 $("#dialog").remove();
-$('.MainContent').html(result);
+//$('#ContentMainTable').html(result);
 
 }
 });
@@ -276,9 +283,10 @@ $('.CopyRecord').click(function(e){
     
 });
 
+$(".EditRecord").unbind('click');
 $('.EditRecord').click(function(e){
     //e.preventDefault();
-    $(".EditRecord").unbind('click');
+    
     var Record=$(this).parent().attr('RecId');
 //    var Record=$(this).attr('RecId');
 //    var Module=$(this).attr('Module');
@@ -376,7 +384,15 @@ $('.ButtonActionAjax').click(function(){
     return false;
     });
         
-        
+    $(".LocalMenu").one("click",function(event){
+    $(".LocalMenu").unbind('click'); //"Убиваем" размножение AJAX запроса связано с тем, что
+                                    //$(document).ready выполняется при загрузке ажаксом и этим снимаем клик
+    event.preventDefault();
+    var  toLoad = $(this).attr('href').substr(9,$(this).attr('href').length);
+    UpdMainContent(toLoad);
+           
+    return false;
+    });    
         
         
         

@@ -92,7 +92,7 @@ protected function PrintMsg($MSG){
     function MergeArray()
     {
         $new_arr=array();
-            $this->TableHeadLocal = array_map('strtolower', $this->TableHeadLocal); 
+        $this->TableHeadLocal = array_map('strtolower', $this->TableHeadLocal); 
             //$this->TableHead = array_map('strtolower', $this->TableHead);
         if (!empty($this->TableHeadLocal)){
             foreach($this->TableHead as $key=>$value){
@@ -220,9 +220,9 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
     If ($TableName=='JurOZIKD' AND $key=='IDPtk'){ $result=$this->getPTK($data);}
     //If ($TableName=='JurOZIKD' AND $key=='DataBeg'){ $resul=date("d.m.Y",strtotime($data));}
    
-    If ($TableName=='JurOZIKD' AND $key=='DataBeg'){ $result=date("d.m.Y",strtotime($data));}
-    If ($TableName=='JurOZIKD' AND $key=='DataEnd'){ $result=date("d.m.Y",strtotime($data));}
-    If ($TableName=='JurOZIKD' AND $key=='DateAkt'){ $result=date("d.m.Y",strtotime($data));}
+//    If ($TableName=='JurOZIKD' AND $key=='DataBeg'){ $result=date("d.m.Y",strtotime($data));}
+//    If ($TableName=='JurOZIKD' AND $key=='DataEnd'){ $result=date("d.m.Y",strtotime($data));}
+//    If ($TableName=='JurOZIKD' AND $key=='DateAkt'){ $result=date("d.m.Y",strtotime($data));}
 
     If ($result=='')
         {return $data;}
@@ -551,7 +551,7 @@ protected function get_LeftBar()
         $data .= $this->DynamicTableGenerated();
         $data .= $this->UIButtonSave(); 
         $data .= $this->UIButtonClose();
-        $this->Form($Caption, $data);
+        $this->Form($Caption, $data,'Edit');
         //var_dump($_SESSION);
     }
     

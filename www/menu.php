@@ -25,10 +25,10 @@ echo '<li> <a href="/?option=viewJurTS">Задачи</a></li>';
 
 
 If ($_GET['option']=='Jurnals'){
-    echo '<li class="current"> <a href="?option=Jurnals"> ';
+    echo '<li class="current"> <a href="/?option=Jurnals"> ';
 }
 else {
-    echo '<li> <a href="?option=Jurnals">';
+    echo '<li> <a href="/?option=Jurnals">';
 }
         
     echo 'Электронные Журналы </a>'
