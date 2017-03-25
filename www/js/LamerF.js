@@ -25,40 +25,26 @@
 //              months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май','Июнь','Июль', 'Август', 'Сентябрь', 'Октябрь','Ноябрь', 'Декабрь']
 //     });});        
 //END функция для поля с календарем и временем
-$(function(){$('.KalDates').will_pickdate({ 
-              timePicker: true, 
-              inputOutputFormat: 'Y-m-d', 
-              format: 'd-m-Y', 
-              startDay: 1, 
-              militaryTime: true, 
-              timePicker: false,
-              //inputOutputFormat: 'U',
-              days: ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'],
-              months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май','Июнь','Июль', 'Август', 'Сентябрь', 'Октябрь','Ноябрь', 'Декабрь']
-     }); 
-             //}
-         
-        //);
-
         //$(function(){
-$('.KalDatesTimes').will_pickdate({ 
-              timePicker: true, 
-              inputOutputFormat: 'Y-m-d H:i:s', 
-              format: 'm-d-Y H:i:s', 
-              startDay: 1, 
-              militaryTime: true, 
-              //inputOutputFormat: 'U',
-              days: ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'],
-              months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май','Июнь','Июль', 'Август', 'Сентябрь', 'Октябрь','Ноябрь', 'Декабрь']
-     }); });
-
-
-//$(function(){
+//    $('.KalDates').will_pickdate({ 
+//              timePicker: true, 
+//              inputOutputFormat: 'Y-m-d', 
+//              format: 'd-m-Y', 
+//              startDay: 1, 
+//              militaryTime: true, 
+//              timePicker: false,
+//              //inputOutputFormat: 'U',
+//              days: ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'],
+//              months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май','Июнь','Июль', 'Август', 'Сентябрь', 'Октябрь','Ноябрь', 'Декабрь']
+//     }); 
 //
-//    $('.sqlReq').autocomplete('mode=sql', {
-//        width: 200,
-//        max: 5
-//    });
-//
-//});
-
+//$('.KalDatesTimes').will_pickdate({ 
+//              timePicker: true, 
+//              inputOutputFormat: 'Y-m-d H:i:s', 
+//              format: 'm-d-Y H:i:s', 
+//              startDay: 1, 
+//              militaryTime: true, 
+//              //inputOutputFormat: 'U',
+//              days: ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'],
+//              months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май','Июнь','Июль', 'Август', 'Сентябрь', 'Октябрь','Ноябрь', 'Декабрь']
+//     });

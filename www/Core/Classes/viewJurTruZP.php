@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class viewJurTruZp extends Jurnals {
     public function __construct() {
         $this->class='viewJurtruzp';

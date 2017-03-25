@@ -102,7 +102,7 @@ class viewJurTS extends Jurnals {
    
     
     protected function obr() {
-      
+        //var_dump($_REQUEST);
         //var_dump($Action);
         If ($_REQUEST['Act'] == UMC) {
             $this->MainContent();
@@ -153,6 +153,7 @@ class viewJurTS extends Jurnals {
         
         If ($_REQUEST['Action'] == EditRecord) {
             //$_SESSION['IdRec'] = $_REQUEST['id'];
+            $_SESSION['IdRec'] = $_REQUEST['RecordId'];
             $this->Edit('Изменение задачи/заявки','');    
         }
        
@@ -162,6 +163,9 @@ class viewJurTS extends Jurnals {
             $_SESSION['IdRec'] = $_REQUEST['id'];
             $this->Create(1);  
         }
+     
+ 
+       
         
 //        IF (isset($_POST['B1Action1'])) {
 //            $NNAkt='';
@@ -183,16 +187,13 @@ class viewJurTS extends Jurnals {
 
         
         //IF (isset($_POST['SaveButton'])) {
-        IF ($_Post['Action'] == Edit) {
+         IF ($_REQUEST['Action'] == 'Edit') {
             
              //$_SESSION['IdRec'] = $_REQUEST['id'];       
              //var_dump($_REQUEST['id']);
-             exit("test");
             $Zadacha=htmlspecialchars($_POST['Opisanie']);
-  //$Zadacha=iconv('windows-1251','utf-8', $Zadacha);
-  //$OtvUserId=htmlspecialchars($_POST['SpisSTS']);
   $UserId=htmlspecialchars($_POST['UserId']);
-  $Comments=htmlspecialchars($_POST['comments']);
+  $Comments=htmlspecialchars($_POST['comment']);
   //$Id=htmlspecialchars( $_POST['id']);
   If ($_SESSION['Status']==1)
   {
@@ -217,7 +218,7 @@ class viewJurTS extends Jurnals {
             $this->query($query);
             $this->Logging($_SESSION['Id_user'], $Id_Razdela=0,$_SESSION['IdRec'],11,0,'Изменение задачи');
             $this->MainTabelA();
-            header("location: /?option=".$this->class);
+            //header("location: /?option=".$this->class);
         }
        
         $this->GLflagCreate=0;

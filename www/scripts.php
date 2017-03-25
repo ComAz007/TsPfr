@@ -7,7 +7,6 @@
 
 <script src="js/jquery.min.js"></script>
 <script src="js/kickstart.js"></script> <!-- KICKSTART -->
-<script src="js/la.js"></script>
 <script type="text/javascript" src="js/jquery-2.2.0.js"></script>
 <script type="text/javascript" src="js/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="js/jquery.mousewheel-3.0.6.pack.js"></script>
@@ -16,5 +15,6 @@
 <script type="text/javascript" src="js/jquery.fancybox.js"></script>
 <script type="text/javascript" src="css/kalend1/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="css/kalend1/will_pickdate.js"></script>
+<script src="js/la.js"></script>
 <script src="js/LamerF.js"></script> 
 

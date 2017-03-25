@@ -12,7 +12,7 @@
 
 <?php
 //include_once 'scripts_1.php';
-include 'scripts.php';
+include_once 'scripts.php';
 
 ?>
 

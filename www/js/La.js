@@ -1,3 +1,32 @@
+   $.ajaxSetup({cache: true}); 
+   
+   (function($)
+{
+    /*
+     * $.include() helper (for JavaScript importing within JavaScript code).
+     */
+    var import_js_imported = [];
+
+    $.extend(true,
+            {
+                include: function(script)
+                {
+                    var found = false;
+                    for (var i = 0; i < import_js_imported.length; i++)
+                        if (import_js_imported[i] == script) {
+                            found = true;
+                            break;
+                        }
+                    if (found == false) {
+                        $("head").append('<script type="text/javascript" src="' + script + '"></script>');
+                        import_js_imported.push(script);
+                    }
+                }
+            });
+
+})(jQuery);
+   
+   
    //Сия чудная функция получает Value Инпутов с типом Чекид
     function GetDataCheked(){
         var CheckedArray = [];
@@ -55,10 +84,34 @@ for(var i=2; i<Files.length; i++) {
   }
 }
 
+$('.KalDates').will_pickdate({ 
+              timePicker: true, 
+              inputOutputFormat: 'Y-m-d', 
+              format: 'd-m-Y', 
+              startDay: 1, 
+              militaryTime: true, 
+              timePicker: false,
+              //inputOutputFormat: 'U',
+              days: ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'],
+              months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май','Июнь','Июль', 'Август', 'Сентябрь', 'Октябрь','Ноябрь', 'Декабрь']
+     }); 
+
+$('.KalDatesTimes').will_pickdate({ 
+              timePicker: true, 
+              inputOutputFormat: 'Y-m-d H:i:s', 
+              format: 'm-d-Y H:i:s', 
+              startDay: 1, 
+              militaryTime: true, 
+              //inputOutputFormat: 'U',
+              days: ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'],
+              months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май','Июнь','Июль', 'Август', 'Сентябрь', 'Октябрь','Ноябрь', 'Декабрь']
+     });
 
 
+//$(function() {
+    
 
-$(function() {
+//$(function() {
 
 //$('.CreateForm').submit(function(e){
 ////отменяем стандартное действие при отправке формы
@@ -125,7 +178,7 @@ $(function() {
     
      
     
-  });
+ // });
   
   function modalwindow(){
       

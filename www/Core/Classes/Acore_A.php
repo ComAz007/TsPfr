@@ -220,9 +220,9 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
     If ($TableName=='JurOZIKD' AND $key=='IDPtk'){ $result=$this->getPTK($data);}
     //If ($TableName=='JurOZIKD' AND $key=='DataBeg'){ $resul=date("d.m.Y",strtotime($data));}
    
-//    If ($TableName=='JurOZIKD' AND $key=='DataBeg'){ $result=date("d.m.Y",strtotime($data));}
-//    If ($TableName=='JurOZIKD' AND $key=='DataEnd'){ $result=date("d.m.Y",strtotime($data));}
-//    If ($TableName=='JurOZIKD' AND $key=='DateAkt'){ $result=date("d.m.Y",strtotime($data));}
+    If ($TableName=='JurOZIKD' AND $key=='DataBeg'){ $result=date("d.m.Y",strtotime($data));}
+    If ($TableName=='JurOZIKD' AND $key=='DataEnd'){ $result=date("d.m.Y",strtotime($data));}
+    If ($TableName=='JurOZIKD' AND $key=='DateAkt'){ $result=date("d.m.Y",strtotime($data));}
 
     If ($result=='')
         {return $data;}
@@ -517,18 +517,20 @@ protected function get_LeftBar()
     </html>';
         
     }
+    
     public function get_Body()
     {
- 
+ //include 'scripts.php';
        if ($_POST||$_GET){
+           
           if (!isset($_GET['SearchSTR'])) {
-          include 'scripts.php';
-          
+         include 'scripts.php';
           };
+          
           $this->obr($_REQUEST);
           $this->obrGL($_REQUEST);
-          if (!isset($_REQUEST['Act']) and !isset($_REQUEST['Action'])){
-          $this->MainContent();}
+//          if (!isset($_REQUEST['Act']) and !isset($_REQUEST['Action'])){
+//          $this->MainContent();}
         }
  else {
 
@@ -538,21 +540,37 @@ protected function get_LeftBar()
         $this->get_Footer();    }
         }
         
-        If ($_REQUEST['id']!==NULL){
+//        If ($_REQUEST['id']!==NULL){
+//            $_SESSION['IdRec'] = $_REQUEST['id'];
+//        }
+
+        If (isset($_REQUEST['id'])){
             $_SESSION['IdRec'] = $_REQUEST['id'];
         }
-
-         unset($_SESSION['NotAjax']);
+        
+        If (isset($_REQUEST['RecordId'])){
+            $_SESSION['IdRec'] =  $_REQUEST['RecordId'];
+        }
+        ;
+        
+         If (isset($_REQUEST['sl'])){
+            $_SESSION['param']=$_REQUEST['sl'];
+        }
+               
+        
+         //unset($_SESSION['NotAjax']);
     }
 
     abstract function MainContent();
     
     protected function Edit($Caption,$data){
-        $data .= $this->DynamicTableGenerated();
-        $data .= $this->UIButtonSave(); 
-        $data .= $this->UIButtonClose();
-        $this->Form($Caption, $data,'Edit');
-        //var_dump($_SESSION);
+        $data1='';
+        $data1.=$data;
+        $data1 .= $this->DynamicTableGenerated();
+        $data1 .= $this->UIButtonSave(); 
+        $data1 .= $this->UIButtonClose();
+        var_dump($data1);
+        $this->Form($Caption, $data1,'Edit');
     }
     
     protected function Create($Caption,$data){
@@ -760,23 +778,23 @@ protected function get_LeftBar()
     //echo $Type.'</BR>';
         switch($Type){
            case 'varchar':
-               return '<div class="col_6 center">'.$Label.'<BR> <input name="'.$Name.'" value="'.$Value.'"> </div>';
+               return ' <div class="col_6 center">'.$Label.'<BR> <input name="'.$Name.'" value="'.$Value.'"> </div> ';
                break;
            case 'text':
-               return $Label.'<BR> '.$this->UITextArea($Name,$Value).'</BR> </BR>'; // почти трушная реализаци To-DO вот так должно быть ВЕЗДЕ!!!
+               return $Label.' <BR> '.$this->UITextArea($Name,$Value).'</BR> </BR>'; // почти трушная реализаци To-DO вот так должно быть ВЕЗДЕ!!!
                break;
            case 'tinyint':
-               return '<div class="col_6 center">'.$Label.'<BR> <input name="'.$Name.'" value="'.$Value.'"> </div>';
+               return ' <div class="col_6 center">'.$Label.'<BR> <input name="'.$Name.'" value="'.$Value.'"> </div> ';
                break;
            case 'int':
                If ($Name<>'Id' or $IdEdit==True){
-               return '<div class="col_6 center">'.$Label.'<BR> <input name="'.$Name.'" value="'.$Value.'"> </div>';}
+               return ' <div class="col_6 center">'.$Label.'<BR> <input name="'.$Name.'" value="'.$Value.'"> </div> ';}
                break;
             case 'date':
-               return '<div class="col_6 center">'.$Label.'<BR> <input class="KalDates" name="'.$Name.'" value="'.$Value.'"> </div>';
+               return ' <div class="col_6 center">'.$Label.'<BR> <input id="KD" class="KalDates" name="'.$Name.'" value="'.$Value.'"> </div> ';
                break;
            case 'datetime':
-               return '<div class="col_6 center">'.$Label.'<BR> <input class="KalDatesTimes" name="'.$Name.'" value="'.$Value.'"> </div>';
+               return ' <div class="col_6 center">'.$Label.'<BR> <input class="KalDatesTimes" name="'.$Name.'" value="'.$Value.'"> </div> ';
                break;
         }
 //<p> Поиск УПФР по классификатору: </BR> <input name="SearchField" placeholder="Поиск УПФР по справочнику" style="width: 100%" class="searchUPFR">
@@ -857,20 +875,20 @@ public function UILabel($Text){
 }
 
 public function UIButtonSave(){
-    return "<input type='submit' name='SaveButton' value='Сохранить изменения' >";
+    return ' <input type="submit" name="SaveButton" value="Сохранить изменения" > ';
 }
 
 public function UIButtonCreate(){
-    return "<input type='submit' name='CreateButton' value='Создать запись' >";
+    return ' <input type="submit" name="CreateButton" value="Создать запись" > ';
  
 }
 
 public function UIButtonClose(){
-    return "<input type='submit' name='CloseButton' value='Закрыть' >";
+    return ' <input type="submit" name="CloseButton" value="Закрыть" > ';
 }
 
 protected function UIIdTableAction($CssSelector,$ActionLabel){
-    return '<a class="'.$CssSelector.' PointCursor">'.$ActionLabel.' </a> </BR>';
+    return ' <a class="'.$CssSelector.' PointCursor">'.$ActionLabel.' </a> </BR> ';
 }
 
 

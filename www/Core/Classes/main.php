@@ -17,6 +17,11 @@ class main extends Acore_A{
     }
 
     public function MainContent() {
+        echo "<div style='
+  top: 0;
+  left: 0;
+  width: auto;
+  height: 60%;'></div>";
     }
     //put your code here
 }
