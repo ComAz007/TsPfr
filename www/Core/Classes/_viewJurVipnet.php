@@ -172,9 +172,9 @@ class viewJurVipnet extends Jurnals {
                 $str=$str. '<td value="'.$data['7'].'" >' . $data['7']. '</td>';
                 $str=$str. '<td value="'.$this->getTypeZ3($data['8']).'" >' . $this->getTypeZ3($data['8']) . '</td>';
                 //$str=$str. '<td value="'.$data['8'].'" >' . $data['8'] . '</td>';
-                $str=$str. '<td value="'.$data['9'].'" >' . $this->getEsNo($data['9']) . '</td>';
+                $str=$str. '<td value="'.$data['9'].'" >' . $this->getYesNo($data['9']) . '</td>';
                  $str=$str. '<td value="'.$data['14'].'" >'. GetUserName( $data['14'] ). '</td>';
-                $str=$str. '<td value="'.$data['10'].'" >' . $this->getEsNo($data['10']) . '</td>';
+                $str=$str. '<td value="'.$data['10'].'" >' . $this->getYesNo($data['10']) . '</td>';
                 $str=$str. '<td value="'.$data['11'].'" >' . $data['11'] . '</td>';
                 $str=$str. '<td value="'.$data['12'].'" >' . $data['12'] . '</td>';
                 $str=$str. '</tr>';

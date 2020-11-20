@@ -11,7 +11,7 @@ class Jurnals extends Acore_A {
         return $arrays[$type];
     }
 
-    protected function getEsNo($type) {
+    protected function getYesNo($type) {
         $arrays = array(
             0 => 'Нет',
             1 => 'Да',
@@ -65,7 +65,6 @@ class Jurnals extends Acore_A {
     }
 
     protected function getESIA($type, $getSet = 0) {
-        //static function getESIA($type,$getSet=0) {
         $arrays = array(
             1 => 'Регистрация',
             2 => 'Подтверждение',
@@ -85,7 +84,6 @@ class Jurnals extends Acore_A {
     }
 
     protected function getPTK($type, $getSet = 0) {
-        //static function getESIA($type,$getSet=0) {
         $arrays = array(
             1 => 'ПТК СПУ(РАЙОН)',
             2 => 'ПТК СПУ(РЕГИОН)',
@@ -140,8 +138,7 @@ class Jurnals extends Acore_A {
             return date(str_replace('M', $monthNames[date('n', $time) - 1], $param), $time);
     }
 
-    public function MainContent() {
-        //echo 'в лог идет: '+$this->LogMsg;
+    public function mainContent() {
         echo '<div class="col_12 column">';
         echo '<p><a href="?option=viewJurVipnet" class="LocalMenu"><H6> Журнал регистрации направления поступления и исполнения запросов (Распоряжение Правления ПФР 463Р от 06.10.2015)</H6></a></p>';
         echo '<p><a href="?option=viewJurEsia" class="LocalMenu"><H6> Журнал регистрации заявлений на регистрацию, подтверждение, удаление, восстановление доступа к учетной записи пользователя в Единой системе идентификации и аутентификации в инфраструктуре, обеспечивающей информационно-технологическое взаимодействие информационных систем, используемых для предоставления государственных и муниципальных услуг в электронной форме</H6></a></p>';
