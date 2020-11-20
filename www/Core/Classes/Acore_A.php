@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 
 //!!!ЭТО АДМИНСКИЙ КЛАСС!!!!
 /**
@@ -224,6 +224,18 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
     If ($TableName=='JurOZIKD' AND $key=='DataEnd'){ $result=date("d.m.Y",strtotime($data));}
     If ($TableName=='JurOZIKD' AND $key=='DateAkt'){ $result=date("d.m.Y",strtotime($data));}
 
+    If ($TableName=='jurvipnetzapros' AND $key=='Napravl'){ $result=$this->getTypeZ($data);}
+    If ($TableName=='jurvipnetzapros' AND $key=='SpNap'){ $result=$this->getTypeZ4($data);}
+    If ($TableName=='jurvipnetzapros' AND $key=='DataReg'){ $result=date("d.m.Y",strtotime($data));}
+    If ($TableName=='jurvipnetzapros' AND $key=='Povtor'){ $result=date("d.m.Y",strtotime($data));}
+    If ($TableName=='jurvipnetzapros' AND $key=='DatePovtor'){ $result=date("d.m.Y",strtotime($data));}
+    If ($TableName=='jurvipnetzapros' AND $key=='DateOtveta'){ $result=date("d.m.Y",strtotime($data));}
+    If ($TableName=='jurvipnetzapros' AND $key=='TypeDeistv'){ $result=$this->getTypeZ3($data);}
+    If ($TableName=='jurvipnetzapros' AND $key=='ZR'){ $result=$this->getEsNo($data);}
+    If ($TableName=='jurvipnetzapros' AND $key=='Povtor'){ $result=$this->getEsNo($data);}
+    If ($TableName=='jurvipnetzapros' AND $key=='Otvetstv'){ $result=$this->GetUserName($data);}
+    
+  
     If ($result=='')
         {return $data;}
     else 
@@ -383,31 +395,28 @@ print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
                     If ($key=='Id'){
                         $datav='';
                         If ($CheckedFieldOnOff!==1 and $data[$CheckedFieldOnOff]<$this->StatusEnd) {
-                        If (in_array('Checked', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<input id="iCheked" class="cCheked" type="checkbox" name="NCheked" value="'.$data[$key].'"></BR>';};
-                        
-                        If (in_array('Edit', $AtribId, true) or in_array('ALL', $AtribId, true)) 
-                            {//$datav.='<a id="Edit" href="?option='.$this->class.'&Act=Edit&id='.$data[$key].'">'.$data[$key].'</a> </BR>';
-                            $datav.=$this->UIIdTableAction('EditRecord',$data[$key]);
-                            //$datav.='<a class="EditRecord PointCursor" RecId='.$data[$key].' Module='.  $this->class.' Table='.$this->table.'>'.$data[$key].'</a> </BR> ';                       
-                            
+                            If (in_array('Checked', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<input id="iCheked" class="cCheked" type="checkbox" name="NCheked" value="'.$data[$key].'"></BR>';};
+                            If (in_array('Edit', $AtribId, true) or in_array('ALL', $AtribId, true)){
+                                $datav.=$this->UIIdTableAction('EditRecord',$data[$key]);
                             }
-                        else
-                            {$datav.='  '.$data[$key].' ';};
-                       
-                        
-                        //If ((in_array('EditStr', $AtribId, true) and (!in_array('Edit', $AtribId, true))) or in_array('ALL', $AtribId, true)) {$datav.='<a id="Edit" href="?option='.$this->class.'&Act=Edit&id='.$data[$key].' ">Редактировать</a> </BR> ';};
-                        If ((in_array('EditStr', $AtribId, true) and (!in_array('Edit', $AtribId, true))) or in_array('ALL', $AtribId, true)) {$datav.=$this->UIIdTableAction('EditRecord','Редактировать');};
-                        If (in_array('PrnRec', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="PrintRecord" href="?option='.$this->class.'&Act=PrintForm&id='.$data[$key].' ">Печать</a> </BR> ';};
-                        //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a id="Copy" href="?option='.$this->class.'&Act=CopySL&id='.$data[$key].' ">Скопировать</a> </BR> ';};
-                        //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor" RecId='.$data[$key].' Module='.$Class.' Table='.$this->table.'>Скопировать</a> </BR> ';};                        
-                        //If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor" RecId='.$data[$key].'>Скопировать</a> </BR> ';}; 
-                        If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.=$this->UIIdTableAction('CopyRecord','Скопировать');};                        
-                        //If ($Cheked==0) {$datav.='<input id="iCheked" class="cCheked" type="checkbox" value="Select * From '.$TableName.' Where Id='.$data[$key].'">';};
+                            else{
+                                $datav.='  '.$data[$key].' ';    
+                            };
+                            If ((in_array('EditStr', $AtribId, true) and (!in_array('Edit', $AtribId, true))) or in_array('ALL', $AtribId, true)) {$datav.=$this->UIIdTableAction('EditRecord','Редактировать');};
+                            If (in_array('PrnRec', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="PrintRecord" href="?option='.$this->class.'&Act=PrintForm&id='.$data[$key].' ">Печать</a> </BR> ';};
+                            If (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.=$this->UIIdTableAction('CopyRecord','Скопировать');};  
                          }
-                         else {$datav.='  '.$data[$key].' ';};
-//                        $datav='</BR> <a href="?option=viewJurEsia&Act=Edit&id='.$data[$key].' ">Изменить</a>';
-//                        $datav=$datav.'</BR> <a href="?option=viewJurEsia&Act=PrintForm&id='.$data[$key].' ">Печать</a>';
-//                        $datav=$datav.'</BR> <a href="?option=viewJurEsia&Act=Delete&id='.$data[$key].' ">Удалить</a>';
+                         else {
+                            //$datav.='  '.$data[$key].' ';
+                            If (in_array('Checked', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<input id="iCheked" class="cCheked" type="checkbox" name="NCheked" value="'.$data[$key].'"></BR>';};
+                            If (in_array('Edit', $AtribId, true) or in_array('ALL', $AtribId, true)){
+                                $datav.=$this->UIIdTableAction('EditRecord',$data[$key]);
+                            }
+                            else{
+                                $datav.='  '.$data[$key].' ';    
+                            };
+                            If ((in_array('EditStr', $AtribId, true) and (!in_array('Edit', $AtribId, true))) or in_array('ALL', $AtribId, true)) {$datav.=$this->UIIdTableAction('EditRecord','Редактировать');};
+                         };
                         $datav.='<a id="Historym" href="?option='.$this->class.'&Act=History&id='.$data[$key].'"> История</a></BR> ';
                         $datav1=$data[$key];
                     }
@@ -548,6 +557,14 @@ protected function get_LeftBar()
             $_SESSION['IdRec'] = $_REQUEST['id'];
         }
         
+        If (isset($_REQUEST['IdRec'])){
+            $_SESSION['IdRec'] = $_REQUEST['IdRec'];
+        }
+         If (isset($_SESSION['IdRec'])){
+            $_SESSION['IdRec'] = $_SESSION['IdRec'];
+        }
+        
+                
         If (isset($_REQUEST['RecordId'])){
             $_SESSION['IdRec'] =  $_REQUEST['RecordId'];
         }
@@ -631,6 +648,7 @@ protected function get_LeftBar()
     
     
     protected function obrGL($request){
+        
         //echo '----Main----';
        // var_dump($request);
        // exit();
@@ -860,7 +878,6 @@ protected function get_LeftBar()
 public function UIButtonAjax($ButtonType,$ButtonText){  
     return "<div class='col_3 ButtonUIAjax visible center' style='height: 25px;'> <a id='".$ButtonType."' title='".$ButtonText."'>".$ButtonText."</a></div>";
 }
-
 
 public function UIButtonActionAjax($ButtonAction,$ButtonLabel){  
     return "<div class='col_3 ButtonActionAjax visible center' Action='".$ButtonAction."' style='height: 25px;'> <a title='".$ButtonLabel."'>".$ButtonLabel."</a></div>";

@@ -5,6 +5,8 @@
 class Statistics extends Jurnals {
     
     public function __construct() {
+        $this->class='Statistics';
+        $this->table='';
         include 'Header.php';
         echo"";
         parent::__construct();

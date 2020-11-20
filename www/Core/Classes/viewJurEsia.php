@@ -161,61 +161,12 @@ private function TableHistory($Res){
         
         Echo ('<div id="tabr1" class="tab-content">');
         $IDU = $_SESSION['Id_user'];
-        //echo "<div class='col_3 visible center' style='height: 25px;'> <a id='Create' title='Создать заявление'>Создать заявление</a></div>";
         $Button='';
         $Button .=$this->UIButtonAjax('Create', 'Создать заявление');
         echo $Button;
-        //echo "<div class='col_3 visible center' id='Create' style='height: 25px;'> <a href='?option=viewJurEsia&Act=Create' title='Создать заявление'>Создать заявление</a></div>";
         echo '<div id="ContentMainTable">';
-       Echo $this->MainTabelA();
+        Echo $this->MainTabelA();
         echo '</div>';
-        //echo "<div class='col_3 visible center ' style='height: 25px;'> <a class='FormMini fancybox.ajax' href='?option=viewJurVipnet&Act=PZ'>Принять запрос</a></div>";
-        //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=viewJurEsia&Act=PrintForm'>Print(test)</a></div>";
-        //echo "<div class='col_3 visible center fik' style='height: 25px;'> <a href='#'>Фиктивный запрос</a></div>";
-        //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=Statistics'>СТАТИСТИКА</a></div>";
-        
-//        If (($_SESSION['Admin']==1) or ($_SESSION['Status']==21))
-//         {
-//            $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap,Kontrol FROM jurvipnetzapros Where DateOtveta is NULL Order By Id DESC LIMIT 20";             
-//         }
-//         
-//        If ($_SESSION['Status']==20) 
-//         {
-//           $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap,Kontrol FROM jurvipnetzapros Where ( (IdUserCreate='$IDU')  or  (Otvetstv='$IDU') ) and (DateOtveta is NULL)  Order By Id DESC LIMIT 20";             
-//         }
-//
-//
-//         If ($_SESSION['Status']==0)
-//         {
-//            $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where (IdUserCreate='$IDU') and (DateOtveta is NULL) Order By Id DESC LIMIT 20";
-//         }
-//
-//         If ($_SESSION['Status']==22)
-//         {
-//            $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where (IdUserCreate='$IDU') and (Otvetstv=0) Order By Id DESC LIMIT 20"; 
-//         }
-//        $Res= $this->query($query);
-//        
-//        
-//         If ($Res<>NULL){
-          
-   
-//   If ($_SESSION['Status']==20) 
-//         {
-//   Echo ('<div id="tabr3" class="tab-content">');
-//$Otd=$_SESSION['IdOtd'];
-//   $query="SELECT jurvipnetzapros.Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap,Kontrol FROM jurvipnetzapros, user Where  (DateOtveta is NULL)  and (user.Id_Otdel='$Otd') and (jurvipnetzapros.IdUserCreate=user.id) Order By Id DESC LIMIT 100";             
-//   //$query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where DateOtveta is NOT NULL Order By DateOtveta DESC";             
-//   $Res=$this->query($query);
-//   $this->Table($Res,0);
-//   Echo '</div>';
-//   }
-//   
-//   Echo ('<div id="tabr1" class="tab-content">');
-//   $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where DateOtveta is NOT NULL Order By DateOtveta DESC";             
-//   $Res=$this->query($query);
-//   $this->Table($Res,1);
-//   Echo '</div>';
    
         
      

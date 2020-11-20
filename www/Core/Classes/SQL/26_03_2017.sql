@@ -1,0 +1,1 @@
+ALTER TABLE `user` ADD `Email` VARCHAR( 50 ) NOT NULL 

@@ -7,6 +7,9 @@ class SprUsers extends Spravochniki {
     public function __construct() {
         $this->class='SprUsers';
         $this->table='User';
+        $this->TableHead=Array("Id"=>"№п/п", "Login"=>"Логин",
+            "FIO"=>"ФИО пользователя", "Status"=>"Набор прав",
+            "Admin"=>"Администратор","Email"=>"Адрес эл.почты");
         parent::__construct();
         
     }
@@ -46,30 +49,31 @@ class SprUsers extends Spravochniki {
 
 
     public function MainContent(){
-        //echo "<script language='javascript'>var opti='".$this->class."' </script>";
-        echo "<Center> <H6> Журнал регистрации начала и конца действия Карточек доступа к ПТК </Center> </H6>";
+
+        echo "<script language='javascript'>var module='".$this->class."' </script>";
+        echo "<Center> <H6> Пользователи системы</Center> </H6>";
         echo '<ul class="tabs left">
-            <li><a href="#tabr1">Карточки</a></li>';
+            <li><a href="#tabr1">Пользователи</a></li>';
         echo '</ul>';
         Echo ('<div id="tabr1" class="tab-content">');
         $IDU = $_SESSION['Id_user'];
-        echo "<div id='Create' class='col_3 visible center' style='height: 25px;'> <a   title='Создать'>Создать Пользователя</a></div>";
-        //echo "<div id='PrintM' class='col_3 visible center' style='height: 25px;'> <a  title='Печатать АКТ'>Печатать АКТ</a></div>";
-        //echo "<div id='Action1' class='col_3 visible center' style='height: 25px;'> <a  title='Включит в АКТ'>Включить в АКТ</a></div>";
-       // echo "<div id='Action2' class='col_3 visible center' style='height: 25px;'> <a  title='Закрыть карточки(у)'>Закрыть карточки(у)</a></div>";
-        //echo "<div class='col_3 visible center' id='Create' style='height: 25px;'> <a href='?option=viewJurEsia&Act=Create' title='Создать заявление'>Создать заявление</a></div>";
-        echo '<div id="content">';
+        echo $this->UIButtonAjax('Create', 'Новый пользователь');
+        
+        echo '<div id="ContentMainTable">';
         Echo $this->MainTabelA();
         echo '</div>';
     }
   
     private function MainTabelA() {
-        $Head=Array("Id"=>"№п/п", "Login"=>"Логин",
-            "FIO"=>"ФИО пользователя", "Status"=>"Набор прав",
-            "Admin"=>"Администратор");
+        
         //user.Id, user.Login, user.FIO, user.Status, user.Admin, otdely.name_Otdel FROM user, otdely WHERE (otdely.id=user.Id_Otdel)
+//        If (($_SESSION['Admin']==1)){
+//            return $this->TablePrototype($Res,$Head,$this->table,$this->class);
+//        }
+        
         If (($_SESSION['Admin']==1)){
-            return $this->TablePrototype($Res,$Head,$this->table,$this->class);
+            return $this->TablePrototypeNew(array('Edit', 'Checked'));
+            //return $this->TablePrototypeNew(array('EditStr', 'Checked'));
         }
 
     }
@@ -152,7 +156,7 @@ class SprUsers extends Spravochniki {
     protected function obr() {
         
         If ($_REQUEST['Act'] == Create) {
-            $_SESSION['IdRec'] = $_REQUEST['id'];
+            //$_SESSION['IdRec'] = $_REQUEST['id'];
             $this->Create($Caption, $data);    
         }
         
@@ -164,9 +168,9 @@ class SprUsers extends Spravochniki {
             }
         }
         
-        If ($_REQUEST['Act'] == Edit) {
-            $_SESSION['IdRec'] = $_REQUEST['id'];
-            $this->Edit();    
+        If ($_REQUEST['Action'] == EditRecord) {
+            //$_SESSION['IdRec'] = $_REQUEST['id'];
+            $this->Edit('Редактирование данных пользователя');    
         }
         
           If ($_REQUEST['Act'] == Action2) {
@@ -235,39 +239,55 @@ class SprUsers extends Spravochniki {
         };
     }
 
+    
     public function Create($Caption, $data) {
-        Echo "<Div class=grid>"; 
-        Echo '<div id="dialog" title="Создание пользователя">';
-        Echo "<form enctype='multipart/form-data' action='' method='Post'>";  
-            $Stt=$this->GetStructTable($this->table);
-            $pole='';
-                foreach ($Stt as $key=>$value1){
-//                    foreach ($value1 as $key=>$value){
-//                      
-//                        If ($key=='Name') {$FieldName=$value1[$key]; $this->Fields=$this->Fields+$FieldName+',';};
-//                        If ($key=='Type') $FieldType=$value1[$key];
-//                        If ($key=='Comment') $FieldLabel=$value1[$key];
-//                        
-//                    }
-                    //$Zstr=$this->FieldZN($_SESSION['DefTable'], $FieldName, $_REQUEST['id']);
-                        //echo $this->FieldGenerate($FieldType, $FieldName, $FieldLabel, $Zstr);
-                       //echo $this->FieldGenerate($FieldType, $FieldName, $FieldLabel);
-                        echo $this->UIDinamicTableFieldGenerate($value1['Type'], $value1['Name'], $value1['Comment']);
-                }
-            //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=Defaul&Act=Save' title='Сохранить запись'>Сохранить запись</a></div>";
-            Echo "<br><p><input type='submit' name='Save' value='Создать пользователя' >";
-             Echo "</form>";
-//            }
-//            else {
-//                echo "<div class='LaButton' > <a  href='?option=Defaul&Act=Create' title='Создать запись'>Создать запись</a></div>";
-//            If ($this->table<>'') $this->MainTabel($this->table);
-//}
+        $this->TableHeadLocal=array("False");
+        $Usluga=$this->getPTK(0,2);
+        $data.='Название ПТК: <select name="Usluga">';
+        foreach ($Usluga as $key=>$value ){
+            $data.=' <option value='.$key.'>'.$value.' </option>';
+        }
+        $data.='  </select> </BR>  </BR></p>';     
+        $data.=' Дата начала <input class="KalDates" name="DataBeg"> </BR>  </BR></p>';
+        $data.=' Основание <input name="Osnovanie"> </BR>  </BR></p>';
         
-        
-        Echo '</Div>';
-        Echo '</Div>';
-        //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=viewJurVipnet&Action=Create' title='Создать'>Сохранить</a></div> </Br></Br></Br>";
+        parent::Create($Caption, $data);
     }
+    
+    
+//    public function Create($Caption, $data) {
+//        Echo "<Div class=grid>"; 
+//        Echo '<div id="dialog" title="Создание пользователя">';
+//        Echo "<form enctype='multipart/form-data' action='' method='Post'>";  
+//            $Stt=$this->GetStructTable($this->table);
+//            $pole='';
+//                foreach ($Stt as $key=>$value1){
+////                    foreach ($value1 as $key=>$value){
+////                      
+////                        If ($key=='Name') {$FieldName=$value1[$key]; $this->Fields=$this->Fields+$FieldName+',';};
+////                        If ($key=='Type') $FieldType=$value1[$key];
+////                        If ($key=='Comment') $FieldLabel=$value1[$key];
+////                        
+////                    }
+//                    //$Zstr=$this->FieldZN($_SESSION['DefTable'], $FieldName, $_REQUEST['id']);
+//                        //echo $this->FieldGenerate($FieldType, $FieldName, $FieldLabel, $Zstr);
+//                       //echo $this->FieldGenerate($FieldType, $FieldName, $FieldLabel);
+//                        echo $this->UIDinamicTableFieldGenerate($value1['Type'], $value1['Name'], $value1['Comment']);
+//                }
+//            //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=Defaul&Act=Save' title='Сохранить запись'>Сохранить запись</a></div>";
+//            Echo "<br><p><input type='submit' name='Save' value='Создать пользователя' >";
+//             Echo "</form>";
+////            }
+////            else {
+////                echo "<div class='LaButton' > <a  href='?option=Defaul&Act=Create' title='Создать запись'>Создать запись</a></div>";
+////            If ($this->table<>'') $this->MainTabel($this->table);
+////}
+//        
+//        
+//        Echo '</Div>';
+//        Echo '</Div>';
+//        //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=viewJurVipnet&Action=Create' title='Создать'>Сохранить</a></div> </Br></Br></Br>";
+//    }
 
     
     public function Action1(){
@@ -282,15 +302,20 @@ class SprUsers extends Spravochniki {
         Echo '</Div>';
     }
     
-    public function Edit(){
-        Echo "<Div class=grid>"; 
-        Echo '<div id="dialog" title="Изменение карточки # '.$_SESSION['IdRec'].'">';
-        Echo "<form enctype='multipart/form-data' action='' method='Post'>";
-        Echo 'Дата окончания действия карт <input class="KalDates"  name="DataAkt"> </BR>  </BR></p>';
-        Echo "<p><input type='submit' name='B1Edit' value='Изменить' >";
-        Echo '</form>';
-        Echo '</Div>';
-        Echo '</Div>';
+    
+    public function Edit($Caption, $data){
+        $this->TableHeadLocal=array("FIO","Status","Admin","Email");
+        parent::Edit($Caption, $data);
     }
+//    public function Edit(){
+//        Echo "<Div class=grid>"; 
+//        Echo '<div id="dialog" title="Изменение карточки # '.$_SESSION['IdRec'].'">';
+//        Echo "<form enctype='multipart/form-data' action='' method='Post'>";
+//        Echo 'Дата окончания действия карт <input class="KalDates"  name="DataAkt"> </BR>  </BR></p>';
+//        Echo "<p><input type='submit' name='B1Edit' value='Изменить' >";
+//        Echo '</form>';
+//        Echo '</Div>';
+//        Echo '</Div>';
+//    }
   
 }

@@ -227,8 +227,8 @@ $('.KalDatesTimes').will_pickdate({
                 });  
             }  
             
-     
-
+ 
+ 
 function obrabotka(){
 $('.UIForm').unbind('submit');
 $('.UIForm').submit(function(e){
@@ -242,8 +242,11 @@ var m_action=$('.UIForm').attr('action');
 //получаем данные, введенные пользователем в формате input1=value1&input2=value2...,
 //то есть в стандартном формате передачи данных формы
 var m_data=$('.UIForm').serialize();
-//alert(m_data+" "+module);
-
+//var formData = new FormData(document.forms.UIForm);
+//formData.append( 'file', $('input[type=file]')[0].files[0] );
+//var m_data=new FormData(this);
+//alert($('input[type=file]')[0].files[0]);
+//m_data+$('input[type=file]')[0].files[0];
 //$('#add_user').on('button', 'click', function(){
 //$(this).closest('form').preventDefault(); //Предотвращаем выполнение функций, предусмотренных стандартным поведением формы;
 //var formData = $('#add_user input').serialize(); //Ваша переменная;
@@ -265,14 +268,114 @@ $("#dialog").remove();
 
 }
 });
+
+var data = new FormData();
+	$.each( files, function( key, value ){
+		data.append( key, value );
+	});
+	// Отправляем запрос
+	$.ajax({
+                url: "?option="+module,
+		//url: './submit.php?uploadfiles',
+		type: 'POST',
+		data: data,
+		cache: false,
+		dataType: 'json',
+		processData: false, // Не обрабатываем файлы (Don't process the files)
+		contentType: false, // Так jQuery скажет серверу что это строковой запрос
+		success: function( respond, textStatus, jqXHR ){
+			// Если все ОК
+			if( typeof respond.error === 'undefined' ){
+				// Файлы успешно загружены, делаем что нибудь здесь
+
+				// выведем пути к загруженным файлам в блок '.ajax-respond'
+				var files_path = respond.files;
+				var html = '';
+				$.each( files_path, function( key, val ){ html += val +'<br>'; } )
+				$('.ajax-respond').html( html );
+			}
+			else{
+				console.log('ОШИБКИ ОТВЕТА сервера: ' + respond.error );
+			}
+		},
+		error: function( jqXHR, textStatus, errorThrown ){
+			console.log('ОШИБКИ AJAX запроса: ' + textStatus );
+		}
+	});
+
 });
     
 }
+
+ //$data.=' <input id="filez" type="file" name="FileZ" required></p></BR>';
+ //$data.= "<p><input id='VxdZ' type='submit' value='Принять запрос' >";
+
+(function($){
+// Автор: Тимур Камаев, http://wp-kama.ru/
+
+// Глобальная переменная куда будут располагаться данные файлов. С не будем работать
+var files;
+
+// Вешаем функцию на событие
+// Получим данные файлов и добавим их в переменную
+$('input[type=file]').change(function(){
+	files = this.files;
+        alert(files);
+});
+
+
+// Вешаем функцию ан событие click и отправляем AJAX запрос с данными файлов
+$('.submit.button').click(function( event ){
+	event.stopPropagation(); // Остановка происходящего
+	event.preventDefault();  // Полная остановка происходящего
+
+	// Содадим данные формы и добавим в них данные файлов из files
+	var data = new FormData();
+	$.each( files, function( key, value ){
+		data.append( key, value );
+	});
+
+	// Отправляем запрос
+	$.ajax({
+                url: "?option="+module,
+		//url: './submit.php?uploadfiles',
+		type: 'POST',
+		data: data,
+		cache: false,
+		dataType: 'json',
+		processData: false, // Не обрабатываем файлы (Don't process the files)
+		contentType: false, // Так jQuery скажет серверу что это строковой запрос
+		success: function( respond, textStatus, jqXHR ){
+			// Если все ОК
+			if( typeof respond.error === 'undefined' ){
+				// Файлы успешно загружены, делаем что нибудь здесь
+
+				// выведем пути к загруженным файлам в блок '.ajax-respond'
+				var files_path = respond.files;
+				var html = '';
+				$.each( files_path, function( key, val ){ html += val +'<br>'; } )
+				$('.ajax-respond').html( html );
+			}
+			else{
+				console.log('ОШИБКИ ОТВЕТА сервера: ' + respond.error );
+			}
+		},
+		error: function( jqXHR, textStatus, errorThrown ){
+			console.log('ОШИБКИ AJAX запроса: ' + textStatus );
+		}
+	});
+	
+});
+
+
+});
+
 
 //function Back(module){
 //      location.replace("/");
 //      UpdMainContent(module);
 //}
+
 
 //$(document).on'click','input[type="submit"]',function(){
  var requestSent = false;

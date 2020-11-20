@@ -8,7 +8,28 @@ class viewJurVipnet extends Jurnals {
     public function __construct() {
         $this->class='viewJurVipnet';
         $this->table='jurvipnetzapros';
-        $this->TableHead=Array("False");
+        $this->StatusEnd=7;
+        $this->TableHead=Array(
+        "Napravl"=>"Направ ление",
+        "SpNap"=>"Способ  запроса",
+        "Id"=>"Рег №",
+	"DataReg"=>"Дата",
+	"KodReg"=>"Регион",
+	"KodUrLic"=>"Юр Лицо",
+        "KodUpfr"=>"УПФР",
+        "FIOZL"=>"На кого запрос",
+        "IdUserCreate"=>"Отправил/ Принял",
+        "TypeZapros"=>"Тип запроса",
+        "TypeDeistv"=>"Уточнение",
+        "ZR"=>"Заблаговременный",
+        "Otvetstv"=>"ответственный",
+        "Povtor"=>"Повтор",
+        "DatePovtor"=>"Дата Повтора",
+        "DateOtveta"=>"Дата Ответа");
+         //``, ``, ``, ``, ``, ``, `TypeZaprosId`, ``, `FileZapr`, `PathFileToArchiv`, ``, ``, ``, `FileOtv`, `ZR`, ``, ``, `SpNap`, `Kontrol`
+        
+        
+        
         parent::__construct();
         //$this->MainContent();
     }
@@ -287,78 +308,100 @@ private function TableHistory($Res){
         echo "<script language='javascript'>var module='".$this->class."' </script>";
         echo "<script language='javascript'>var opti='".$this->class."' </script>";
         echo "<Center> <H6> Журнал регистрации направления поступления и исполнения запросов (Распоряжение Правления ПФР 463Р от 06.10.2015) </Center> </H6>";
-        echo '<ul class="tabs left">
-<li><a href="#tabr2">Запросы в обработке</a></li>';
-If ($_SESSION['Status']==20) 
-{
-echo '<li><a href="#tabr3">Запросы Отдела(в работе)</a></li>';
-}
-echo '<li><a href="#tabr1">Запросы обработанные</a></li>
-    </ul>';
-        Echo ('<div id="tabr2" class="tab-content">');
-        $IDU = $_SESSION['Id_user'];
+//        echo '<ul class="tabs left">
+//<li><a href="#tabr2">Запросы в обработке</a></li>';
+//If ($_SESSION['Status']==20) 
+//{
+//echo '<li><a href="#tabr3">Запросы Отдела(в работе)</a></li>';
+//}
+//echo '<li><a href="#tabr1">Запросы обработанные</a></li>
+//    </ul>';
+//        Echo ('<div id="tabr2" class="tab-content">');
+//        $IDU = $_SESSION['Id_user'];
         //echo "<div class='col_3 visible center' style='height: 25px;'> <a id='Create' title='Создать запрос'>Создать запрос</a></div>";
+        echo '<ul class="tabs left">
+                <li><a href="#tabr1">Запросы в обработке</a></li>';
+        echo '</ul>';
+        Echo ('<div id="tabr1" class="tab-content">');
         echo $this->UIButtonAjax('Create', 'Создать запрос');
         //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=viewJurVipnet&Act=Create' title='Создать запрос'>Создать запрос</a></div>";
         
         //echo "<div class='col_3 visible center ' style='height: 25px;'> <a class='FormMini fancybox.ajax' href='?option=viewJurVipnet&Act=PZ'>Принять запрос</a></div>";
-        echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=viewJurVipnet&Act=PZ'>Принять запрос</a></div>";
-        echo "<div class='col_3 visible center fik' style='height: 25px;'> <a href='#'>Фиктивный запрос</a></div>";
-        echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=Statistics'>СТАТИСТИКА</a></div>";
+        //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=viewJurVipnet&Act=PZ'>Принять запрос</a></div>";
+        echo $this->UIButtonActionAjax('PZ', 'Принять запрос');
+       // echo $this->UIButtonAjax('PoslatOtvet', 'Послать ответ');
+        echo $this->UIButtonActionAjax('Stat', 'Статистика');
         
-        If (($_SESSION['Admin']==1) or ($_SESSION['Status']==21))
-         {
-            $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap,Kontrol FROM jurvipnetzapros Where DateOtveta is NULL Order By Id DESC LIMIT 20";             
-         }
-         
-        If ($_SESSION['Status']==20) 
-         {
-           $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap,Kontrol FROM jurvipnetzapros Where ( (IdUserCreate='$IDU')  or  (Otvetstv='$IDU') ) and (DateOtveta is NULL)  Order By Id DESC LIMIT 40";             
-         }
-
-
-         If ($_SESSION['Status']==0)
-         {
-            $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where (IdUserCreate='$IDU') and (DateOtveta is NULL) Order By Id DESC LIMIT 20";
-         }
-
-         If ($_SESSION['Status']==22)
-         {
-            $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where (IdUserCreate='$IDU') and (Otvetstv=0) Order By Id DESC LIMIT 40"; 
-         }
-        $Res= $this->query($query);
+        echo $this->UIButtonActionAjax('PoslatOtvet', 'Послать ответ');
+        echo $this->UIButtonActionAjax('Otvetstv', 'Ответственный');
+        echo $this->UIButtonActionAjax('Povtor', 'Повтор');
+        echo $this->UIButtonActionAjax('Pereslat', 'Переслать');
         
-        
-        If ($Res<>NULL){
         echo '<div id="ContentMainTable">';
-        $this->Table($Res,0);
+       Echo $this->MainTabelA();
         echo '</div>';
-         }
-   Echo '</div>';
-   
-   If ($_SESSION['Status']==20) 
-         {
-   Echo ('<div id="tabr3" class="tab-content">');
-$Otd=$_SESSION['IdOtd'];
-   $query="SELECT jurvipnetzapros.Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap,Kontrol FROM jurvipnetzapros, user Where  (DateOtveta is NULL)  and (user.Id_Otdel='$Otd') and (jurvipnetzapros.IdUserCreate=user.id) Order By Id DESC LIMIT 100";             
-   //$query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where DateOtveta is NOT NULL Order By DateOtveta DESC";             
-   $Res=$this->query($query);
-   
-    
-   $this->Table($Res,0);
-       
-   Echo '</div>';
-   }
-   
-   Echo ('<div id="tabr1" class="tab-content">');
-   $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where DateOtveta is NOT NULL Order By DateOtveta DESC LIMIT 100";             
-   $Res=$this->query($query);
-   $this->Table($Res,1);
-   Echo '</div>';
+//        If (($_SESSION['Admin']==1) or ($_SESSION['Status']==21))
+//         {
+//            $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap,Kontrol FROM jurvipnetzapros Where DateOtveta is NULL Order By Id DESC LIMIT 20";             
+//         }
+//         
+//        If ($_SESSION['Status']==20) 
+//         {
+//           $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap,Kontrol FROM jurvipnetzapros Where ( (IdUserCreate='$IDU')  or  (Otvetstv='$IDU') ) and (DateOtveta is NULL)  Order By Id DESC LIMIT 40";             
+//         }
+//
+//
+//         If ($_SESSION['Status']==0)
+//         {
+//            $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where (IdUserCreate='$IDU') and (DateOtveta is NULL) Order By Id DESC LIMIT 20";
+//         }
+//
+//         If ($_SESSION['Status']==22)
+//         {
+//            $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where (IdUserCreate='$IDU') and (Otvetstv=0) Order By Id DESC LIMIT 40"; 
+//         }
+//        $Res= $this->query($query);
+//        
+//        
+//        If ($Res<>NULL){
+//        echo '<div id="ContentMainTable">';
+//        $this->Table($Res,0);
+//        echo '</div>';
+//         }
+//   Echo '</div>';
+//   
+//   If ($_SESSION['Status']==20) 
+//         {
+//   Echo ('<div id="tabr3" class="tab-content">');
+//$Otd=$_SESSION['IdOtd'];
+//   $query="SELECT jurvipnetzapros.Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap,Kontrol FROM jurvipnetzapros, user Where  (DateOtveta is NULL)  and (user.Id_Otdel='$Otd') and (jurvipnetzapros.IdUserCreate=user.id) Order By Id DESC LIMIT 100";             
+//   //$query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where DateOtveta is NOT NULL Order By DateOtveta DESC";             
+//   $Res=$this->query($query);
+//   
+//    
+//   $this->Table($Res,0);
+//       
+//   Echo '</div>';
+//   }
+//   
+//   Echo ('<div id="tabr1" class="tab-content">');
+//   $query="SELECT Id,DataReg,KodReg,KodUrLic,KodUpfr,FIOZL,IdUserCreate,TypeZapros,TypeDeistv,ZR,Povtor,DatePovtor,DateOtveta,Napravl,Otvetstv,SpNap FROM jurvipnetzapros Where DateOtveta is NOT NULL Order By DateOtveta DESC LIMIT 100";             
+//   $Res=$this->query($query);
+//   $this->Table($Res,1);
+//   Echo '</div>';
    
         
      
   }
+  
+    private function MainTabelA() {
+          //If (($_SESSION['Admin']==1) or ($_SESSION['Status']==20)){
+              return $this->TablePrototypeNew(array('Copy','Checked'),'status','status<7');
+              //return $this->TablePrototype($Res,$this->TableHead,$this->table,$this->class,Array('Copy'));
+              //}
+          //Else{return $this->TablePrototype($Res,$this->TableHead,$this->table,$this->class,Array('Copy'));}
+  }
+  
   
 
 //    public function __construct() {
@@ -376,6 +419,14 @@ $Otd=$_SESSION['IdOtd'];
     } 
 
     
+    private function MainRekviz2()
+    {
+        return '<p> Поиск УПФР по классификатору: </BR> <input name="SearchField" placeholder="Поиск УПФР по справочнику" style="width: 100%" class="searchUPFR"></p>'
+        .'    <p>Код Региона: <input name="KodRegion" value="071" maxlength=3 size="5" placeholder="000" required>'
+        .'    Код Юрлица: <input name="KodUrL" value="001"  maxlength=3 size="5" placeholder="000" required>'
+        .'    Код У(О)ПФР: <input name="KodUPFR" value="001" maxlength=3 size="5" placeholder="000" required></p>';
+    } 
+    
      private function MainRekviz1()
     {
         return '<p> Поиск УПФР по классификатору: </BR> <input name="SearchField" placeholder="Поиск УПФР по справочнику" style="width: 100%" class="searchUPFR"></p>'
@@ -391,14 +442,16 @@ $Otd=$_SESSION['IdOtd'];
     }
 
     private function Otvetstv() {
-
-        Echo '<div id="dialog" title="Назначение ответственного">';
-        Echo "<form enctype='multipart/form-data' action='?option=viewJurVipnet' method='Post'>";
-        echo '<p>Назначить ответственного </p>';
-        echo selected(SetSpisok("Select Id, FIO From User Where status=20"), 'UserId', 'Style="width:  200px"', 0);
-        Echo "<p><input type='submit' name='OTV' value='Назначить ответственного' >";
-        Echo "</form>";
-        Echo '</div>';
+        $data='';
+        //Echo '<div id="dialog" title="Назначение ответственного">';
+        //Echo "<form enctype='multipart/form-data' action='?option=viewJurVipnet' method='Post'>";
+        $data .='<p>Назначить ответственного </p>';
+        $data .=selected(SetSpisok("Select Id, FIO From User Where status=20"), 'UserId', 'Style="width:  200px"', 0);
+        $data .="<p><input type='submit' name='OTV' value='Назначить ответственного' >";
+        //Echo "</form>";
+        //Echo '</div>';
+        
+        $this->CreateForm('Назначение ответственного',$data,'OtvetstvN');
     }
     
     private function Kontrols() {
@@ -430,21 +483,25 @@ $Otd=$_SESSION['IdOtd'];
     
 
     private function VxodZapros() {
+        $this->TableHeadLocal=Array("False");
+        $data='';
         
-        Echo '<div id="dialog" title="Обработка входящего запроса">';
-        Echo "<form enctype='multipart/form-data' action='?option=viewJurVipnet' method='Post'>";
+        
+        //Echo '<div id="dialog" title="Обработка входящего запроса">';
+        //Echo "<form enctype='multipart/form-data' action='?option=viewJurVipnet' method='Post'>";
         $this->PrintMsg($_SESSION['$Message']);
-                Echo ' Способ запроса:
+                $data.= ' Способ запроса:
             <select name="SposNapr" required>
                    <option value="1"  >Почта</option>
                 <option value="0" selected>VipNet</option>
                 </select> </p></BR>';
         
-        echo 'Выбрать файл: </BR>';
-        Echo ' <input type="file" name="FileZ" required></p></BR>';
-        Echo "<p><input type='submit' name='VxdZ' value='Обработать запрос' >";
-        Echo "</form>";
-        Echo '</div>';
+        $data.= 'Выбрать файл: </BR>';
+        $data.=' <input id="filez" type="file" name="FileZ" required></p></BR>';
+        $data.= "<p><input id='VxdZ' type='submit' value='Принять запрос' >";
+        $this->CreateForm('Регистрация входящего запроса',$data,'VxdZ');
+        //Echo "</form>";
+        //Echo '</div>';
     }
     
     private function VxodOtvet() {
@@ -460,21 +517,24 @@ $Otd=$_SESSION['IdOtd'];
     }
     
     private function Msg() {
-   
-        Echo '<div id="dialog" title="Отправка ответа на запрос">';
-Echo '<div  class="col_12 center" style="font-size:18px; color: Red;  text-align:center; ">ВНИМАНИЕ ПРЕЖДЕ ЧЕМ НАЖАТЬ КНОПКУ положите ОТПРАВЛЯЕМЫЕ файлы по пути '.PathVremFiles.' Затем открывайте это ОКНО. Если положить файлы когда окно открыто ФАЙЛЫ не ПОДПИШУТЬСЯ</div>';
+        $this->TableHeadLocal=Array("False");
+        $data='';
+        
+        //Echo '<div id="dialog" title="Отправка ответа на запрос">';
+$data .='<div  class="col_12 center" style="font-size:18px; color: Red;  text-align:center; ">ВНИМАНИЕ ПРЕЖДЕ ЧЕМ НАЖАТЬ КНОПКУ положите ОТПРАВЛЯЕМЫЕ файлы по пути '.PathVremFiles.' Затем открывайте это ОКНО. Если положить файлы когда окно открыто ФАЙЛЫ не ПОДПИШУТЬСЯ</div>';
 $this->EPCreate();
 
-        Echo "<form enctype='multipart/form-data' action='?option=viewJurVipnet' method='Post'>";
-        $this->MainRekviz();
-        $IdRec = $_SESSION['IdRec'];
+//        Echo "<form enctype='multipart/form-data' action='?option=viewJurVipnet' method='Post'>";
+        $data .=$this->MainRekviz2();
+        $IdRec =  $_SESSION['param'][0];
+        //$IdRec = $_SESSION['IdRec'];
         $query="SELECT TypeZaprosId FROM jurvipnetzapros WHERE Id='$IdRec'";
             $IdTypeZapr= (int)$this->resultOne($query);
             
             $TZI = $IdTypeZapr+1;
             $TZ = $this->getTypeZ2($TZI);
-	Echo '<div class="col_6 visible center">';
-             Echo 'Тип ответа на запрос: <b style="font-size:18px; color: Red; "> </BR> '.$TZ.'</B></p></div>';
+	$data .= '<div class="col_6 visible center">';
+             $data .= 'Тип ответа на запрос: <b style="font-size:18px; color: Red; "> </BR> '.$TZ.'</B></p></div>';
         //Echo ' Файл для отправки: <input type="file" name="FileZ" required></BR>';
 //        Echo '<p>Тип запроса: <select name="TypeZapr">
 //                <option value="2">ОСИД</option>
@@ -483,8 +543,8 @@ $this->EPCreate();
 //                <option value="8">ООС</option>
 //                </select>  </BR>';
 
-Echo '<div class="col_6 visible center">Тип действия(примечание): </BR>';
-Echo ' 
+$data .= '<div class="col_6 visible center">Тип действия(примечание): </BR>';
+$data .= ' 
 	    <select name="TypeDeistv" required>
                 <option value="0">СТАЖ</option>
                 <option value="1">З/ПЛ</option>
@@ -492,34 +552,86 @@ Echo '
                 <option value="3">АКТ ПРОВЕРКИ</option>
                 <option value="4">ДРУГОЕ</option>
                 </select>';
-Echo '</div>';
-        Echo "<p><input type='submit' name='SendAs' value='Послать ответ' >";
-        Echo "</form>";
-
-        Echo '</div>';
+$data .= '</div>';
+        $data .= "<p><input type='submit' name='SendAs' value='Послать ответ' >";
+//        Echo "</form>";
+//
+//        Echo '</div>';
+        $this->CreateForm('Отправка ответа на запрос',$data,'SendAs');
+        //parent::Edit('Отправка ответа на запрос', $data);
     }
     
    
+    private function Stat() {
+        $this->TableHeadLocal=Array("False");
+        $data='';
+        
+        $data.="<Center> <H6> Статистика обработки входящих/исходящих Журнал регистрации направления поступления и исполнения запросов (Распоряжение Правления ПФР 463Р от 06.10.2015) </Center> </H6>";
+         $data.='ИСХОДЯЩИЕ всего: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=0").'</BR>';
+$data.='из них: '.'</BR>';
+$data.='Стаж: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=0 and TypeDeistv=1")."</BR>";
+$data.='З/пл: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=0 and TypeDeistv=2")."</BR>";
+$data.='Стаж и З/ПЛ: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=0 and TypeDeistv=3")."</BR>";
+$data.='Акт Проверки: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=0 and TypeDeistv=4")."</BR>";
+$data.='Другое: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=0 and (TypeDeistv=5 Or TypeDeistv is null) ")."</BR>";
+
+
+$data.='обработанные всего: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=0 and DateOtveta is NOT NULL")."</BR>"; 
+$data.='из них: ';
+$data.='Стаж: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=0 and DateOtveta is NOT NULL and TypeDeistv=1")."</BR>";
+$data.='З/пл: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=0 and DateOtveta is NOT NULL and TypeDeistv=2")."</BR>";
+$data.='Стаж и З/ПЛ: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=0 and DateOtveta is NOT NULL and TypeDeistv=3")."</BR>";
+$data.='Акт Проверки: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=0 and DateOtveta is NOT NULL and TypeDeistv=4")."</BR>";
+$data.='Другое: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=0 and DateOtveta is NOT NULL and (TypeDeistv=5 Or TypeDeistv is null) ")."</BR>";
+
+//SELECT jurvipnetzapros.Id, FIO FROM jurvipnetzapros, user WHERE IdUserCreate = User.id AND NapRavl =0 AND DateOtveta IS NULL 
+
+
+
+$data.= " </BR> </BR>".'ВХОДЯЩИЕ'."</BR>";
+$data.= 'Входящие всего: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=1")."</BR>";
+$data.= 'из них: ';
+$data.= 'Стаж: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=1 and TypeDeistv=1")."</BR>";
+$data.= 'З/пл: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=1 and TypeDeistv=2")."</BR>";
+$data.= 'Стаж и З/ПЛ: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=1 and TypeDeistv=3")."</BR>";
+$data.='Акт Проверки: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=1 and TypeDeistv=4")."</BR>";
+$data.='Другое: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=1 and (TypeDeistv=5 Or TypeDeistv is null) ")."</BR>";
+
+
+$data.='Входящие обработанные всего: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=1 and DateOtveta is NOT NULL")."</BR>"; 
+$data.= 'из них: ';
+$data.= 'Стаж: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=1 and DateOtveta is NOT NULL and TypeDeistv=1")."</BR>";
+$data.='З/пл: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=1 and DateOtveta is NOT NULL and TypeDeistv=2")."</BR>";
+$data.='Стаж и З/ПЛ: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=1 and DateOtveta is NOT NULL and TypeDeistv=3")."</BR>";
+$data.='Акт Проверки: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=1 and DateOtveta is NOT NULL and TypeDeistv=4")."</BR>";
+$data.='Другое: '. $this->resultOne("SELECT count(Id) FROM jurvipnetzapros Where NapRavl=1 and DateOtveta is NOT NULL and (TypeDeistv=5 Or TypeDeistv is null) ")."</BR>";
+        
+        $this->CreateForm('Статистика запросов',$data,'');
+        //parent::Edit('Отправка ответа на запрос', $data);
+    }
+    
+    
     
      private function Peres() {
-      
-        Echo '<div id="dialog" title="Пересылка запроса">';
-        Echo "<form enctype='multipart/form-data' action='?option=viewJurVipnet' method='Post'>";
-        $this->MainRekviz();
-        Echo "</BR> <p><input type='submit' name='ReSend' value='Переслать запрос' >";
-        Echo "</form>";
-        Echo "</div>";
+        $data='';
+        $data .=$this->MainRekviz2();
+        //Echo '<div id="dialog" title="Пересылка запроса">';
+        //Echo "<form enctype='multipart/form-data' action='?option=viewJurVipnet' method='Post'>";
+        //$this->MainRekviz();
+        $data.="</BR> <p><input type='submit' name='ReSend' value='Переслать запрос' >";
+        //Echo "</form>";
+        //Echo "</div>";
+        $this->CreateForm('Пересылка запроса',$data,'ReSend');
     }
 
     //`Id`, `DataReg`, `KodReg`, `KodUrLic`, `KodUpfr`, `FIOZL`, `IdUserCreate`, `TypeZapros`, `TypeZaprosId`, `TypeDeistv`, `FileZapr`, PathFileToArchiv `Povtor`, `DatePovtor`, `DateOtveta`, `FileOtv`
     //
     protected function obr() {
-       
+        
         $DC = date('Y-m-d');
-        If ($_REQUEST['Act'] == 2) {
-            $_SESSION['IdRec'] = $_REQUEST['id'];
+        If ($_REQUEST['Action'] == 'Otvetstv') {
+            $_SESSION['IdRec'] = $_SESSION['param'][0];
             $this->Otvetstv();
-           // exit();
         }
         
         If ($_REQUEST['Act'] == 'Create') {
@@ -529,7 +641,8 @@ Echo '</div>';
             $this->Create('Создание запроса', $data);
         }
 
-        IF (isset($_POST['OTV'])) {
+        If ($_REQUEST['Action'] == 'OtvetstvN') {
+        //IF (isset($_POST['OTV'])) {
             $IdRec = $_SESSION['IdRec'];
             $IdUserSet = $_POST['UserId'];
             $this->Logging($_SESSION['Id_user'], $Id_Razdela=1,$IdRec,6,$IdUserSet,'Назначен ответственный');
@@ -539,7 +652,7 @@ Echo '</div>';
             header("location: /?option=viewJurVipnet");
         }
 
-        If ($_REQUEST['Act'] == PZ) {
+        If ($_REQUEST['Action'] == PZ) {
             $this->VxodZapros();
             
             unset($_SESSION['$Message']);
@@ -559,75 +672,110 @@ Echo '</div>';
         IF (isset($_POST['HistoryClose'])) {
           header("location: /?option=viewJurVipnet");   
         }
-        
-        IF (isset($_POST['VxdZ'])) {
-            //$DC = date('Y-m-d');
-            $IDU = $_SESSION['Id_user'];
-            
-            $Ext = $this->getExtens($_FILES['FileZ']['name']);  
-            $PS = PATHINVipnet;
-            $SpNap = $_POST['SposNapr'];
-            
-            $file=$_FILES['FileZ']['name'];
-            
-            $FileMas = explode("_", $file);
-            
-            //$FileMas[0] - КОД ОПФР ЮРЛИЦА УПФР
-            If ($FileMas[0]=='') 
-            {
-                
-                //exit('Ошибка выбора файла. Файл уже обработан. Выберите другой');
-                $_SESSION['$Message']='Ошибка выбора файла. Файл уже обработан. Выберите другой';
-                //TO-DOжестокий костыль нужно что бы выводило окно как в оригинале!
-               header("location: /?option=viewJurVipnet&Act=PZ");
-                //$this->VxodZapros();
-            }
-            
-            Else {
-                $Zapr1=$FileMas[1];
-
-                $napominanie=stripos($Zapr1, '(н)' );
-                $Zapr=$Zapr1;
-
-                If ($napominanie!==FALSE){
-                    $Zapr=substr($Zapr1,$napominanie+4);
-                    $napominanie=1;
-                }
-                else {$napominanie=0;}
-
-
-                $Zapr1=$Zapr;
-                $zablagRab=stripos($Zapr1, '(зр)' );
-
-                If ($zablagRab!==FALSE){
-                    $Zapr=substr($Zapr1,0,$zablagRab);
-                    $zablagRab=1;
-
-                }
-                else {$zablagRab=0;}
-
-                $Zapr1=mb_strtoupper($Zapr);
-
-                $FIO=substr($FileMas[2],0,strlen($FileMas[2])-4);
-
-                $TZI = $this->getTypeZ1($Zapr1);
-
-                $Flname='_'.$file;
-
-
-
-                $query = "INSERT INTO jurvipnetzapros (DataReg, FIOZL,IdUserCreate,TypeZapros,TypeZaprosId,FileZapr,PathFileToArchiv,Napravl,Povtor,ZR,SpNap)
-                   VALUES('$DC','$FIO','$IDU','$Zapr1','$TZI','$Flname','$PS','1','$napominanie','$zablagRab','$SpNap')";
-                $this->query($query);
-                
-                $this->Logging($_SESSION['Id_user'], $Id_Razdela=1,$this->linkId,2,0,'Принят входящий запрос');
-                
-                $P=$PS.iconv('utf-8', 'windows-1251', $file);
-                $P1=$PS.'_'.iconv('utf-8', 'windows-1251', $file);
-                rename($P,$P1);
-                header("location: /?option=viewJurVipnet");
-            } //If ($FileMas[0]=='') else
+        If ($_REQUEST['Action'] == 'VxdZ'){
+            var_dump($_FILES);
+        var_dump($_REQUEST);
+//        //IF (isset($_POST['VxdZ'])) {
+//            //IF (isset($_POST['VxdZ'])) {
+//            //$DC = date('Y-m-d');
+//            $IDU = $_SESSION['Id_user'];
+//            
+//            var_dump($_FILES);
+//            exit();
+//            $Ext = $this->getExtens($_FILES['FileZ']['name']);  
+//            $PS = PATHINVipnet;
+//            $SpNap = $_POST['SposNapr'];
+//            
+//            $file=$_FILES['FileZ']['name'];
+//            
+//            $FileMas = explode("_", $file);
+//            
+//            //$FileMas[0] - КОД ОПФР ЮРЛИЦА УПФР
+//            If ($FileMas[0]=='') 
+//            {
+//                
+//                //exit('Ошибка выбора файла. Файл уже обработан. Выберите другой');
+//                $_SESSION['$Message']='Ошибка выбора файла. Файл уже обработан. Выберите другой';
+//                //TO-DOжестокий костыль нужно что бы выводило окно как в оригинале!
+//               //header("location: /?option=viewJurVipnet&Act=PZ");
+//                //$this->VxodZapros();
+//            }
+//            
+//            Else {
+//                $Zapr1=$FileMas[1];
+//
+//                $napominanie=stripos($Zapr1, '(н)' );
+//                $Zapr=$Zapr1;
+//
+//                If ($napominanie!==FALSE){
+//                    $Zapr=substr($Zapr1,$napominanie+4);
+//                    $napominanie=1;
+//                }
+//                else {$napominanie=0;}
+//
+//
+//                $Zapr1=$Zapr;
+//                $zablagRab=stripos($Zapr1, '(зр)' );
+//
+//                If ($zablagRab!==FALSE){
+//                    $Zapr=substr($Zapr1,0,$zablagRab);
+//                    $zablagRab=1;
+//
+//                }
+//                else {$zablagRab=0;}
+//
+//                $Zapr1=mb_strtoupper($Zapr);
+//
+//                $FIO=substr($FileMas[2],0,strlen($FileMas[2])-4);
+//
+//                $TZI = $this->getTypeZ1($Zapr1);
+//
+//                $Flname='_'.$file;
+//
+//
+//
+//                $query = "INSERT INTO jurvipnetzapros (DataReg, FIOZL,IdUserCreate,TypeZapros,TypeZaprosId,FileZapr,PathFileToArchiv,Napravl,Povtor,ZR,SpNap)
+//                   VALUES('$DC','$FIO','$IDU','$Zapr1','$TZI','$Flname','$PS','1','$napominanie','$zablagRab','$SpNap')";
+//                var_dump($query);
+//                exit();
+//                $this->query($query);
+//                
+//                $this->Logging($_SESSION['Id_user'], $Id_Razdela=1,$this->linkId,2,0,'Принят входящий запрос');
+//                
+//                $P=$PS.iconv('utf-8', 'windows-1251', $file);
+//                $P1=$PS.'_'.iconv('utf-8', 'windows-1251', $file);
+//                rename($P,$P1);
+//                //header("location: /?option=viewJurVipnet");
+//            } //If ($FileMas[0]=='') else
         }        
+        
+        $data = array();
+
+if( isset( $_GET['uploadfiles'] ) ){  
+    $error = false;
+    $files = array();
+
+    $uploaddir = './uploads/'; // . - текущая папка где находится submit.php
+	
+	// Создадим папку если её нет
+	if( ! is_dir( $uploaddir ) ) mkdir( $uploaddir, 0777 );
+
+	// переместим файлы из временной директории в указанную
+	foreach( $_FILES as $file ){
+        if( move_uploaded_file( $file['tmp_name'], $uploaddir . basename($file['name']) ) ){
+            $files[] = realpath( $uploaddir . $file['name'] );
+        }
+        else{
+            $error = true;
+        }
+    }
+	
+    $data = $error ? array('error' => 'Ошибка загрузки файлов.') : array('files' => $files );
+	
+	echo json_encode( $data );
+}
+        
+        
         
         If ($_REQUEST['Act'] == 3) {
             //TO-DO добавить проверку на соответсвие ЗИЛС-ОИЛС И возможно на фамилию если не совпадает то предупреждать ;
@@ -657,7 +805,7 @@ Echo '</div>';
             
             Else {
                 $F='_'.$file;
-                $query = "UPDATE jurvipnetzapros SET DateOtveta='$DC', FileOtv='$F' Where Id=$IdRec";
+                $query = "UPDATE jurvipnetzapros SET DateOtveta='$DC', FileOtv='$F' , Status=".$this->StatusEnd." Where Id=$IdRec";
                 $this->query($query);
                 $P=$PS.iconv('utf-8', 'windows-1251', $file);
                 $P1=$PS.'_'.iconv('utf-8', 'windows-1251', $file);
@@ -667,12 +815,12 @@ Echo '</div>';
             }
         }
          
-         If ($_REQUEST['Act'] == 'Peres') {
-            $_SESSION['IdRec'] = $_REQUEST['id'];
-            $Id= $_REQUEST['id'];
+         If ($_REQUEST['Action'] == 'Pereslat') {
+             
+            $_SESSION['IdRec'] = $_SESSION['param'][0];
+            $Id= $_SESSION['IdRec'];
             $query = "Select FileZapr from jurvipnetzapros Where Id=$Id";
             $rez=$this->query($query,1);
-            //$rez=mysqli_fetch_assoc($rez);            
             $_SESSION['FileZapr']=$rez['FileZapr'];
              
             
@@ -704,8 +852,7 @@ Echo '</div>';
                 
          
         
-        IF (isset($_POST['ReSend']))
-                {
+        IF ($_REQUEST['Action'] == 'ReSend'){
             $IdRec = $_SESSION['IdRec'];
             $IDUs=$_SESSION['Id_user'];
             //$DC = $_POST['DateC'];
@@ -724,9 +871,9 @@ Echo '</div>';
             rename($P,$P1);
             copy($P1, $P2);
             If ($_SESSION['Status']=22)
-                $query = "UPDATE jurvipnetzapros SET DateOtveta='$DC', KodReg='$KR',KodUrLic='$KU',KodUpfr='$KP', FileOtv='$Flname', Otvetstv='$IDUs' , Napravl='2' Where Id=$IdRec";    
+                $query = "UPDATE jurvipnetzapros SET DateOtveta='$DC', KodReg='$KR',KodUrLic='$KU',KodUpfr='$KP', FileOtv='$Flname', Otvetstv='$IDUs' , Napravl='2' , Status=".$this->StatusEnd."Where Id=$IdRec";    
             else 
-                $query = "UPDATE jurvipnetzapros SET DateOtveta='$DC', KodReg='$KR',KodUrLic='$KU',KodUpfr='$KP', FileOtv='$Flname', Napravl='2' Where Id=$IdRec";    
+                $query = "UPDATE jurvipnetzapros SET DateOtveta='$DC', KodReg='$KR',KodUrLic='$KU',KodUpfr='$KP', FileOtv='$Flname', Napravl='2', Status=".$this->StatusEnd." Where Id=$IdRec";    
             $this->query($query);
             $this->Logging($_SESSION['Id_user'],$Id_Razdela=1,$IdRec,4,$KR.$KU.$KP,'Пересылка запроса на '.$KR.$KU.$KP);
             
@@ -784,12 +931,15 @@ Echo '</div>';
             header("location: /?option=viewJurVipnet");
         }
         
+        If ($_REQUEST['Action'] == 'Stat') {
+           $this->Stat(); 
+        }
         
-        
-        If ($_REQUEST['Act'] == 'Msg') {
+        If ($_REQUEST['Action'] == 'PoslatOtvet') {
+        //If ($_REQUEST['Act'] == 'Msg') {
             
-            $_SESSION['IdRec'] = $_REQUEST['id'];
-            $Id= $_REQUEST['id'];
+            $_SESSION['IdRec'] = $_SESSION['param'][0];
+            $Id= $_SESSION['param'][0];
             $query = "Select FIOZL from jurvipnetzapros Where Id=$Id";
             $rez=$this->query($query,1);
             //$rez=mysqli_fetch_assoc($rez);            
@@ -826,7 +976,8 @@ Echo '</div>';
 ////header('Content-Type: application/javascript');
 //      echo (isset($_GET['callback']) ? $_GET['callback'] : '').'(' . json_encode($data) . ')';
 //IF () {
-    IF (($_REQUEST['Action'] == 'Create')||isset($_POST['SendAs'])) {
+    IF (($_REQUEST['Action'] == 'Create')||($_REQUEST['Action'] == 'SendAs')) {
+    //IF (($_REQUEST['Action'] == 'Create')||isset($_POST['SendAs'])) {
         //IF (isset($_POST['CreateButton'])||isset($_POST['SendAs'])) {
             $this->GLflagCreate=0;
             //$this->EPCreate();
@@ -845,7 +996,10 @@ Echo '</div>';
                 else {
                     $FL=$_SESSION['FIOZL'];
             }
-            If (isset($_POST['SendAs'])){
+            
+            If ($_REQUEST['Action'] == 'SendAs') {
+            //If (isset($_POST['SendAs'])){
+            
             $query="SELECT TypeZaprosId FROM jurvipnetzapros WHERE Id='$IdRec'";
             $IdTypeZapr= $this->resultOne($query);
             $TZI = $IdTypeZapr+1;
@@ -891,9 +1045,11 @@ Echo '</div>';
                 
             }
             else {
-                $query = "UPDATE jurvipnetzapros SET DateOtveta='$DC', KodReg='$KR',KodUrLic='$KU',KodUpfr='$KP', FileOtv='$Flname', TypeDeistv='$TDe' Where Id=$IdRec";    
+                $query = "UPDATE jurvipnetzapros SET DateOtveta='$DC', KodReg='$KR',KodUrLic='$KU',KodUpfr='$KP', FileOtv='$Flname', TypeDeistv='$TDe', Status='".$this->StatusEnd."' Where Id=$IdRec";
                 
             }
+            //var_dump($query);
+            //exit();
             $this->query($query);
             
             
