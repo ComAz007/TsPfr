@@ -162,7 +162,7 @@ private function TableHistory($Res){
         Echo ('<div id="tabr1" class="tab-content">');
         $IDU = $_SESSION['Id_user'];
         $Button='';
-        $Button .=$this->UIButtonAjax('Create', 'Создать заявление');
+        $Button .=$this->uiButtonAjax('Create', 'Создать заявление');
         echo $Button;
         echo '<div id="ContentMainTable">';
         Echo $this->MainTabelA();

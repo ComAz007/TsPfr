@@ -64,7 +64,7 @@ class viewJurOZIKD extends Jurnals {
         
         echo "<div id='Create' class='col_3 visible center' style='height: 25px;'> <a   title='Создать'>Создать</a></div>";
         echo "<div id='PrintM' class='col_3 visible center' style='height: 25px;'> <a  title='Печатать АКТ'>Печатать АКТ</a></div>";
-        echo $this->UIButtonAjax('Action1', 'Включить в АКТ');
+        echo $this->uiButtonAjax('Action1', 'Включить в АКТ');
         //echo "<div id='Action1' class='col_3 visible center' style='height: 25px;'> <a  title='Включит в АКТ'>Включить в АКТ</a></div>";
         echo "<div id='Action2' class='col_3 visible center' style='height: 25px;'> <a  title='Закрыть карточки(у)'>Закрыть карточки(у)</a></div>";
         //echo "<div class='col_3 visible center' id='Create' style='height: 25px;'> <a href='?option=viewJurEsia&Act=Create' title='Создать заявление'>Создать заявление</a></div>";

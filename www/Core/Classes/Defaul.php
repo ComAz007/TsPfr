@@ -36,7 +36,7 @@ class Defaul extends Acore_A{
                         
                     }
                     $Zstr=$this->FieldZN($_SESSION['DefTable'], $FieldName, $_REQUEST['id']);
-                        echo $this->UIDinamicTableFieldGenerate($FieldType, $FieldName, $FieldLabel, $Zstr);
+                        echo $this->uiDinamicTableFieldGenerate($FieldType, $FieldName, $FieldLabel, $Zstr);
                 }
             
             //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=Defaul&Act=Save' title='Сохранить запись'>Сохранить запись</a></div>";

@@ -21,10 +21,10 @@ class viewJurObrEVD extends Jurnals {
         Echo ('<div id="tabr1" class="tab-content">');
         $IDU = $_SESSION['Id_user'];
         $Button='';
-        $Button .=$this->UIButtonAjax('Create', 'Создать ЭВД');
-        $Button .=$this->UIButtonAjax('Action1', 'Загружен КС');
-        $Button .=$this->UIButtonAjax('Action2', 'Загружен НВП');
-        $Button .=$this->UIButtonAjax('ObrabotkaEnd', 'Обработка завершена');
+        $Button .=$this->uiButtonAjax('Create', 'Создать ЭВД');
+        $Button .=$this->uiButtonAjax('Action1', 'Загружен КС');
+        $Button .=$this->uiButtonAjax('Action2', 'Загружен НВП');
+        $Button .=$this->uiButtonAjax('ObrabotkaEnd', 'Обработка завершена');
         echo $Button;
         echo '<div id="ContentMainTable">';
        Echo $this->MainTabelA();

@@ -59,11 +59,11 @@ class viewJurTS extends Jurnals {
         echo '</ul>';
         Echo ('<div id="tabr1" class="tab-content">');
         $Button='';
-        $Button .=$this->UIButtonAjax('Create', 'Создать задачу');
-        $Button .=$this->UIButtonAjax('Action1', 'Принять задачу');
-        $Button .=$this->UIButtonAjax('Action2', 'Завершить задачу');
+        $Button .=$this->uiButtonAjax('Create', 'Создать задачу');
+        $Button .=$this->uiButtonAjax('Action1', 'Принять задачу');
+        $Button .=$this->uiButtonAjax('Action2', 'Завершить задачу');
         //$this->ButtonAjaxUI('TakeEndTask', 'Принять и завершить задачу');
-        $Button .=$this->UIButtonAjax('DeleteRecord', 'Удалить задачу');
+        $Button .=$this->uiButtonAjax('DeleteRecord', 'Удалить задачу');
         echo $Button;
         echo '<div id="ContentMainTable">';
             Echo $this->MainTabelA();

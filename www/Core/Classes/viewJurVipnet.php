@@ -323,19 +323,19 @@ private function TableHistory($Res){
                 <li><a href="#tabr1">Запросы в обработке</a></li>';
         echo '</ul>';
         Echo ('<div id="tabr1" class="tab-content">');
-        echo $this->UIButtonAjax('Create', 'Создать запрос');
+        echo $this->uiButtonAjax('Create', 'Создать запрос');
         //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=viewJurVipnet&Act=Create' title='Создать запрос'>Создать запрос</a></div>";
         
         //echo "<div class='col_3 visible center ' style='height: 25px;'> <a class='FormMini fancybox.ajax' href='?option=viewJurVipnet&Act=PZ'>Принять запрос</a></div>";
         //echo "<div class='col_3 visible center' style='height: 25px;'> <a href='?option=viewJurVipnet&Act=PZ'>Принять запрос</a></div>";
-        echo $this->UIButtonActionAjax('PZ', 'Принять запрос');
+        echo $this->uiButtonActionAjax('PZ', 'Принять запрос');
        // echo $this->UIButtonAjax('PoslatOtvet', 'Послать ответ');
-        echo $this->UIButtonActionAjax('Stat', 'Статистика');
+        echo $this->uiButtonActionAjax('Stat', 'Статистика');
         
-        echo $this->UIButtonActionAjax('PoslatOtvet', 'Послать ответ');
-        echo $this->UIButtonActionAjax('Otvetstv', 'Ответственный');
-        echo $this->UIButtonActionAjax('Povtor', 'Повтор');
-        echo $this->UIButtonActionAjax('Pereslat', 'Переслать');
+        echo $this->uiButtonActionAjax('PoslatOtvet', 'Послать ответ');
+        echo $this->uiButtonActionAjax('Otvetstv', 'Ответственный');
+        echo $this->uiButtonActionAjax('Povtor', 'Повтор');
+        echo $this->uiButtonActionAjax('Pereslat', 'Переслать');
         
         echo '<div id="ContentMainTable">';
        Echo $this->MainTabelA();

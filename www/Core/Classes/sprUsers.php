@@ -57,7 +57,7 @@ class SprUsers extends Spravochniki {
         echo '</ul>';
         Echo ('<div id="tabr1" class="tab-content">');
         $IDU = $_SESSION['Id_user'];
-        echo $this->UIButtonAjax('Create', 'Новый пользователь');
+        echo $this->uiButtonAjax('Create', 'Новый пользователь');
         
         echo '<div id="ContentMainTable">';
         Echo $this->MainTabelA();

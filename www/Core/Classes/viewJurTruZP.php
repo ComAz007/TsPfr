@@ -27,8 +27,8 @@ class viewJurTruZp extends Jurnals {
         Echo ('<div id="tabr1" class="tab-content">');
         $IDU = $_SESSION['Id_user'];
         $Button='';
-        $Button .=$this->UIButtonAjax('Create', 'Создать запрос');
-        $Button .=$this->UIButtonActionAjax('Rezult', 'Результат запроса');
+        $Button .=$this->uiButtonAjax('Create', 'Создать запрос');
+        $Button .=$this->uiButtonActionAjax('Rezult', 'Результат запроса');
         echo $Button;
         //echo "<div id='Action1' class='col_3 visible center' style='height: 25px;'> <a  title='Результат запроса'>Результат запроса</a></div>";
         echo '<div id="ContentMainTable">';
@@ -124,7 +124,7 @@ class viewJurTruZp extends Jurnals {
         $data='';
         $data.=' Дата ответа <input class="KalDates"  name="DateOtv"> </BR>  </BR></p>';
         $data.=' Номер ответа <input name="NomerOtv"> </BR>  </BR></p>';
-        $data.=' Результат рассмотрения'.$this->UITextArea('Rezult');
+        $data.=' Результат рассмотрения'.$this->uiTextArea('Rezult');
         $data.="<p><input type='submit' value='Завершить обработку' >";
         
         $this->CreateForm('Результаты запроса', $data, 'RezultF');

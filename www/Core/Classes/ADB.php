@@ -89,7 +89,7 @@ protected function FieldZN($Table,$Field,$Id) {
     return $this->query($query,1)[$Field]; 
 }
 
-protected function GetValueFieldRecord($Table,$Field,$Id) {
+protected function getValueFieldRecord($Table,$Field,$Id) {
     $query="Select ".$Field." from ".$Table." Where Id=".$Id;
 //    if ($result = mysqli_prepare($this->link, $query)) {
 //        $result=mysqli_query($this->link,$query);
