@@ -118,7 +118,7 @@ abstract class Acore_A extends ADB {
             exit(1);
         }
 
-        foreach ($array_file as $name_file) { // Наш цикл
+        foreach ($array_file as $name_file) {
             if (!is_dir($folder . $name_file)) {
                 $zip->addFile($folder . $name_file, iconv('windows-1251', 'CP866//TRANSLIT//IGNORE', $name_file));
             }
@@ -163,7 +163,7 @@ abstract class Acore_A extends ADB {
         print "<script language='javascript'> SendGet($Files,$PathTmp) </script>";
     }
 
-    //Чудо функция организующая связб поля и справочника!!!
+    //Чудо функция организующая связь поля и справочника
     protected function identData($TableName, $key, $data) {
 
         $result = '';
@@ -183,7 +183,6 @@ abstract class Acore_A extends ADB {
             $result = $this->getUserName($data);
         }
 
-        //if ($TableName=='juresia' AND $key=='Deistvie'){$result=Jurnals::getESIA($data); echo $result;}
         if ($TableName == 'JurObrEVD' AND $key == 'region') {
             $result = $this->getRegion($data);
         }
@@ -198,7 +197,6 @@ abstract class Acore_A extends ADB {
         if ($TableName == 'JurOZIKD' AND $key == 'IDPtk') {
             $result = $this->getPTK($data);
         }
-        //if ($TableName=='JurOZIKD' AND $key=='DataBeg'){ $resul=date("d.m.Y",strtotime($data));}
 
         if ($TableName == 'JurOZIKD' AND $key == 'DataBeg') {
             $result = date("d.m.Y", strtotime($data));
@@ -213,34 +211,42 @@ abstract class Acore_A extends ADB {
         if ($TableName == 'jurvipnetzapros' AND $key == 'Napravl') {
             $result = $this->getTypeZ($data);
         }
+
         if ($TableName == 'jurvipnetzapros' AND $key == 'SpNap') {
             $result = $this->getTypeZ4($data);
         }
+
         if ($TableName == 'jurvipnetzapros' AND $key == 'DataReg') {
             $result = date("d.m.Y", strtotime($data));
         }
+
         if ($TableName == 'jurvipnetzapros' AND $key == 'Povtor') {
             $result = date("d.m.Y", strtotime($data));
         }
+
         if ($TableName == 'jurvipnetzapros' AND $key == 'DatePovtor') {
             $result = date("d.m.Y", strtotime($data));
         }
+
         if ($TableName == 'jurvipnetzapros' AND $key == 'DateOtveta') {
             $result = date("d.m.Y", strtotime($data));
         }
+
         if ($TableName == 'jurvipnetzapros' AND $key == 'TypeDeistv') {
             $result = $this->getTypeZ3($data);
         }
+
         if ($TableName == 'jurvipnetzapros' AND $key == 'ZR') {
             $result = $this->getEsNo($data);
         }
+
         if ($TableName == 'jurvipnetzapros' AND $key == 'Povtor') {
             $result = $this->getEsNo($data);
         }
+
         if ($TableName == 'jurvipnetzapros' AND $key == 'Otvetstv') {
             $result = $this->getUserName($data);
         }
-
 
         if ($result == '') {
             return $data;
@@ -250,14 +256,11 @@ abstract class Acore_A extends ADB {
     }
 
     protected function TablePrototype($Res, $Head, $TableName = '', $Class = '', $AtribId = Array('Edit'), $CheckedFieldOnOff = '1') {
-
-        //`Id`, `DataReg`, `KodReg`, `KodUrLic`, `KodUpfr`, `FIOZL`, `IdUserCreate`, `TypeZapros`, `TypeZaprosId`, `TypeDeistv`, `FileZapr`, `Povtor`, `DatePovtor`, `DateOtveta`, `FileOtv`
         $str = '';
         // выводим на страницу сайта заголовки HTML-таблицы
         $str = $str . '<table class="col_12  sortable" cellspacing="0" cellpadding="0">';
         //echo $col;
         $str = $str . '<thead><tr class="alt User">';
-
         $ii = 0;
         $select = '';
         foreach ($Head as $key => $value) {
@@ -272,20 +275,15 @@ abstract class Acore_A extends ADB {
 
         $query = '';
         $query = 'Select ' . $select . ' From ' . $TableName;
+
         if ($Access == 1) {
             $query = $query . ' Where IdUserCreate=' . $_SESSION['Id_user'];
         };
 
         $query = $query . ' Order By Id DESC LIMIT 20';
-
         $Res = $this->query($query);
         $str = $str . '</thead></tr>';
-        //echo '</thead>';
-        //echo '<tbody>';
         $str = $str . '<tbody> <tr class="alt">';
-
-        //var_dump($query);
-        //`Id`, `FIO`, `DocRekv`, `SNILS`, `DateObr`, `Deistvie`, `IdUserCreate`
         while ($data = $Res->fetch_assoc()) {
             foreach ($Head as $key => $value) {
                 if ($key == 'Id') {
@@ -308,31 +306,20 @@ abstract class Acore_A extends ADB {
                         if (in_array('PrnRec', $AtribId, true) or in_array('ALL', $AtribId, true)) {
                             $datav.='<a class="PrintRecord PointCursor" href="?option=' . $Class . '&Act=PrintForm&id=' . $data[$key] . '" RecId=' . $data[$key] . '>Печать</a> </BR> ';
                         };
-                        //if (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a id="CopyRecords" href="?option='.$Class.'&Act=CopySL&id='.$data[$key].' ">Скопировать</a> </BR> ';};
-                        //if (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor" RecId='.$data[$key].' Module='.$Class.' Table='.$this->table.'>Скопировать</a> </BR> ';};
-                        //if (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor" RecId='.$data[$key].'>Скопировать</a> </BR> ';};
-                        //if (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {$datav.='<a class="CopyRecord PointCursor">Скопировать</a> </BR> ';};
+
                         if (in_array('Copy', $AtribId, true) or in_array('ALL', $AtribId, true)) {
                             $datav.=$this->uiIdTableAction('CopyRecord', 'Скопировать');
                         };
-
-//if ($Cheked==0) {$datav.='<input id="iCheked" class="cCheked" type="checkbox" value="Select * From '.$TableName.' Where Id='.$data[$key].'">';};
                     } else {
                         $datav.='  ' . $data[$key] . ' ';
                     };
-//                        $datav='</BR> <a href="?option=viewJurEsia&Act=Edit&id='.$data[$key].' ">Изменить</a>';
-//                        $datav=$datav.'</BR> <a href="?option=viewJurEsia&Act=PrintForm&id='.$data[$key].' ">Печать</a>';
-//                        $datav=$datav.'</BR> <a href="?option=viewJurEsia&Act=Delete&id='.$data[$key].' ">Удалить</a>';
                     $datav.='<a id="Historym" href="?option=' . $Class . '&Act=History&id=' . $data[$key] . '"> История</a></BR> ';
                     $datav1 = $data[$key];
                 } else {
                     $datav = $this->identData($TableName, $key, $data[$key]);
                 }
 
-
-
                 if ($key == 'Id') {
-                    //$str=$str. '<td value="'.$datav1.'" >'.$datav1.' '. $datav. '</td>';
                     $str = $str . '<td RecId=' . $data[$key] . ' value="' . $data[$key] . '" >' . $datav . '</td>';
                 } else {
                     $str = $str . '<td RecId=' . $data[$key] . ' value="' . $datav . '" >' . $datav . '</td>';
@@ -343,11 +330,9 @@ abstract class Acore_A extends ADB {
             $datav = '';
             $datav1 = '';
         }
-
         $str = $str . '</tbody></table>';
 
         return $str;
-        //echo $str;
     }
 
     //TO-DO новая функция отрисовки таблиц(от 19/12/2016). Заменить во всех местах
@@ -492,7 +477,7 @@ abstract class Acore_A extends ADB {
     }
 
     protected function get_LeftBar() {
-
+        //Function had been reserving from print LeftBar
     }
 
     protected function get_Footer() {
@@ -506,7 +491,6 @@ abstract class Acore_A extends ADB {
     }
 
     public function get_Body() {
-        //include 'scripts.php';
         if ($_POST || $_GET) {
 
             if (!isset($_GET['SearchSTR'])) {
@@ -554,34 +538,31 @@ abstract class Acore_A extends ADB {
         $data1 .= $this->uiButtonSave();
         $data1 .= $this->uiButtonClose();
         var_dump($data1);
-        $this->Form($Caption, $data1, 'Edit');
+        $this->form($Caption, $data1, 'Edit');
     }
 
     protected function create($Caption, $data) {
         $data .= $this->dynamicTableGenerated();
         $data .= '</br> ' . $this->uiButtonCreate();
-        $this->Form($Caption, $data, 'Create');
+        $this->form($Caption, $data, 'Create');
     }
 
     //создание формы почти повторяет private function Form
     //TO-DO рассмотреть вопрос об оптимизации соединив все в одну форму
     // TO-DO доработать до стадии когда из полей подставляются значения если они там есть!!!
     protected function createForm($Caption, $data, $Action) {
-        $this->Form($Caption, $data, $Action);
+        $this->form($Caption, $data, $Action);
     }
 
     protected function copyRecord($Caption, $data) {
         $data .= $this->dynamicTableGenerated();
         $data .= $this->uiButtonCreate();
-        $this->Form($Caption, $data, 'Create');
+        $this->form($Caption, $data, 'Create');
     }
 
-    private function Form($Caption, $data, $Action = '') {
+    private function form($Caption, $data, $Action = '') {
         echo '<div id="dialog" title="' . $Caption . '# ' . $_SESSION['IdRec'] . '" >';
 
-        //TO-DO ПОлНЫ БРЕД ИПО вот этастрока создана что бы проверить как оно рабоатет
-        //echo "<form enctype='multipart/form-data' action='?option=viewJurTS' method='Post' class='create'>";
-        // а вот это истинная ИСХОДНА СТРОКА
         if ($Action == '') {
             echo "<form enctype='multipart/form-data' action='' method='Post'>";
         } else {
@@ -594,7 +575,7 @@ abstract class Acore_A extends ADB {
     }
 
     protected function obr() {
-
+        //To-Do Function had been reserving for additional process
     }
 
     protected function obrGL($request) {
